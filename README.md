@@ -1,5 +1,4 @@
-# kool
-
+# kool (KompetenzpOOL)
 
 
 ## Getting started
