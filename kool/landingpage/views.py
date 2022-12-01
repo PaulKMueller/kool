@@ -1,15 +1,19 @@
-import csv
 from django.shortcuts import render
 from django.http import HttpResponse
+import pandas as pd
+from material.frontend.views import *
+from . import models
 
 
 content = []
 
-with open('/workspaces/kool/firsttest.csv', encoding='UTF-8') as file:
-    csvreader = csv.reader(file)
-    for row in csvreader:
-        content.append([row[0], row[1]])
+csvreader = pd.read_csv('/workspaces/kool/firsttest.csv', encoding='UTF-8', header=None)
+
+#iterating through csv file using pandas
+for expert, trustworthiness in zip(csvreader[0], csvreader[1]):
+    content.append([expert, trustworthiness])
 
 
 def home(request):
     return render(request, 'home.html', {'content':content})
+
