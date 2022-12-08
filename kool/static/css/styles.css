@@ -1,3 +1,5 @@
+
+
 th {
     color:rgb(0, 0, 0);
     text-align: left;
@@ -49,4 +51,8 @@ table {
     font-family: sans-serif;
     width: 90%;
     align-self: center;
+}
+
+.roundedcorners {
+    border-radius: 10px
 }
