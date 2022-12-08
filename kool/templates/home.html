@@ -198,8 +198,12 @@
             <h2 style="font-size:30px", align="central">Kompetenzsuche</h2>
         </div>
     
-    
-        
+        <!-- neue Searchbar -->
+        <div class="nav-wrapper white z-depth-4 roundedcorners" style="left: 5%; position: absolute; width: 30%; height: 75px; border: 1px black; border-style: solid; align-items: center; display: flex; border-radius: 10px">
+            {% include 'includes/searchbar.html' %}
+        </div>
+
+
         <div class="container">
             <form id="search-site" action="search" method="get" autocomplete="on" >
                 <div class="input-group" >

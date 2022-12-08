@@ -1,23 +1,17 @@
 {% extends 'base.html' %}
 
 
-
-
-{% block under_nav_bar %}
-    <div class="nav-wrapper white z-depth-4 roundedcorners" style="bottom: -35px; left: 5%; position: absolute; width: 30%; height: 75px; border: 1px black; border-style: solid; align-items: center; display: flex; border-radius: 10px">
-        <form style="flex: 100">
-            <div class="input-field" style="position: relative">
-            <!-- todo: start input left -->
-                <input placeholder="Search Competences" id="search" type="search" style="width: 65%; margin: 0">
-                <label class="label-icon" for="search" style="left: auto; right: 0; width: auto, margin-left: 0; margin-right: 5%">
-                    <i class="material-icons">search</i>
-                </label>
-            </div>
-        </form>
-    </div>
-{% endblock %}
-
 {% block main_content %}
+
+<!-- NavBar & Searchbar using include -->
+<div class="navbar-fixed light-blue accent-1 z-depth-4" style="width: 100%; height: 200px; position: fixed">
+    {% include 'includes/navbar.html' %}
+    <div class="nav-wrapper white z-depth-4 roundedcorners" style="bottom: -35px; left: 5%; position: absolute; width: 30%; height: 75px; border: 1px black; border-style: solid; align-items: center; display: flex; border-radius: 10px">
+        {% include 'includes/searchbar.html' %}
+    </div>
+</div>
+
+
 <div class="container transparent" style="margin-top: 235px; width: 100%">
     <div class="nav-bar row" style="width: 100%; margin-top: 15px">
         <form>
