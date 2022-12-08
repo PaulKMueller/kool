@@ -185,78 +185,79 @@
     </head>
 
 
-<div style="width: 100%;">
-    <div>
-        <h1 id="balkentop" style="font-size:40px; color: "black", align="left">KOOL - Find competent scientists
-
-         <button id="logbutton"><u>login</u></button>
-         <button id="regbutton"><u>register</u></button>
-        </h1>
-
-    </div>
-    <div>
-        <h2 style="font-size:30px", align="central">Kompetenzsuche</h2>
-    </div>
-
-
+    <div style="width: 100%;">
+        <div>
+            <h1 id="balkentop" style="font-size:40px; color: "black", align="left">KOOL - Find competent scientists
     
-    <div class="container">
-        <form id="search-site" action="search" method="get" autocomplete="on" >
-            <div class="input-group" >
-                <div class="input-field">
-                    <input id = "search" type = "search" name="q"> 
-                    {% comment %} , placeholder="Search..." {% endcomment %}
-                </div>
+             <button id="logbutton"><u>login</u></button>
+             <button id="regbutton"><u>register</u></button>
+            </h1>
+    
+        </div>
+        <div>
+            <h2 style="font-size:30px", align="central">Kompetenzsuche</h2>
+        </div>
+    
+    
         
-        <button type="submit" class="input-group-addon btn">Suche</button>
-
-        </form>
+        <div class="container">
+            <form id="search-site" action="search" method="get" autocomplete="on" >
+                <div class="input-group" >
+                    <div class="input-field">
+                        <input id = "search" type = "search" name="q"> 
+                        {% comment %} , placeholder="Search..." {% endcomment %}
+                    </div>
+            
+            <button type="submit" class="input-group-addon btn">Suche</button>
     
-    <br><br><br><br>
-
-    <div id="showcomp">
-
-          <h3> Popular competences <button id="showallbutton">  show all</button></h3> 
-
-     </div
-
-
-       
+            </form>
+        
+        <br><br><br><br>
     
-  
-
-
-
-    <br><br><br><br>
-    <br><br><br><br>
-
-    <div>
-            <button id="aboutbutton"><u>About KOOL</u></button>
-            <button id="privacybutton"><u>Privacy</u></button>
-            <button id="imprintbutton"><u>Imprint</u></button>
+        <div id="showcomp">
+    
+              <h3> Popular competences <button id="showallbutton">  show all</button></h3> 
+    
+         </div
+    
+    
+           
+        
+      
+    
+    
+    
+        <br><br><br><br>
+        <br><br><br><br>
+    
+        <div>
+                <button id="aboutbutton"><u>About KOOL</u></button>
+                <button id="privacybutton"><u>Privacy</u></button>
+                <button id="imprintbutton"><u>Imprint</u></button>
+        </div>
+    
+    
+    
+        {% comment %} <div>
+            <br>
+            <table id="tabelle">
+                <thead>
+                    <tr id="ueberschrift">
+                        <th>expert</th>
+                        <th>trustworthiness</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for person, value in content %}
+                    <tr>
+                        <td>{{ person }}</td>
+                        <td>{{ value }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div> {% endcomment %}
     </div>
-
-
-
-    {% comment %} <div>
-        <br>
-        <table id="tabelle">
-            <thead>
-                <tr id="ueberschrift">
-                    <th>expert</th>
-                    <th>trustworthiness</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for person, value in content %}
-                <tr>
-                    <td>{{ person }}</td>
-                    <td>{{ value }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div> {% endcomment %}
-</div>
+    
 
 {% endblock %}
