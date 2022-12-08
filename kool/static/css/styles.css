@@ -1,3 +1,5 @@
+
+
 th {
     color:rgb(0, 0, 0);
     text-align: left;
@@ -51,3 +53,6 @@ table {
     align-self: center;
 }
 
+.roundedcorners {
+    border-radius: 10px
+}
