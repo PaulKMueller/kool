@@ -25,7 +25,7 @@
 </div>
   <div class="row" style="margin-top: 250px; width: 90%">
     <div class="col s12" style="height: 10px;">
-      <a class="waves-effect waves-black btn-flat left" href="/competence">
+      <a class="waves-effect waves-black btn-flat left" href="/category">
         <i class="material-icons">arrow_back</i>
         View categories
       </a>
@@ -35,9 +35,9 @@
     </div>
       {% for competency in competencies %}
       <div class="col s12 l3">
-        <a href="https://www.google.com">
+        <a href="{{ competency.0 }}">
           <div class="card grey darken-4 roundedcorners" style="height: 100px;">
-            <span class="white-text" style="font-size: 30px;">{{ competency }}</span>
+            <span class="white-text" style="font-size: 30px;">{{ competency.1 }}</span>
           </div>
         </a>
       </div>

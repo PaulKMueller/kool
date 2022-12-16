@@ -8,5 +8,5 @@ urlpatterns = [
     path('chemistry', views.competence_page),
     path('cs', views.competence_page),
     path('economics', views.competence_page),
-    path('competency/<int:id>', views.competence_page)
+    path('<int:id>', views.competence_page)
 ]
