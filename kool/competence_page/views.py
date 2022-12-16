@@ -1,35 +1,38 @@
 from django.shortcuts import render
 from competence_page.models import Category
+import requests
+import time
 # Create your views here.
 
 biology = Category()
 biology.name = 'Biology'
-biology.link = '/competence/biology'
+biology.link = '/competence/123'
 biology.img = 'https://cdn.pixabay.com/photo/2019/03/19/19/54/butterflies-4066785_960_720.jpg'
-
-chemistry = Category()
-chemistry.name = 'Chemistry'
-chemistry.link = '/competence/chemistry'
-chemistry.img = 'https://cdn.pixabay.com/photo/2012/11/07/21/23/showcase-65306_960_720.jpg'
-
-cs = Category()
-cs.name = 'Computer_Science'
-cs.link = '/competence/cs'
-cs.img = 'https://cdn.pixabay.com/photo/2022/04/04/16/42/technology-7111799_960_720.jpg'
-
-economics = Category()
-economics.name = 'Economics'
-economics.link = '/competence/economics'
-economics.img = 'https://cdn.pixabay.com/photo/2016/10/09/19/19/coins-1726618_960_720.jpg'
-
-categories = [biology, chemistry, cs, economics]
-
+url = "http://localhost:8020/all_categories"
 
 def categories_page(request):
+    
+    categories = get_request_from_api(url)
+
+    category = Category()
+    category.name = "categories"
+
+    print(categories)
     return render(request, 'competence_categories.html',
                   {'categories': categories})
 
 
-def competence_page(request):
-    return render(request, 'biology.html', {'name': 'Biology',
-                                            'numbers': range(30)})
+def get_request_from_api(url):
+    for i in range(5):
+        try:
+            response = requests.get(url)
+            return response.json()
+        except:
+            time.sleep(2)
+            continue
+    return "connection failed"
+
+def competence_page(request, id):
+    print(id)
+    return render(request, 'category.html', {'name': id,
+                                            'competencies': ["Machine Learning", "Linear Algebra", "Cocklecken", get_request_from_api(url)[0]]} )
