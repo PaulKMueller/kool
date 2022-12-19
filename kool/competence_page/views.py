@@ -17,11 +17,11 @@ def categories_page(request):
     category_names.sort(key=lambda a: a[1])
     categories_obj = []
     print(category_names)
-    for categorie in category_names:
+    for category in category_names:
         newCat = Category()
-        newCat.name = categorie[1]
-        newCat.link = categorie[0]
-        newCat.img = "https://picsum.photos/200/100"
+        newCat.name = category[1]
+        newCat.link = category[0]
+        newCat.img = "/static/images/" + str(category[0]) + ".jpg"
         categories_obj.append(newCat)
 
     return render(request, 'competence_categories.html',
@@ -40,8 +40,12 @@ def get_request_from_api(url):
 
 
 def competence_page(request, id):
-    req_url = main_url + "/competencies_by_id/" + str(id)
-    competencies = get_request_from_api(req_url)
+    competencies_req_url = main_url + "/competencies_by_id/" + str(id)
+    name_req_url = main_url + "/category_name/" + str(id)
+
+    competencies = get_request_from_api(competencies_req_url)
     competencies.sort(key=lambda a: a[1])
-    return render(request, 'category.html', {'name': id,
+
+    name = get_request_from_api(name_req_url)[0]
+    return render(request, 'category.html', {'name': name,
                                              'competencies': competencies})

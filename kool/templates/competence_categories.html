@@ -28,15 +28,16 @@
 
   <div class="col s12 l3">
     <div class="card">
-      <div class="card-image">
+      <div class="card-image" stye="border-radius: 10px">
         <a href="{{category.link}}">
-          <img class="responsive-img" src="{{category.img}}" />
+          <div style="overflow: hidden">
+          <img class="responsive-img" src="{{ category.img }}"  style = "height: 200px; width: 100%; object-fit: cover; filter: brightness(60%) blur(2px)" />
           <span class="card-title" style="font-size: 30px"
-            >{{category.name}}</span
-          >
+            >{{category.name}}</span>
+          </div>
         </a>
       </div>
-    </div>
+  </div>
   </div>
 
   {% endfor %} {% endblock %}
