@@ -13,34 +13,77 @@
 
 
 <div class="container-fixed transparent" style="margin-top: 235px; width: 100%">
-    <div class="nav-bar row" style="width: 100%; margin-top: 15px">
-        <form>
-            <div class="container col s2 offset-s1 z-depth-1 white left roundedcorners" style="justify-content: space-between">
-                Machine Learning
-                <button class="btn-flat"> <i class="material-icons">close</i> </button>
-            </div>
-        </form
+    
+    <div class="flow-text container left-align resultsshower">
+        RESULTS
+    </div
+
+
+    <div class="container transparent" style="width: 100%">
+        {% for expert, count in results %}
+        <div class="container grey lighten-3 roundedcorners bordersmall resultbox z-depth-1">
+                <i class="small material-icons" style="margin-left: 3%">account_circle</i>
+                <div class="resulttext" style="width:31%">
+                    {{ expert }}
+                </div>
+                <div class="infoboxresult">
+                    <div> 5 </div>
+                    <div> Relevancy </div>
+                </div>
+                <div class="infoboxresult">
+                    <div> 2022 </div>
+                    <div> Last relevant publication </div>
+                </div>
+                <div class="resultcount">
+                    <div> {{ count }} </div>
+                    <div> Relevant publications </div>
+                </div>
+                <button onclick="expand('{{ forloop.counter }}');" class="btn-large btn-flat waves-effect transparent right-align roundedcorners">
+                    <i class="medium material-icons">expand_more</i>
+                </button>
+        </div>
+        <div id="{{ forloop.counter }}" class="container" style="display: None">
+            <table class="highlight">
+                <thead>
+                    <tr>
+                        <th>Compentence</th>
+                        <th>Title</th>
+                        <th>Publicated</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>df</th>
+                        <th>dsf</th>
+                        <th>sdf</th>
+                    </tr>
+                    <tr>
+                        <th>df</th>
+                        <th>dsf</th>
+                        <th>sdf</th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <br>
+        {% endfor %}
     </div>
 </div>
 
-<div class="container">
-    Results:
-</div>
+<script>
+    function expand(tabContent) {
 
-<div class="container transparent">
-    {% for expert, count in results %}
-    <div class="container grey lighten-3 roundedcorners bordersmall resultbox z-depth-1 ">
-        <div class="resulttext left">
-            {{ expert }}
-        </div>
-        <div class="resultcount right" style="">
-            <div> {{ count }} </div>
-            <div> Relevant publications </div>
-        </div>
-    </div>
-    <br>
-    {% endfor %}
-</div>
+        document.getElementById(tabContent).style.display = "block";
 
+        /*
+        if (document.getElementById(tabContent).style.display == 'None') {
+            document.getElementById(tabContent).style.display = 'block'
+        }  else {
+            document.getElementById(tabContent).style.display = 'none'
+        }
+        */
+        
+    }
+</script>
 
 {% endblock %}

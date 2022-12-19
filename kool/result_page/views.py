@@ -12,5 +12,5 @@ for expert, trustworthiness in zip(csvreader[0], csvreader[1]):
     resultsdict.append([expert, trustworthiness])
 
 
-def results(request):
+def results(request, id):
     return render(request, 'result_page.html', {'results': resultsdict})
