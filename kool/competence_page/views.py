@@ -40,7 +40,7 @@ def get_request_from_api(url):
 
 
 def competence_page(request, id):
-    req_url = main_url + "/competencies_by_id/" + str(id)
+    req_url = main_url + "/competencies_by_category_id/" + str(id)
     competencies = get_request_from_api(req_url)
     competencies.sort(key=lambda a: a[1])
     return render(request, 'category.html', {'name': id,
