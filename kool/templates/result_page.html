@@ -6,21 +6,40 @@
 <!-- NavBar & Searchbar using include -->
 <div class="navbar-fixed light-blue accent-1 z-depth-4" style="width: 100%; height: 200px; position: fixed">
     {% include 'includes/navbar.html' %}
-    <div class="nav-wrapper white z-depth-4 roundedcorners" style="bottom: -35px; left: 5%; position: absolute; width: 30%; height: 75px; border: 1px black; border-style: solid; align-items: center; display: flex; border-radius: 10px">
+    <div class="nav-wrapper white z-depth-4 searchbaroffset roundedcorners bordersmall">
         {% include 'includes/searchbar.html' %}
     </div>
 </div>
 
 
-<div class="container transparent" style="margin-top: 235px; width: 100%">
+<div class="container-fixed transparent" style="margin-top: 235px; width: 100%">
     <div class="nav-bar row" style="width: 100%; margin-top: 15px">
         <form>
-            <div class="container col s3 offset-s2 z-depth-1 white left roundedcorners" style="border-radius: 8px; justify-content: space-between">
+            <div class="container col s2 offset-s1 z-depth-1 white left roundedcorners" style="justify-content: space-between">
                 Machine Learning
                 <button class="btn-flat"> <i class="material-icons">close</i> </button>
             </div>
         </form
     </div>
+</div>
+
+<div class="container">
+    Results:
+</div>
+
+<div class="container transparent">
+    {% for expert, count in results %}
+    <div class="container grey lighten-3 roundedcorners bordersmall resultbox z-depth-1 ">
+        <div class="resulttext left">
+            {{ expert }}
+        </div>
+        <div class="resultcount right" style="">
+            <div> {{ count }} </div>
+            <div> Relevant publications </div>
+        </div>
+    </div>
+    <br>
+    {% endfor %}
 </div>
 
 
