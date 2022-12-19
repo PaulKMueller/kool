@@ -40,7 +40,7 @@ def get_request_from_api(url):
 
 
 def competence_page(request, id):
-    competencies_req_url = main_url + "/competencies_by_id/" + str(id)
+    competencies_req_url = main_url + "/competencies_by_category_id/" + str(id)
     name_req_url = main_url + "/category_name/" + str(id)
 
     competencies = get_request_from_api(competencies_req_url)
