@@ -12,12 +12,6 @@ def get_request_from_api(url):
             continue
     return "connection failed"
 
-class Result:
-
-    id: int
-    name: int
-    author: dict
-
 class Author:
     def __init__(self, id: int, first_name: str, last_name: str, abstracts: dict):
         self.id = id

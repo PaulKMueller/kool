@@ -12,16 +12,17 @@
 </div>
 
 
+
 <div class="container-fixed transparent" style="margin-top: 235px; width: 100%">
+    {% if has_found %}
     
     <div class="flow-text container left-align resultsshower">
-        Results
-    </div
+        Results: {{ competency }}
+    </div>
 
-
-    <div class="container transparent" style="width: 100%">
+    <div class="container transparent" style="width: 100%; margin-top: 48px">
         {% for author_id, author in authors.items %}
-        <div class="col container grey lighten-3 roundedcorners bordersmall resultbox z-depth-1">
+        <div style="width: 96%" class="col container grey lighten-3 roundedcorners bordersmall resultbox z-depth-1">
                 <i class="small material-icons" style="margin-left: 3%">account_circle</i>
                 <div class="resulttext col" style="width:31%">
                    <p>
@@ -44,8 +45,10 @@
             <table class="highlight">
                 <thead>
                     <tr>
-                        <th>Compentence</th>
+                        <th>Competency</th>
                         <th>Title</th>
+                        <th>Type</th>
+                        <th></th>
                         <th>Publicated</th>
                     </tr>
                 </thead>
@@ -53,9 +56,17 @@
                     {% for abstract_id, abstract in author.abstracts.items %}
                                 
                     <tr>
-                        <th>df</th>
-                        <th>{{ abstract.0.title }}</th>
-                        <th>{{ abstract.0.year }}</th>
+                        <th style="font-weight: normal">{{ competency }}</th>
+                        <th style="font-weight: normal">{{ abstract.0.title }}</th>
+                        <th style="font-weight: normal">{{ abstract.0.doctype }}</th>
+                        <th>
+                            <a href="/abstract/{{abstract_id}}/detailed/">
+                            <button class="buttonabstract btn-medium btn-flat waves-effect roundedcorners">
+                                View Abstract
+                            </button>
+                            </a>
+                        </th>
+                        <th style="font-weight: normal">{{ abstract.0.year }}</th>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -64,20 +75,27 @@
         <br>
         {% endfor %}
     </div>
+
+    {% else %}
+        <div class="flow-text">
+            No results for "{{competency}}"
+        </div>
+
+    {% endif %}
+    
 </div>
+
+
+
 
 <script>
     function expand(tabContent) {
-
-        document.getElementById(tabContent).style.display = "block";
-
-        /*
-        if (document.getElementById(tabContent).style.display == 'None') {
+        status = window.getComputedStyle(document.getElementById(tabContent)).display 
+        if (status == "none") {
             document.getElementById(tabContent).style.display = 'block'
         }  else {
             document.getElementById(tabContent).style.display = 'none'
         }
-        */
         
     }
 </script>

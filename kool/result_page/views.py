@@ -25,7 +25,7 @@ def get_request_from_api(url):
             continue
     return "connection failed"
 
-def getAuthorByCompId(competency_id):
+def get_author_by_competency_id(competency_id):
     request_url = main_url + "/authors_by_competency_id/" + str(competency_id)
     authors_db_entry = get_request_from_api(request_url)
     authors = {}
@@ -42,9 +42,35 @@ def getAuthorByCompId(competency_id):
         authors[author_id].add_abstract(abstract_id, relevancy)
     return authors
 
+def get_competency_name_by_id(competency_id):
+    requests_url = main_url + "/competency_name_by_id/" + str(competency_id)
+    return get_request_from_api(requests_url)
+
+def get_competency_id_by_name(competency_name):
+    requests_url = main_url + "/competency_id_by_name/" + str(competency_name)
+    return get_request_from_api(requests_url)
+
+
 def results(request, id = None):
+    """if ?q=... exists its preferred, else id is used. When no authors found
+    user is informed in frontend"""
+    found_id = False
+    found_authors = False
     searchquery = request.GET.get('q', '')
-    print(searchquery)
-    authors = getAuthorByCompId(id)
+    authors = {}
+    if searchquery == "":
+        competency_id = id
+        found_id = True
+    else:
+        competency = searchquery
+        result = get_competency_id_by_name(searchquery)
+        if result is not None:
+            competency_id = result[0]
+            found_id = True
     
-    return render(request, 'result_page.html', {'authors': authors})
+    if found_id:
+        authors = get_author_by_competency_id(competency_id)
+        if len(authors) != 0:
+            found_authors = True
+            competency = get_competency_name_by_id(competency_id)[0]
+    return render(request, 'result_page.html', {'has_found': found_authors, 'competency': competency, 'authors': authors})

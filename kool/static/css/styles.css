@@ -69,3 +69,9 @@ body {
     padding-top: 10px;
     font-weight: bolder;
 }
+
+.buttonabstract {
+    border: 1px #00509F;
+    border-style: solid;
+    color: #00509F;
+}
