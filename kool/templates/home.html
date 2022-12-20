@@ -13,42 +13,24 @@
             <button id="logbutton"><u>login</u></button>
              <button id="regbutton"><u>register</u></button>
             </h1>
-    
         </div>
         <div>
             <h2 style="font-size:30px", align="central"></h2>
         </div>
-        
         <div class="container">
-
-        {% comment %} alte suchleiste {% endcomment %}
-
-            {% comment %} <form id="search-site" action="search" method="get" autocomplete="on" >
-                <div class="input-group" >
-                    <div class="input-field">
-                        <input id = "search" type = "search" name="q">  {% endcomment %}
-                        {% comment %} , placeholder="Search..." {% endcomment %}
-                    {% comment %} </div>  
-            <button type="submit" class="input-group-addon btn">Suche</button>
-            </form> {% endcomment %}
 
  <div class="container">
     <div class="nav-wrapper white z-depth-4 roundedcorners" style="top: 140px; left: 25%; position: absolute; width: 50%; height: 100px; border: 1px black; border-style: solid; align-items: center; display: flex; border-radius: 10px">
-        <form style="flex: 100" autocomplete="off">
-                        <div class="input-field" style="position: relative">
-                                {% comment %} list="list-competency" zu input {% endcomment %}
-                                <input  placeholder="Search Competences" id="auto" type="text" class="autocomplete" style="width: 65%; margin: 0;font-size:30px">
-                                    {% comment %} <datalist id="list-competency">
-                                    <option>Machine Learning</>
-                                    <option>Data Science</>
-                                    <option>Data Lake</>
-                                    <option>Data Warehouse</>
-                                    <option>Biotechnology</>
-                                    </data>  {% endcomment %}
-                                <label for="auto" class="label-icon" for="search" style="left: auto; right: 0; width: auto, margin-left: 0; margin-right: 5%; margin-top:0%", type="submit", name="action">
-                                <a href="result_page/">  <i class="material-icons">search</i></a>
-                                </label>
-                        </div>
+        <form id="searchbar" style="flex: 100" autocomplete="off" method="get" action="/results">
+            <div class="input-field" style="position: relative">
+             {% comment %} list="list-competency" zu input {% endcomment %}
+                <input name="q" placeholder="Search Competences" id="auto" type="text" class="autocomplete" style="width: 65%; margin: 0;font-size:30px">
+                <label for="auto" class="label-icon" for="search" style="left: auto; right: 0; width: auto, margin-left: 0; margin-right: 5%; margin-top:0%", type="submit", name="action">
+                    <button class="transparent" style="border: none" type="submit">
+                        <i class="material-icons">search</i>
+                    </button>
+                </label>
+            </div>
         </form>
     </div>
 </div>
@@ -57,15 +39,21 @@
 
 <script>  
 document.addEventListener('DOMContentLoaded', function() {
-    var auto = document.querySelectorAll('.autocomplete');
-     M.Autocomplete.init(auto, {
-        data:{
-            'Machine Learning': null,
-            'Data Science': null,
-            'Data Lake': null
+    var dict = JSON.parse('{{competencies|escapejs}}');
+    var elems = document.querySelectorAll('.autocomplete');
+    options = {
+        data: {
+        },
+        limit: 10,
+        onAutocomplete: function(selectedValue) {
+            document.getElementById("searchbar").submit();
         }
-     });
-  }); 
+    }
+    for (var key in dict){
+        options.data[dict[key][1]] = null
+    }
+    var instances = M.Autocomplete.init(elems, options);
+});
 </script>
 
 
@@ -76,10 +64,10 @@ document.addEventListener('DOMContentLoaded', function() {
         {% comment %} popular comp mit show all button und vier blöcken mit popular comp und show scientists button {% endcomment %}
 
 
-        <div style="align=central">
-             <div id="showcomp", align="left">
+        <div style="align: central">
+             <div id="showcomp" align="left">
                 <h3> Popular competences <button id="showallbutton"> 
-                <a href="/competence/"><span class="black-text text-darken-2"> 
+                <a href="/Category/"><span class="black-text text-darken-2"> 
                 show all</span> </a></button></h3> 
             </div
         </div>
