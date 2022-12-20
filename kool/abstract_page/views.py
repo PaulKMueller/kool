@@ -35,6 +35,7 @@ def abstract_page(request, id, auth_id=None):
         if (auth_id is not None) and (auth_id == author.id):
             detailed_auth = author
 
+    # no author found, pick the first one
     if detailed_auth is None:
         detailed_auth = authors[0]
 

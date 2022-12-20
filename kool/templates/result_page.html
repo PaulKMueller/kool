@@ -4,7 +4,7 @@
 {% block main_content %}
 
 <!-- NavBar & Searchbar using include -->
-<div class="navbar-fixed light-blue accent-1 z-depth-4" style="width: 100%; height: 200px; position: fixed">
+<div class="navbar-fixed blue lighten-2 z-depth-4" style="width: 100%; height: 120px; position: fixed">
     {% include 'includes/navbar.html' %}
     <div class="nav-wrapper white z-depth-4 searchbaroffset roundedcorners bordersmall">
         {% include 'includes/searchbar.html' %}
@@ -13,18 +13,18 @@
 
 
 
-<div class="container-fixed transparent" style="margin-top: 235px; width: 100%">
+<div class="container-fixed transparent" style="margin-top: 180px; width: 100%">
     {% if has_found %}
     
-    <div class="flow-text container left-align resultsshower">
+    <div class="flow-text container left-align resultsshower competency">
         Results: {{ competency }}
     </div>
 
-    <div class="container transparent" style="width: 100%; margin-top: 48px">
+    <div class="container-fixed transparent" style="width: 100%; margin-top: 48px">
         {% for author_id, author in authors.items %}
-        <div style="width: 96%" class="col container grey lighten-3 roundedcorners bordersmall resultbox z-depth-1">
+        <div class="col resultbox container l10  grey lighten-3 roundedcorners  z-depth-1">
                 <i class="small material-icons" style="margin-left: 3%">account_circle</i>
-                <div class="resulttext col" style="width:31%">
+                <div class="resulttext col">
                    <p>
                         {{author.first_name}} {{ author.last_name }}
                    </p>
@@ -56,11 +56,11 @@
                     {% for abstract_id, abstract in author.abstracts.items %}
                                 
                     <tr>
-                        <th style="font-weight: normal">{{ competency }}</th>
+                        <th class="competency" style="font-weight: normal">{{ competency }}</th>
                         <th style="font-weight: normal">{{ abstract.0.title }}</th>
                         <th style="font-weight: normal">{{ abstract.0.doctype }}</th>
                         <th>
-                            <a href="/abstract/{{abstract_id}}/detailed/">
+                            <a href="/abstract/{{abstract_id}}/detailed/{{author_id}}">
                             <button class="buttonabstract btn-medium btn-flat waves-effect roundedcorners">
                                 View Abstract
                             </button>

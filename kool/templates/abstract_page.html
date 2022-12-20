@@ -19,18 +19,15 @@
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"
 ></script>
 <!-- NavBar using include -->
-<div
-  class="navbar-fixed light-blue accent-1 z-depth-4"
-  style="width: 100%; height: 200px; position: fixed; z-index: 1"
->
+<div class="navbar-fixed blue lighten-2 z-depth-4" style="width: 100%; height: 120px; position: fixed; z-index: 1">
   {% include 'includes/navbar.html' %}
 </div>
 <div
   class="row"
-  style="margin-top: 100px; width: 97%; position: relative; z-index: 2"
+  style="margin-top: 80px; width: 97%; position: relative; z-index: 2"
 >
   <div class="col s12 l6">
-    <div class="card" style="padding: 16px">
+    <div class="card roundedcorners" style="padding: 16px">
       <h5 style="text-align: left; font-weight: 500">{{ abstract.title }}</h5>
       <h6 class="left" style="font-weight: 500">{{ abstract.doctype }}</h6>
       <h6 class="right" style="font-weight: 500">{{ abstract.year }}</h6>
@@ -40,14 +37,14 @@
     </div>
   </div>
   <div class="col s12 l3">
-    <div class="card" style="padding: 16px">
+    <div class="card roundedcorners" style="padding: 16px">
       <h5 style="text-align: left; font-weight: 500">
         Competencies in this abstract
       </h5>
       {% for competency in competencies_abs %}
       <a
         class="competency"
-        href="/competency/{{competency.id}}"
+        href="/results/{{competency.id}}"
         style="text-align: left"
       >
         <p>{{competency.name}}</p>
@@ -55,7 +52,7 @@
       <div class="divider"></div>
       {%endfor%}
     </div>
-    <div class="card" style="padding: 16px">
+    <div class="card roundedcorners" style="padding: 16px">
       <h5 style="text-align: left; font-weight: 500">Authors</h5>
         {% for author in authors %}
         <a
@@ -70,7 +67,7 @@
       </div>
     </div>
     <div class="col s12 l3">
-      <div class="card" style="padding: 16px">
+      <div class="card roundedcorners" style="padding: 16px">
         <h5 style="text-align: left; font-weight: 500">
           {{ detailed_auth.first_name }} {{ detailed_auth.last_name }}
         </h5>
@@ -78,7 +75,7 @@
           {% for competency in competencies_auth %}
           <a
             class="competency"
-            href="/competency/{{ competency.id }}"
+            href="/results/{{ competency.id }}"
             style="text-align: left"
           >
             <p>{{ competency.name }}</p>

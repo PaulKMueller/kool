@@ -1,9 +1,7 @@
 {% extends 'base.html' %} {% block main_content %}
 <!-- NavBar & Searchbar using include -->
-<div
-  class="navbar-fixed light-blue accent-1 z-depth-4"
-  style="width: 100%; height: 200px; position: fixed"
->
+<div class="navbar-fixed blue lighten-2 z-depth-4" style="width: 100%; height: 120px; position: fixed; z-index: 1">
+
   {% include 'includes/navbar.html' %}
   <div
     class="nav-wrapper white z-depth-4 roundedcorners"
@@ -23,7 +21,7 @@
     {% include 'includes/searchbar.html' %}
   </div>
 </div>
-<div class="row" style="margin-top: 250px; width: 90%">
+<div class="row" style="margin-top: 180px; width: 90%">
   {% for category in categories %}
 
   <div class="col s12 l3">
