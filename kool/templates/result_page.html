@@ -15,27 +15,25 @@
 <div class="container-fixed transparent" style="margin-top: 235px; width: 100%">
     
     <div class="flow-text container left-align resultsshower">
-        RESULTS
+        Results
     </div
 
 
     <div class="container transparent" style="width: 100%">
-        {% for expert, count in results %}
-        <div class="container grey lighten-3 roundedcorners bordersmall resultbox z-depth-1">
+        {% for author_id, author in authors.items %}
+        <div class="col container grey lighten-3 roundedcorners bordersmall resultbox z-depth-1">
                 <i class="small material-icons" style="margin-left: 3%">account_circle</i>
-                <div class="resulttext" style="width:31%">
-                    {{ expert }}
+                <div class="resulttext col" style="width:31%">
+                   <p>
+                        {{author.first_name}} {{ author.last_name }}
+                   </p>
                 </div>
-                <div class="infoboxresult">
-                    <div> 5 </div>
-                    <div> Relevancy </div>
-                </div>
-                <div class="infoboxresult">
-                    <div> 2022 </div>
+                <div class="infoboxresult col">
+                    <div> {{author.get_last_publication_year }} </div>
                     <div> Last relevant publication </div>
                 </div>
-                <div class="resultcount">
-                    <div> {{ count }} </div>
+                <div class="resultcount col">
+                    <div> {{ author.get_number_of_publications }} </div>
                     <div> Relevant publications </div>
                 </div>
                 <button onclick="expand('{{ forloop.counter }}');" class="btn-large btn-flat waves-effect transparent right-align roundedcorners">
@@ -52,16 +50,14 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% for abstract_id, abstract in author.abstracts.items %}
+                                
                     <tr>
                         <th>df</th>
-                        <th>dsf</th>
-                        <th>sdf</th>
+                        <th>{{ abstract.0.title }}</th>
+                        <th>{{ abstract.0.year }}</th>
                     </tr>
-                    <tr>
-                        <th>df</th>
-                        <th>dsf</th>
-                        <th>sdf</th>
-                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
