@@ -1,267 +1,143 @@
 {% extends 'base.html' %}
 
 {% block main_content %}
+{% block main_content %}
 
 <html>
     <head>
-        <style>
-            #tabelle {
-                width: 80%;
-                height: 200px;
-                background-color: white;
-                color: black;
-                text-align: center;
-                margin-left: auto;
-                margin-right: auto;
-            }
-            #ueberschrift{
-                background-color: #9EC4D5;
-                color: black;
-            }
-            #balkentop{
-                background-color:#9EC4D5;
-                color: black;
-                width:100%;
-                height: 120px;
-                text-align: top;
-                margin: auto;
-            }
-             #logbutton {
-                border: none;
-                line-height: 50px;
-                width: 70px;
-                font-size: 12pt;
-                font-family: tahoma;
-                margin-top: 1px;
-                margin-right: 40px;
-                position:absolute;
-                top:0;
-                right:0;
-                background-color:#9EC4D5;
- }
-  #logbutton:hover {background-color: #9EC4D5}
-
-#logbutton:active {
-  background-color:#9EC4D5 ;
-  transform: translateY(4px);
-}
-              #regbutton {
-                margin: 0px;
-                border: none;
-                line-height: 50px;
-                width: 40px;
-                font-size: 12pt;
-                font-family: tahoma;
-                margin-top: 1px;
-                margin-right: 140px;
-                position:absolute;
-                top:0;
-                right:0;
-                background-color:#9EC4D5;
-            }
-         #regbutton:hover {
-            background-color: #9EC4D5
-        }
-
-        #regbutton:active {
-            background-color:#9EC4D5 ;
-            transform: translateY(4px);
-        }
-
-    #aboutbutton {
-                margin: 0px;
-                border: none;
-                line-height: 50px;
-                width: 150px;
-                font-size: 12pt;
-                font-family: tahoma;
-                margin-bottom: 1px;
-                margin-left: 0px;
-                position:absolute;
-                bottom:0;
-                left:0;
-                background-color:white;
-    }
-         #aboutbutton:hover {
-            background-color: white
-        }
-
-        #aboutbutton:active {
-             background-color:white;
-             transform: translateY(4px);
-        } 
-        #privacybutton {
-                margin: 0px;
-                border: none;
-                line-height: 50px;
-                width: 50px;
-                font-size: 12pt;
-                font-family: tahoma;
-                margin-bottom: 1px;
-                margin-left: 160px;
-                position:absolute;
-                bottom:0;
-                left:0;
-                background-color:white;
-    }
-         #privacybutton:hover {
-            background-color: white
-        }
-
-        #privacybutton:active {
-             background-color:white;
-             transform: translateY(4px);
-        } 
-               #imprintbutton {
-                margin: 0px;
-                border: none;
-                line-height: 50px;
-                width: 50px;
-                font-size: 12pt;
-                font-family: tahoma;
-                margin-bottom: 1px;
-                margin-left: 260px;
-                position:absolute;
-                bottom:0;
-                left:0;
-                background-color:white;
-    }
-         #imprintbutton:hover {
-            background-color: white
-        }
-
-        #imprintbutton:active {
-             background-color:white;
-             transform: translateY(4px);
-        } 
-
-
-                #showallbutton {
-                margin: 13px;
-                line-height: 20px;
-                border-radius: 8px;
-                width: 100px;
-                font-size: 14pt;
-                font-family: tahoma;
-                margin-central: 0px;
-                position:absolute;
-                central:10;
-                background-color:white;
-                border-color: grey;
-               }
-              #showallbutton:hover {
-                    background-color: white
-                    border-color: grey;
-            }
-
-             #showallbutton:active {
-                    background-color: white;
-                    transform: translateY(4px);
-                    border-color: grey;
-                 } 
-
-        #showcomp {
-            width: 500px;
-            font-size:10pt;
-        }
-            h3{
-                font-family: roman;
-                 margin: 50;
-            }
-            button {
-                float: right;
-            }
-
-
-
-
-
-
-
-
-
-
-        </style>
+        <link rel='stylesheet' type='text/css' href='static/css/homestyle.css'>
     </head>
-
 
     <div style="width: 100%;">
         <div>
-            <h1 id="balkentop" style="font-size:40px; color: "black", align="left">KOOL - Find competent scientists
-    
-             <button id="logbutton"><u>login</u></button>
+            <h1 id="balkentop" style="font-size:40px; color: "black", align="left" ><b>KOOL</b> - Find competent scientists
+            <button id="logbutton"><u>login</u></button>
              <button id="regbutton"><u>register</u></button>
             </h1>
-    
         </div>
         <div>
-            <h2 style="font-size:30px", align="central">Kompetenzsuche</h2>
+            <h2 style="font-size:30px", align="central"></h2>
         </div>
-    
-        <!-- neue Searchbar -->
-        <div class="nav-wrapper white z-depth-4 roundedcorners" style="left: 5%; position: absolute; width: 30%; height: 75px; border: 1px black; border-style: solid; align-items: center; display: flex; border-radius: 10px">
-            {% include 'includes/searchbar.html' %}
-        </div>
-
-
         <div class="container">
-            <form id="search-site" action="search" method="get" autocomplete="on" >
-                <div class="input-group" >
-                    <div class="input-field">
-                        <input id = "search" type = "search" name="q"> 
-                        {% comment %} , placeholder="Search..." {% endcomment %}
-                    </div>
-            
-            <button type="submit" class="input-group-addon btn">Suche</button>
-    
-            </form>
-        
-        <br><br><br><br>
-    
-        <div id="showcomp">
-    
-              <h3> Popular competences <button id="showallbutton">  show all</button></h3> 
-    
-         </div
-    
-    
-           
-        
-      
-    
-    
-    
-        <br><br><br><br>
-        <br><br><br><br>
-    
-        <div>
-                <button id="aboutbutton"><u>About KOOL</u></button>
-                <button id="privacybutton"><u>Privacy</u></button>
-                <button id="imprintbutton"><u>Imprint</u></button>
-        </div>
-    
-    
-    
-        {% comment %} <div>
-            <br>
-            <table id="tabelle">
-                <thead>
-                    <tr id="ueberschrift">
-                        <th>expert</th>
-                        <th>trustworthiness</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for person, value in content %}
-                    <tr>
-                        <td>{{ person }}</td>
-                        <td>{{ value }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div> {% endcomment %}
+
+ <div class="container">
+    <div class="nav-wrapper white z-depth-4 roundedcorners" style="top: 140px; left: 25%; position: absolute; width: 50%; height: 100px; border: 1px black; border-style: solid; align-items: center; display: flex; border-radius: 10px">
+        <form id="searchbar" style="flex: 100" autocomplete="off" method="get" action="/results">
+            <div class="input-field" style="position: relative">
+             {% comment %} list="list-competency" zu input {% endcomment %}
+                <input name="q" placeholder="Search Competences" id="auto" type="text" class="autocomplete" style="width: 65%; margin: 0;font-size:30px">
+                <label for="auto" class="label-icon" for="search" style="left: auto; right: 0; width: auto, margin-left: 0; margin-right: 5%; margin-top:0%", type="submit", name="action">
+                    <button class="transparent" style="border: none" type="submit">
+                        <i class="material-icons">search</i>
+                    </button>
+                </label>
+            </div>
+        </form>
     </div>
+</div>
+
+
+
+<script>  
+document.addEventListener('DOMContentLoaded', function() {
+    var dict = JSON.parse('{{competencies|escapejs}}');
+    var elems = document.querySelectorAll('.autocomplete');
+    options = {
+        data: {
+        },
+        limit: 10,
+        onAutocomplete: function(selectedValue) {
+            document.getElementById("searchbar").submit();
+        }
+    }
+    for (var key in dict){
+        options.data[dict[key][1]] = null
+    }
+    var instances = M.Autocomplete.init(elems, options);
+});
+</script>
+
+
+
+    <br><br><br><br>
+
+
+        {% comment %} popular comp mit show all button und vier blöcken mit popular comp und show scientists button {% endcomment %}
+
+
+        <div style="align: central">
+             <div id="showcomp" align="left">
+                <h3> Popular competences <button id="showallbutton"> 
+                <a href="/Category/"><span class="black-text text-darken-2"> 
+                show all</span> </a></button></h3> 
+            </div
+        </div>
+
+            <div class="row">
+                <div class="col s1 m3">
+                    <div class="card blue-grey">
+                        <div class="card-content white-text">
+                            <span class="card-title">Machine Learning</span>
+                            <p>This is a short paragraph about Machine Learning. Search for Scientist to find out more.</p>
+                        </div>
+                        <div class="card-action">
+                            <a href="#"><span class="white-text text-darken-2">Search Scientists</span></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s1 m3">
+                    <div class="card blue-grey">
+                        <div class="card-content white-text">
+                            <span class="card-title">Data Science</span>
+                            <p>This is a short paragraph about Data Science. Search for Scientist to find out more.</p>
+                        </div>
+                        <div class="card-action">
+                            <a href="#"><span class="white-text text-darken-2">Search Scientists</span></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s1 m3">
+                    <div class="card blue-grey">
+                        <div class="card-content white-text">
+                            <span class="card-title">Biotechnology</span>
+                            <p>This is a short paragraph about Biotechnology. Search for Scientist to find out more.</p>
+                        </div>
+                        <div class="card-action">
+                            <a href="#"><span class="white-text text-darken-2">Search Scientists</span></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s1 m3">
+                    <div class="card blue-grey">
+                        <div class="card-content white-text">
+                            <span class="card-title">Green Energy</span>
+                            <p>This is a short paragraph about Green Energy. Search for Scientist to find out more.</p>
+                        </div>
+                        <div class="card-action">
+                            <a href="#"><span class="white-text text-darken-2">Search Scientists</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    
+        <br><br><br><br>
+      
+    {% comment %} untere Navbar mit Aboutkool, privacy und imprint {% endcomment %}
+
+    <div class="row" id="bottomDiv">
+        <nav>
+            <div class="nav-wrapper white">
+                <ul class="left hide-on-med-and-down">
+                    <li><a href="aboutkool/"><span class="black-text text-darken-2"><u>About Kool</u></span></a></li>
+                    <li><a href=""><span class="black-text text-darken-2"><u>Privacy</u></span></a></li>
+                    <li><a href=""><span class="black-text text-darken-2"><u>Imprint</u></span></a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    </div>
+  
     
 
 {% endblock %}

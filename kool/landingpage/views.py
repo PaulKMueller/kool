@@ -1,18 +1,27 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-import pandas as pd
-from . import models
+import requests
+import json
 
+main_url = "http://192.168.123.116:8020"
 
-content = []
-
-csvreader = pd.read_csv('/workspaces/kool/kool/firsttest.csv', encoding='UTF-8', header=None)
-
-#iterating through csv file using pandas
-for expert, trustworthiness in zip(csvreader[0], csvreader[1]):
-    content.append([expert, trustworthiness])
+def get_request_from_api(url):
+    for i in range(5):
+        try:
+            response = requests.get(url)
+            return response.json()
+        except:
+            time.sleep(2)
+            continue
+    return "connection failed"
 
 
 def home(request):
-    return render(request, 'home.html', {'content':content})
+    req_all_comp = main_url + "/all_competencies/"
+    competencies = get_request_from_api(req_all_comp)
+    print(json.dumps(competencies))
+    return render(request, 'home.html', {'competencies': json.dumps(competencies)})
+
+def aboutkoolpage(request):
+    return render(request, 'aboutkool.html')
+
 

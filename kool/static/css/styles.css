@@ -36,6 +36,30 @@ body {
     border-radius: 10px
 }
 
+.autocom-box li{
+    list-style: none;
+    padding: 8px 12px;
+    display: none;
+    width: 100%;
+    cursor: default;
+    border-radius: 3px;
+  }
+
+
+.autocom-box li{
+    list-style: none;
+    padding: 8px 12px;
+    display: none;
+    width: 100%;
+    cursor: default;
+    border-radius: 3px;
+  }
+
+
+
+
+
+
 .searchbaroffset {
     bottom: -35px;
     left: 5%; 
