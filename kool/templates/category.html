@@ -1,0 +1,47 @@
+{% extends 'base.html' %} {% block main_content %}
+<!-- NavBar & Searchbar using include -->
+<div
+  class="navbar-fixed light-blue accent-1 z-depth-4"
+  style="width: 100%; height: 200px; position: fixed"
+>
+  {% include 'includes/navbar.html' %}
+  <div
+    class="nav-wrapper white z-depth-4 roundedcorners"
+    style="
+      bottom: -35px;
+      left: 5%;
+      position: absolute;
+      width: 30%;
+      height: 75px;
+      border: 1px black;
+      border-style: solid;
+      align-items: center;
+      display: flex;
+      border-radius: 10px;
+    "
+  >
+    {% include 'includes/searchbar.html' %}
+  </div>
+</div>
+  <div class="row" style="margin-top: 250px; width: 90%">
+    <div class="col s12" style="height: 10px;">
+      <a class="waves-effect waves-black btn-flat left" href="/category">
+        <i class="material-icons">arrow_back</i>
+        View categories
+      </a>
+    </div>
+    <div class="col s12">
+      <h2 class="left">{{name}}</h2>
+    </div>
+      {% for competency in competencies %}
+      <div class="col s12 l3">
+        <a class="competency" href="{{ competency.0 }}">
+          <div class="card grey darken-4 roundedcorners" style="height: 100px;">
+            <span class="white-text" style="font-size: 30px;">{{ competency.1 }}</span>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+  </div>
+  {% endblock %}
+</div>
