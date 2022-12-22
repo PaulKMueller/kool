@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from competence_page.models import Category
 import requests
+import json
 import time
 # Create your views here.
 
@@ -23,9 +24,11 @@ def categories_page(request):
         newCat.link = category[0]
         newCat.img = "/static/images/" + str(category[0]) + ".jpg"
         categories_obj.append(newCat)
-
+    req_all_comp = main_url + "/all_competencies/"
+    all_competencies = get_request_from_api(req_all_comp)
+    
     return render(request, 'competence_categories.html',
-                  {'categories': categories_obj})
+                  {'categories': categories_obj, 'all_competencies': json.dumps(all_competencies)})
 
 
 def get_request_from_api(url):
@@ -47,5 +50,9 @@ def competence_page(request, id):
     competencies.sort(key=lambda a: a[1])
 
     name = get_request_from_api(name_req_url)[0]
+    req_all_comp = main_url + "/all_competencies/"
+    all_competencies = get_request_from_api(req_all_comp)
+    
     return render(request, 'category.html', {'name': name,
-                                             'competencies': competencies})
+                                             'competencies': competencies,
+                                             'all_competencies': json.dumps(all_competencies)})

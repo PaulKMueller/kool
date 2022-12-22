@@ -1,7 +1,7 @@
 from django.shortcuts import render
 import requests
 from abstract_page.models import Abstract, Author, Competency
-
+import json
 # Create your views here.
 
 main_url = "http://192.168.123.116:8020"

@@ -2,6 +2,7 @@ from django.shortcuts import render
 import pandas as pd
 import requests
 from result_page.models import Author 
+import json
 
 resultsdict = []
 
@@ -73,4 +74,11 @@ def results(request, id = None):
         if len(authors) != 0:
             found_authors = True
             competency = get_competency_name_by_id(competency_id)[0]
-    return render(request, 'result_page.html', {'has_found': found_authors, 'competency': competency, 'authors': authors})
+
+    req_all_comp = main_url + "/all_competencies/"
+    all_competencies = get_request_from_api(req_all_comp)
+
+    return render(request, 'result_page.html', {'has_found': found_authors,
+     'competency': competency,
+      'authors': authors,
+      'all_competencies': json.dumps(all_competencies)})

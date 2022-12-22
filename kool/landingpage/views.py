@@ -1,6 +1,7 @@
 from django.shortcuts import render
 import requests
 import json
+import time
 
 main_url = "http://192.168.123.116:8020"
 
@@ -18,8 +19,7 @@ def get_request_from_api(url):
 def home(request):
     req_all_comp = main_url + "/all_competencies/"
     competencies = get_request_from_api(req_all_comp)
-    print(json.dumps(competencies))
-    return render(request, 'home.html', {'competencies': json.dumps(competencies)})
+    return render(request, 'home.html', {'all_competencies': json.dumps(competencies)})
 
 def aboutkoolpage(request):
     return render(request, 'aboutkool.html')
