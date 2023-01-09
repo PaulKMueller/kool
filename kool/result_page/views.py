@@ -1,13 +1,12 @@
 from django.shortcuts import render
 import pandas as pd
-import requests
-from result_page.models import Author 
+from result_page.models import Author
 import json
 import access
 
 resultsdict = []
 
-csvreader = pd.read_csv('/workspaces/kool/kool/firsttest.csv', 
+csvreader = pd.read_csv('/workspaces/kool/kool/firsttest.csv',
                         encoding='UTF-8',
                         header=None)
 
@@ -17,7 +16,8 @@ for expert, trustworthiness in zip(csvreader[0], csvreader[1]):
 
 
 def get_author_by_competency_id(competency_id):
-    authors_db_entry = access.get_request_from_api("/authors_by_competency_id/" + str(competency_id))
+    authors_db_entry = access.get_request_from_api("/authors_by_competency_id/"
+                                                   + str(competency_id))
     authors = {}
     for author_entry in authors_db_entry:
         author_id = author_entry[0]
@@ -27,19 +27,24 @@ def get_author_by_competency_id(competency_id):
         relevancy = author_entry[4]
 
         if author_id not in authors:
-            authors[author_id] = Author(author_id, author_first_name, author_last_name, {})
-    
+            authors[author_id] = Author(author_id, author_first_name,
+                                        author_last_name, {})
+
         authors[author_id].add_abstract(abstract_id, relevancy)
     return authors
 
+
 def get_competency_name_by_id(competency_id):
-    return access.get_request_from_api("/competency_name_by_id/" + str(competency_id))
+    return access.get_request_from_api("/competency_name_by_id/"
+                                       + str(competency_id))
+
 
 def get_competency_id_by_name(competency_name):
-    return access.get_request_from_api("/competency_id_by_name/" + str(competency_name))
+    return access.get_request_from_api("/competency_id_by_name/"
+                                       + str(competency_name))
 
 
-def results(request, id = None):
+def results(request, id=None):
     """if ?q=... exists its preferred, else id is used. When no authors found
     user is informed in frontend"""
     found_id = False
@@ -54,8 +59,7 @@ def results(request, id = None):
         result = get_competency_id_by_name(searchquery)
         if result is not None:
             competency_id = result[0]
-            found_id = True
-    
+            found_id = True     
     if found_id:
         authors = get_author_by_competency_id(competency_id)
         if len(authors) != 0:
@@ -65,6 +69,6 @@ def results(request, id = None):
     all_competencies = access.get_request_from_api("/all_competencies/")
 
     return render(request, 'result_page.html', {'has_found': found_authors,
-     'competency': competency,
-      'authors': authors,
-      'all_competencies': json.dumps(all_competencies)})
+                  'competency': competency,
+                  'authors': authors,
+                  'all_competencies': json.dumps(all_competencies)})

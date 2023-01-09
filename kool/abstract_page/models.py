@@ -1,11 +1,7 @@
-from django.db import models
-
-# Create your models here.
-
-
 class Abstract:
-
-    def __init__(self, id: int, year: int, title: str, content: str, doctype: str, institution: str):
+    '''Represents an abstract'''
+    def __init__(self, id: int, year: int, title: str, content: str,
+                 doctype: str, institution: str):
         self.id = id
         self.year = year
         self.title = title
@@ -15,6 +11,7 @@ class Abstract:
 
 
 class Author:
+    '''Represents an author'''
     def __init__(self, id: int, first_name: str, last_name: str):
         self.id = id
         self.first_name = first_name
@@ -22,6 +19,7 @@ class Author:
 
 
 class Competency:
+    '''Represents a competency'''
     def __init__(self, id: int, name: str):
         self.id = id
         self.name = name
