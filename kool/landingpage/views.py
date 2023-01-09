@@ -2,23 +2,10 @@ from django.shortcuts import render
 import requests
 import json
 import time
-
-main_url = "http://192.168.123.116:8020"
-
-def get_request_from_api(url):
-    for i in range(5):
-        try:
-            response = requests.get(url)
-            return response.json()
-        except:
-            time.sleep(2)
-            continue
-    return "connection failed"
-
+import access
 
 def home(request):
-    req_all_comp = main_url + "/all_competencies/"
-    competencies = get_request_from_api(req_all_comp)
+    competencies = access.get_request_from_api("/all_competencies/")
     return render(request, 'home.html', {'all_competencies': json.dumps(competencies)})
 
 def aboutkoolpage(request):

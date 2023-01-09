@@ -1,16 +1,5 @@
 import requests
-
-main_url = "http://192.168.123.116:8020"
-
-def get_request_from_api(url):
-    for i in range(5):
-        try:
-            response = requests.get(url)
-            return response.json()
-        except:
-            time.sleep(2)
-            continue
-    return "connection failed"
+import access 
 
 class Author:
     def __init__(self, id: int, first_name: str, last_name: str, abstracts: dict):
@@ -20,8 +9,7 @@ class Author:
         self.abstracts = {}
  
     def add_abstract(self, abstract_id: int, relevancy: float):
-        endpoint = main_url + "/abstract_by_id/" + str(abstract_id)
-        abstract_db_entry = get_request_from_api(endpoint)
+        abstract_db_entry = access.get_request_from_api("/abstract_by_id/" + str(abstract_id))
         abstract = Abstract(abstract_db_entry[0], abstract_db_entry[1],
                         abstract_db_entry[2], abstract_db_entry[3],
                         abstract_db_entry[4], abstract_db_entry[5])

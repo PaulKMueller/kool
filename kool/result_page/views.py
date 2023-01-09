@@ -3,6 +3,7 @@ import pandas as pd
 import requests
 from result_page.models import Author 
 import json
+import access
 
 resultsdict = []
 
@@ -10,25 +11,13 @@ csvreader = pd.read_csv('/workspaces/kool/kool/firsttest.csv',
                         encoding='UTF-8',
                         header=None)
 
-main_url = "http://192.168.123.116:8020"
-
 # iterating through csv file using pandas
 for expert, trustworthiness in zip(csvreader[0], csvreader[1]):
     resultsdict.append([expert, trustworthiness])
 
-def get_request_from_api(url):
-    for i in range(5):
-        try:
-            response = requests.get(url)
-            return response.json()
-        except:
-            time.sleep(2)
-            continue
-    return "connection failed"
 
 def get_author_by_competency_id(competency_id):
-    request_url = main_url + "/authors_by_competency_id/" + str(competency_id)
-    authors_db_entry = get_request_from_api(request_url)
+    authors_db_entry = access.get_request_from_api("/authors_by_competency_id/" + str(competency_id))
     authors = {}
     for author_entry in authors_db_entry:
         author_id = author_entry[0]
@@ -44,12 +33,10 @@ def get_author_by_competency_id(competency_id):
     return authors
 
 def get_competency_name_by_id(competency_id):
-    requests_url = main_url + "/competency_name_by_id/" + str(competency_id)
-    return get_request_from_api(requests_url)
+    return access.get_request_from_api("/competency_name_by_id/" + str(competency_id))
 
 def get_competency_id_by_name(competency_name):
-    requests_url = main_url + "/competency_id_by_name/" + str(competency_name)
-    return get_request_from_api(requests_url)
+    return access.get_request_from_api("/competency_id_by_name/" + str(competency_name))
 
 
 def results(request, id = None):
@@ -75,8 +62,7 @@ def results(request, id = None):
             found_authors = True
             competency = get_competency_name_by_id(competency_id)[0]
 
-    req_all_comp = main_url + "/all_competencies/"
-    all_competencies = get_request_from_api(req_all_comp)
+    all_competencies = access.get_request_from_api("/all_competencies/")
 
     return render(request, 'result_page.html', {'has_found': found_authors,
      'competency': competency,
