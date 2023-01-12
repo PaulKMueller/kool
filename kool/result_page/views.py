@@ -4,16 +4,6 @@ from result_page.models import Author
 import json
 import access
 
-resultsdict = []
-
-csvreader = pd.read_csv('/workspaces/kool/kool/firsttest.csv',
-                        encoding='UTF-8',
-                        header=None)
-
-# iterating through csv file using pandas
-for expert, trustworthiness in zip(csvreader[0], csvreader[1]):
-    resultsdict.append([expert, trustworthiness])
-
 
 def get_author_by_competency_id(competency_id):
     authors_db_entry = access.get_request_from_api("/authors_by_competency_id/"

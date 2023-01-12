@@ -1,0 +1,22 @@
+paths:
+  path_to_db: database_api/database_with_mmr_and_diversity05.db
+  path_to_csv: database_api/db_creation/data.csv
+
+categories: ["Mathematics", "Computer and Informations Sciences",
+                  "Physical Sciences", "Chemical Sciences",
+                  "Environmental Sciences",
+                  "Earth Sciences", "Biological Sciences",
+                  "Civil Engineering",
+                  "Electrical Engineering", "Mechanical Engineering",
+                  "Chemical Engineering", "Materials Engineering",
+                  "Medical Engineering", "Nano-technology", "Medicine",
+                  "Health Sciences", "Agriculture, Forestry, and Fisheries",
+                  "Animal and Dairy Sciences", "Veterinary Sciences",
+                  "Agricultural Engineering", "Psychology",
+                  "Economics and Business",
+                  "Educational Sciences", "Sociology",
+                  "Law", "Political Sciences",
+                  "Geography", "Media and Communication",
+                  "History and Archeology",
+                  "Languages and Literature", "Philosophy",
+                  "Ethics and Religion"]

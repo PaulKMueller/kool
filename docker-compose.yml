@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  app:
+    ports:
+      - 8000:8000
+      - 8010:8010
+      - 8020:8020
+    volumes:
+      - ./kool:/usr/src/app
+
+    build:
+      context: ./kool
+
+    depends_on:
+      - backend
+
+    # Overrides default command so things don't shut down after the process ends.
+   # command: sleep infinity
+
+    # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
+    # network_mode: service:db
+
+    # Uncomment the next line to use a non-root user for all processes.
+    # user: vscode
+
+    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally.
+    # (Adding the "ports" property to this file will not forward from a Codespace.)
+
+  backend:
+    restart: unless-stopped
+
+    volumes:
+      - ./backend:/usr/src/app
+    build:
+      context: ./backend
+
+    command: sleep infinity
