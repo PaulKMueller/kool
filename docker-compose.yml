@@ -1,38 +1,47 @@
 version: '3.8'
 
 services:
-  app:
+  frontend:
     ports:
       - 8000:8000
-      - 8010:8010
-      - 8020:8020
     volumes:
-      - ./kool:/usr/src/app
+      - ./frontend:/usr/src/app
 
     build:
-      context: ./kool
+      context: ./frontend
 
     depends_on:
-      - backend
+      - database_api
 
-    # Overrides default command so things don't shut down after the process ends.
-   # command: sleep infinity
-
-    # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
-    # network_mode: service:db
-
-    # Uncomment the next line to use a non-root user for all processes.
-    # user: vscode
-
-    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally.
-    # (Adding the "ports" property to this file will not forward from a Codespace.)
-
-  backend:
+  database_api:
+    environment:
+      - PATH_TO_DB=database.db
+      - PATH_TO_CSV=db_creation/data.csv
     restart: unless-stopped
 
     volumes:
-      - ./backend:/usr/src/app
+      - ./database_api:/usr/src/app
     build:
-      context: ./backend
+      context: ./database_api
+  
+  # uncomment when you want to run the ML Model API
 
-    command: sleep infinity
+#  model_api:
+#    restart: unless-stopped
+#
+#    volumes:
+#      - ./model_api:/usr/src/app
+#    build:
+#      context: ./model_api
+  
+  # uncomment when you want to run the playground
+
+#  playground:
+#    ports:
+#      - 8030:8030
+#    restart: unless-stopped
+#
+#    volumes:
+#      - ./playground:/usr/src/app
+#    build:
+#      context: ./playground

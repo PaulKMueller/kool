@@ -1,0 +1,5 @@
+playground/__pycache__
+database_api/__pycache__
+database_api/db_creation/__pycache__
+model_api/__pycache__
+.vscode

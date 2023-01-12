@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+
+{% block main_content %}
+
+<!-- NavBar & Searchbar using include -->
+<div class="navbar-fixed z-depth-2" style="background-color: #9EC4D5; width: 100%; height: 120px; position: fixed">
+    {% include 'includes/navbar.html' %}
+    <div class="nav-wrapper white z-depth-4 searchbaroffset roundedcorners bordersmall">
+        {% include 'includes/searchbar.html' %}
+    </div>
+</div>
+
+
+
+<div class="container-fixed transparent" style="margin-top: 180px; width: 100%">
+    {% if has_found %}
+    
+    <div class="flow-text container left-align resultsshower competency" style="height: 36px">
+        Results: {{ competency }}
+    </div>
+
+    <div class="container-fixed transparent" style="width: 100%; margin-top: 48px">
+        {% for author_id, author in authors.items %}
+        <div class="col resultbox container l10  grey lighten-3 roundedcorners  z-depth-1">
+                <i class="small material-icons" style="margin-left: 3%">account_circle</i>
+                <div class="resulttext col">
+                   <p>
+                        {{author.first_name}} {{ author.last_name }}
+                   </p>
+                </div>
+                <div class="infoboxresult col">
+                    <div> {{author.get_last_publication_year }} </div>
+                    <div> Last relevant publication </div>
+                </div>
+                <div class="resultcount col">
+                    <div> {{ author.get_number_of_publications }} </div>
+                    <div> Relevant publications </div>
+                </div>
+                <button onclick="expand('{{ forloop.counter }}');" class="btn-large btn-flat waves-effect transparent right-align roundedcorners">
+                    <i class="medium material-icons">expand_more</i>
+                </button>
+        </div>
+        <div id="{{ forloop.counter }}" class="container" style="display: None">
+            <table class="highlight">
+                <thead>
+                    <tr>
+                        <th>Competency</th>
+                        <th>Title</th>
+                        <th>Type</th>
+                        <th></th>
+                        <th>Publicated</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for abstract_id, abstract in author.abstracts.items %}
+                                
+                    <tr>
+                        <th class="competency" style="font-weight: normal">{{ competency }}</th>
+                        <th style="font-weight: normal">{{ abstract.0.title }}</th>
+                        <th style="font-weight: normal">{{ abstract.0.doctype }}</th>
+                        <th>
+                            <a href="/abstract/{{abstract_id}}/detailed/{{author_id}}">
+                            <button class="buttonabstract btn-medium btn-flat waves-effect roundedcorners">
+                                View Abstract
+                            </button>
+                            </a>
+                        </th>
+                        <th style="font-weight: normal">{{ abstract.0.year }}</th>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <br>
+        {% endfor %}
+    </div>
+
+    {% else %}
+        <div class="flow-text">
+            No results for "{{competency}}"
+        </div>
+
+    {% endif %}
+    
+</div>
+
+
+
+
+<script>
+    function expand(tabContent) {
+        status = window.getComputedStyle(document.getElementById(tabContent)).display 
+        if (status == "none") {
+            document.getElementById(tabContent).style.display = 'block'
+        }  else {
+            document.getElementById(tabContent).style.display = 'none'
+        }
+        
+    }
+</script>
+
+{% endblock %}

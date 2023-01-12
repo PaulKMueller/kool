@@ -1,0 +1,69 @@
+{% extends 'base.html' %} {% block main_content %}
+<!-- NavBar & Searchbar using include -->
+<div class="navbar-fixed z-depth-2" style="background-color: #9EC4D5; width: 100%; height: 120px; position: fixed; z-index: 1">
+
+  {% include 'includes/navbar.html' %}
+  <div
+    class="nav-wrapper white z-depth-4 roundedcorners"
+    style="
+      bottom: -35px;
+      left: 5%;
+      position: absolute;
+      width: 30%;
+      height: 75px;
+      border: 1px black;
+      border-style: solid;
+      align-items: center;
+      display: flex;
+      border-radius: 10px;
+    "
+  >
+    {% include 'includes/searchbar.html' %}
+  </div>
+</div>
+<div class="row" style="margin-top: 180px; width: 90%">
+  {% for category in categories %}
+
+  <div class="col s12 l3">
+    <div class="card">
+      <div class="card-image" stye="border-radius: 10px">
+        <a href="{{category.link}}">
+          <div style="overflow: hidden">
+          <img class="responsive-img" src="{{ category.img }}"  style = "height: 200px; width: 100%; object-fit: cover; filter: brightness(60%) blur(2px)" />
+          <span class="card-title" style="font-size: 30px"
+            >{{category.name}}</span>
+          </div>
+        </a>
+      </div>
+  </div>
+  </div>
+
+  {% endfor %} {% endblock %}
+
+  <!--biology: https://cdn.pixabay.com/photo/2019/03/19/19/54/butterflies-4066785_960_720.jpg-->
+  <!--chemistry: https://cdn.pixabay.com/photo/2012/11/07/21/23/showcase-65306_960_720.jpg-->
+  <!--computer science: https://cdn.pixabay.com/photo/2022/04/04/16/42/technology-7111799_960_720.jpg-->
+  <!--economics: https://cdn.pixabay.com/photo/2016/10/09/19/19/coins-1726618_960_720.jpg-->
+
+  <!--<div class="col s3 m3">
+      <div class="card">
+        <div class="card-image">
+          <img
+            class="responsive-img"
+            src="https://cdn.pixabay.com/photo/2019/03/19/19/54/butterflies-4066785_960_720.jpg"
+          />
+          <span class="card-title">Biology</span>
+        </div>
+        <div class="card-content">
+          <p>
+            I am a very simple card. I am good at containing small bits of
+            information. I am convenient because I require little markup to use
+            effectively.
+          </p>
+        </div>
+        <div class="card-action">
+          <a href="#">This is a link</a>
+        </div>
+      </div>
+    </div>-->
+</div>

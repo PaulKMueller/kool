@@ -1,0 +1,27 @@
+<form  id="searchbar" style="flex: 100" method="get" action="/results">
+    <div class="input-field" style="position: relative">
+    <!-- todo: start input left & autofill -->
+        <input name="q" class="autocomplete" placeholder="Search Competences" id="search" type="search" style="width: 65%; margin: 0">
+        <label class="label-icon" for="search" style="left: auto; right: 0; width: auto, margin-left: 0; margin-right: 5%">
+            <i class="material-icons">search</i>
+        </label>
+    </div>
+</form>
+<script>  
+    document.addEventListener('DOMContentLoaded', function() {
+        var dict = JSON.parse('{{all_competencies|escapejs}}');
+        var elems = document.querySelectorAll('.autocomplete');
+        options = {
+            data: {
+            },
+            limit: 10,
+            onAutocomplete: function(selectedValue) {
+                document.getElementById("searchbar").submit();
+            }
+        }
+        for (var key in dict){
+            options.data[dict[key][1]] = null
+        }
+        var instances = M.Autocomplete.init(elems, options);
+    });
+</script>

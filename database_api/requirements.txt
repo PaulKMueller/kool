@@ -1,0 +1,6 @@
+fastapi
+PyYAML
+numpy
+uvicorn
+langdetect
+selenium
