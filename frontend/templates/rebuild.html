@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+
+{% block main_content %}
+
+{% include 'includes/navbar_admin.html' %}
+
+<div class="container transparent" style="padding-top: 100px;">
+    <div class="container">
+        <div class="input-field">
+            <select>
+                <option selected="selected" value="" disabled>Choose the model</option>
+                <option value="1">Opt 1</option>
+                <option value="2">Opt 2</option>
+                <option value="3">Opt 3</option>
+            </select>
+            <label>ML Model for creating database</label>
+        </div>
+    </div>
+    <button class="btn-large waves-effect waves-ligh red roundedcorners">Rebuild</button>
+</div>
+
+<script>
+    $(document).ready(function() {
+    $('select').formSelect();
+    });
+</script>
+
+{% endblock %}
