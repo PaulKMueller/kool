@@ -9,4 +9,5 @@ urlpatterns = [
     path('edit_database/', views.edit_database, name='edit_database'),
     path('rebuild/', views.rebuild, name='rebuild'),
     path('scraper/', views.scraper, name='scraper'),
+    path('playground/', views.playground, name='playground'),
 ]

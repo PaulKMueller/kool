@@ -135,6 +135,7 @@ def ask_galactica(abstract: str):
             if competency in other_competency and competency != other_competency:
                 competency_list.remove(competency)
 
+    competency_list = [(competency, -1) for competency in competency_list]
     return competency_list
 
 
