@@ -7,6 +7,6 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-ENTRYPOINT ["python", "run_database_api.py"]
+ENTRYPOINT ["python", "run_model_api.py"]
 
 

@@ -36,6 +36,7 @@ def get_competency(abstract: str):
     """
     return get_competency_from_backend(abstract)
 
+
 @app.get("/get_category_of_competency/{competency}")
 def get_category(competency: str):
     """Endpoint for getting the category of a specific competency. Returns
@@ -43,8 +44,12 @@ def get_category(competency: str):
 
     Args:
         competency (str): a competency
+
+    Returns:
+        int: id of the category
     """
     return get_category_of_competency(competency)
+
 
 @app.get("/generate_text/{abstract}")
 async def get_competencies_from_abstract(abstract: str):
@@ -133,7 +138,7 @@ async def get_keybert_answer(abstract: str):
     to extract competencies from an abstract.
 
     Returns:
-        string: The model's response to the prompt.
+        list: The model's response to the prompt.
     """
     return ask_keybert(abstract)
 
