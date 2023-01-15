@@ -1,10 +1,9 @@
-"""This module summarizes the functions used to generate the competencies.
+"""
+This module summarizes the functions used to generate the competencies.
 It contains a multitude of functions that are used to extract competencies
 from abstracts using different language models.
-
-Returns:
-    _type_: _description_
 """
+
 import random
 import galai as gal
 from transformers import (XLNetTokenizer, XLNetForQuestionAnsweringSimple,

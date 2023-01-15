@@ -1,4 +1,5 @@
-"""This is the backend's database_api. It contains the endpoints
+"""
+This is the backend's database_api. It contains the endpoints
 to access the database.
 """
 

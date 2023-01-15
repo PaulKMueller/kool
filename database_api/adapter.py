@@ -1,4 +1,6 @@
-"""Provides functionality to interact with the database."""
+"""
+Provides functionality to interact with the database.
+"""
 
 import sqlite3
 from sqlite3 import Error

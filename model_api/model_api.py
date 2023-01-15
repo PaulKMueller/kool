@@ -1,4 +1,5 @@
-"""This API exposes different endpoints that can be used
+"""
+This API exposes different endpoints that can be used
 to extract competencies from abstracts.
 """
 
@@ -141,7 +142,3 @@ async def get_keybert_answer(abstract: str):
         list: The model's response to the prompt.
     """
     return ask_keybert(abstract)
-
-# The following code enables the app to be run with "python main.py"
-if __name__ == "__main__":
-    uvicorn.run(app, port=8000)

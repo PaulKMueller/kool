@@ -1,4 +1,5 @@
-"""This module contains functions that are used in the playground.
+"""
+This module contains functions that are used in the playground.
 More specifically, it contains functions that are used in the
 download buttons of the playground.
 """
@@ -35,7 +36,6 @@ def download(object_to_download, download_filename, button_text):
     --------
     download_link(your_df, 'YOUR_DF.csv', 'Click to download data!')
     download_link(your_str, 'YOUR_STRING.txt', 'Click to download text!')
-    
     """
 
     if isinstance(object_to_download, bytes):
@@ -48,7 +48,7 @@ def download(object_to_download, download_filename, button_text):
         object_to_download = json.dumps(object_to_download)
 
     try:
-        # some strings <-> bytes conversions necessary here
+        # Some strings <-> bytes conversions necessary here
         b64 = base64.b64encode(object_to_download.encode()).decode()
     except AttributeError:
         b64 = base64.b64encode(object_to_download).decode()
