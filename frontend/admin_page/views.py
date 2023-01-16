@@ -12,6 +12,7 @@ PLAYGROUND_PORT = os.environ.get(ENVIRONMENT_VARIABLE_PLAYGROUND_PORT)
 def adminpage(request):
     return render(request, 'admin.html')
 
+
 def add_entries(request):
     if request.method == 'POST' and 'new_database' in request.FILES:
         myfile = request.FILES['new_database']

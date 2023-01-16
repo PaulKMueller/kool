@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class CompetencePageConfig(AppConfig):
+class CompetencyPageConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "competence_page"
+    name = "competency_page"

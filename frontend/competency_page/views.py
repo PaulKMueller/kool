@@ -1,6 +1,6 @@
 import json
 from django.shortcuts import render
-from competence_page.models import Category
+from competency_page.models import Category
 import access
 
 
@@ -18,12 +18,12 @@ def categories_page(request):
         categories_obj.append(new_cat)
     all_competencies = access.get_request_from_api("/all_competencies/")
 
-    return render(request, 'competence_categories.html',
+    return render(request, 'competency_categories.html',
                   {'categories': categories_obj,
                    'all_competencies': json.dumps(all_competencies)})
 
 
-def competence_page(request, id):
+def competency_page(request, id):
     '''Render Competency Page, which shows all the competencies to a given
     category id
 
