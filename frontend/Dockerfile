@@ -10,6 +10,6 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Starts the Frontend on Port
-ENTRYPOINT ["python3", "manage.py", "runserver", "0.0.0.0:${FRONTEND_PORT}"]
+ENTRYPOINT ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
 
 
