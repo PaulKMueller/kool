@@ -83,7 +83,7 @@ sql_commands = [SQL_CREATE_TABLE_ABSTRACT,
                 SQL_CREATE_TABLE_HAS_CATEGORY]
 
 
-def create_table(conn, sql_command):
+def create_table(conn, sql_command: str):
     """Creates a table specified in sql_command.
 
     Args:
