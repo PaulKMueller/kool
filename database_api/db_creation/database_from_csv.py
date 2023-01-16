@@ -3,13 +3,12 @@
     data from the model_api.
 """
 
+import os
 import pandas as pd
 from langdetect import detect
 import string_formatter
-import yaml
 import adapter
 from tqdm import tqdm
-import os
 import requests
 
 ENVIRONMENT_VARIABLE_MODEL_API_PORT = "MODEL_API_PORT"
@@ -18,7 +17,7 @@ MODEL_API_PORT = os.environ.get(ENVIRONMENT_VARIABLE_MODEL_API_PORT)
 URL_OF_MODEL_API = "http://model_api:" + MODEL_API_PORT
 
 
-def get_request_from_api(endpoint):
+def get_request_from_api(endpoint: str):
     """ This function sends a get request to the
     model_api and returns the response as json
 

@@ -5,7 +5,6 @@ Provides functionality to interact with the database.
 import sqlite3
 from sqlite3 import Error
 import os
-import numpy as np
 
 
 # Path to existing database or where the database should be created
@@ -42,7 +41,7 @@ def insert_abstract(conn, db_entry_abstract):
     conn.commit()
 
 
-def insert_written_by(conn, abstract_id, author_id):
+def insert_written_by(conn, abstract_id: int, author_id: int):
     """Inserts an entry into the written_by relation in the database.
 
     Args:
@@ -57,7 +56,8 @@ def insert_written_by(conn, abstract_id, author_id):
     conn.commit()
 
 
-def insert_has_competency(conn, author_id, competency_id, status):
+def insert_has_competency(conn, author_id: int,
+                          competency_id: int, status: str):
     """Inserts an entry into the has_competency relation in the database.
 
     Args:
@@ -73,7 +73,8 @@ def insert_has_competency(conn, author_id, competency_id, status):
     conn.commit()
 
 
-def insert_derived_from(conn, competency_id, abstract_id, relevancy):
+def insert_derived_from(conn, competency_id: int,
+                        abstract_id: int, relevancy: float):
     """Inserts an entry into the derived_from relation in the database.
 
     Args:
@@ -89,7 +90,7 @@ def insert_derived_from(conn, competency_id, abstract_id, relevancy):
     conn.commit()
 
 
-def insert_category(conn, category_id, category_name):
+def insert_category(conn, category_id: int, category_name: str):
     """Inserts an entry into the category relation in the database.
 
     Args:
@@ -103,7 +104,7 @@ def insert_category(conn, category_id, category_name):
     conn.commit()
 
 
-def insert_has_category(conn, category_id, competency_id):
+def insert_has_category(conn, category_id: int, competency_id: int):
     """Inserts an entry into the has_category relation in the database.
 
     Args:
@@ -118,7 +119,7 @@ def insert_has_category(conn, category_id, competency_id):
     conn.commit()
 
 
-def get_author_id_by_name(conn, first_name, last_name):
+def get_author_id_by_name(conn, first_name: str, last_name: str) -> int:
     """Returns the id of an author by its name or creates an id if the author's
     id has not been created yet.
 
@@ -150,7 +151,7 @@ def get_author_id_by_name(conn, first_name, last_name):
     return author_id
 
 
-def add_category(conn, competency_name):
+def add_category(conn, competency_name: str) -> int:
     """Adds an entry to the category relation in the database.
 
     Args:
@@ -176,18 +177,18 @@ def add_category(conn, competency_name):
         # Fetchone returns tuple, we want only the author_id
         competency_id = result[0]
 
-    conn.commit
+    conn.commit()
     return competency_id
 
 
-def get_all_categories(conn):
+def get_all_categories(conn) -> list[int, str]:
     """Returns all entries in the category relation in the database.
 
     Args:
         conn (Connection): Connection to the database
 
     Returns:
-        list: List[category_id, name]
+        list: list[category_id, name]
     """
     sql_get_categories = """SELECT * FROM category;"""
     cursor = conn.cursor()
@@ -200,14 +201,14 @@ def get_all_categories(conn):
     return result
 
 
-def get_all_competencies(conn):
+def get_all_competencies(conn) -> list[int, str, float]:
     """Returns all entries in the competency relation in the database.
 
     Args:
         conn (Connection): Connection to the database
 
     Returns:
-        list: List[competency_id, competency_name, relevancy]
+        list: list[competency_id, competency_name, relevancy]
     """
     sql_get_categories = """SELECT * FROM competency;"""
     cursor = conn.cursor()
@@ -219,8 +220,7 @@ def get_all_competencies(conn):
     return result
 
 
-def get_or_generate_competency_id_by_name(conn, competency_name):
-    '''Returns competency_id for a given name and inserts if name not yet in db'''
+def get_or_generate_competency_id_by_name(conn, competency_name: str) -> int:
     """Returns the id of a competency by its name or creates an id if the
     competency's id has not been created yet.
 
@@ -247,21 +247,31 @@ def get_or_generate_competency_id_by_name(conn, competency_name):
 
         competency_id = result[0]
 
-    conn.commit
+    conn.commit()
     return competency_id
 
-def get_competency_id_by_name(conn, competency_id):
-    '''returns competency id for a given name'''
-    sql_get_competency_id = """SELECT competency_id 
+
+def get_competency_id_by_name(conn, competency_id) -> int:
+    """Returns the id of a competency by its name.
+
+    Args:
+        conn (Connection): Connection to the database
+        competency_id (int): Id of the competency
+
+    Returns:
+        int: Id of the competency
+    """
+    sql_get_competency_id = """SELECT competency_id
                             FROM competency
                             WHERE competency_name = ?"""
-    c = conn.cursor()
-    c.execute(sql_get_competency_id, (competency_id,))
-    competeny_name = c.fetchone()
-    conn.commit
-    return competeny_name 
+    cursor = conn.cursor()
+    cursor.execute(sql_get_competency_id, (competency_id,))
+    competency_id = cursor.fetchone()
+    conn.commit()
+    return competency_id
 
-def get_competency_name_by_id(conn, competency_id):
+
+def get_competency_name_by_id(conn, competency_id) -> str:
     """Returns the name of a competency by its id.
 
     Args:
@@ -280,7 +290,7 @@ def get_competency_name_by_id(conn, competency_id):
     return competeny_name
 
 
-def get_category_name_by_id(conn, category_id):
+def get_category_name_by_id(conn, category_id: int) -> str:
     """Returns the name of a category by its id.
 
     Args:
@@ -301,7 +311,7 @@ def get_category_name_by_id(conn, category_id):
     return category_name
 
 
-def get_competencies_by_category(conn, category_name):
+def get_competencies_by_category(conn, category_name: str) -> list[int, str]:
     """Returns all competencies for a given category.
 
     Args:
@@ -309,7 +319,7 @@ def get_competencies_by_category(conn, category_name):
         category (str): Name of the category
 
     Returns:
-        list: List[competency_name]
+        list: list[competency_name]
     """
     sql_get_competencies = """SELECT comp.competency_name FROM competency comp
                               JOIN has_category hc ON comp.competency_id
@@ -325,7 +335,7 @@ def get_competencies_by_category(conn, category_name):
     return result
 
 
-def get_competencies_by_category_id(conn, category_id):
+def get_competencies_by_category_id(conn, category_id: int) -> list[int, str]:
     """Returns all competencies for a given category.
 
     Args:
@@ -333,7 +343,7 @@ def get_competencies_by_category_id(conn, category_id):
         category_id (int): Id of the category
 
     Returns:
-        list: List[competency_id, competency_name]
+        list: list[competency_id, competency_name]
     """
     sql_get_competencies = """SELECT comp.competency_id, comp.competency_name
                               FROM competency comp
@@ -350,7 +360,7 @@ def get_competencies_by_category_id(conn, category_id):
     return result
 
 
-def get_competencies_by_author_id(conn, author_id):
+def get_competencies_by_author_id(conn, author_id: int) -> list[int, str]:
     """Returns all competencies for a given author.
 
     Args:
@@ -358,7 +368,7 @@ def get_competencies_by_author_id(conn, author_id):
         author_id (int): Id of the author
 
     Returns:
-        list: List[competency_id, competency_name, status]
+        list: list[competency_id, competency_name, status]
     """
     sql_get_competencies = """SELECT hc.competency_id, comp.competency_name,
                               hc.status FROM has_competency hc
@@ -375,7 +385,7 @@ def get_competencies_by_author_id(conn, author_id):
     return result
 
 
-def get_competencies_by_abstract_id(conn, abstract_id):
+def get_competencies_by_abstract_id(conn, abstract_id: int) -> list[int, str]:
     """Returns all competencies for a given abstract.
 
     Args:
@@ -400,7 +410,8 @@ def get_competencies_by_abstract_id(conn, abstract_id):
     return result
 
 
-def get_abstract_by_id(conn, abstract_id):
+def get_abstract_by_id(conn,
+                       abstract_id: int) -> list[int, int, str, str, str, str]:
     """Returns an abstract (consisting of all its attributes) by its id.
 
     Args:
@@ -421,7 +432,7 @@ def get_abstract_by_id(conn, abstract_id):
     return result
 
 
-def get_authors_by_abstract(conn, abstract_id):
+def get_authors_by_abstract(conn, abstract_id: int) -> list[int, str, str]:
     """Returns all authors of a given abstract.
 
     Args:
@@ -431,8 +442,6 @@ def get_authors_by_abstract(conn, abstract_id):
     Returns:
         list: List[author_id, first_name, last_name]
     """
-    # TODO Search for usages of this funtion and replace
-    # them with get_authors_by_abstract_id
     sql_get_abstract = """SELECT auth.author_id, auth.first_name,
                           auth.last_name FROM abstract abs
                           JOIN written_by wb
@@ -448,7 +457,9 @@ def get_authors_by_abstract(conn, abstract_id):
     return result
 
 
-def get_authors_with_competency(conn, competency):
+def get_authors_with_competency(conn,
+                                competency: str) -> list[
+                                    int, str, str, int, str]:
     """Returns all authors with a given competency and the status of the
     competency.
 
@@ -457,41 +468,61 @@ def get_authors_with_competency(conn, competency):
         competency_name (str): Name of the competency
 
     Returns:
+        list: list[author_id, first_name, last_name, relevancy, status]
+    """
+    sql_get_authors = """SELECT auth.author_id, auth.first_name,
+                         auth.last_name,
+                         df.relevancy, hc.status
+                         FROM author auth JOIN has_competency hc
+                         ON auth.author_id = hc.author_id JOIN competency comp
+                         ON hc.competency_id = comp.competency_id JOIN
+                         derived_from df
+                         ON comp.competency_id = df.competency_id
+                         WHERE comp.competency_name = ?;"""
+    cursor = conn.cursor()
+    cursor.execute(sql_get_authors, (competency,))
+    result = cursor.fetchall()
+    if result is None:
+        return 'There are no people with this competency.'
+    conn.commit()
+    return result
+
+
+def get_authors_by_competency_id(conn,
+                                 competency_id: int) -> list[
+                                    int, str, str, float, str]:
+    """Returns all authors with a given competency with its
+    relevancy and status.
+
+    Args:
+        conn (Connection): Connection to the database
+        competency_id (int): Id of the competency
+
+    Returns:
         list: List[author_id, first_name, last_name, relevancy, status]
     """
-    sql_get_authors = """SELECT auth.author_id, auth.first_name, auth.last_name, 
-                         df.relevancy, hc.status 
-                         FROM author auth JOIN has_competency hc 
-                         ON auth.author_id = hc.author_id JOIN competency comp 
-                         ON hc.competency_id = comp.competency_id JOIN
-                         derived_from df ON comp.competency_id = df.competency_id
-                         WHERE comp.competency_name = ?;"""
-    c = conn.cursor()
-    c.execute(sql_get_authors, (competency,))
-    result = c.fetchall()
-    if result is None:
-        return 'There are no people with this competency.'
-    conn.commit()
-    return result 
-
-def get_authors_by_competency_id(conn, competency_id):
-    'Returns all authors with the given competency as well as relevency and status'
-    sql_get_authors = """SELECT auth.author_id, auth.first_name, auth.last_name, df.abstract_id, df.relevancy
-                         FROM author auth JOIN has_competency hc 
-                         ON auth.author_id = hc.author_id 
-                         LEFT JOIN derived_from df ON df.competency_id = hc.competency_id
-                         JOIN written_by wb ON wb.author_id = auth.author_id AND wb.abstract_id = df.abstract_id
+    sql_get_authors = """SELECT auth.author_id, auth.first_name,
+                         auth.last_name, df.abstract_id, df.relevancy
+                         FROM author auth JOIN has_competency hc
+                         ON auth.author_id = hc.author_id
+                         LEFT JOIN derived_from df
+                         ON df.competency_id = hc.competency_id
+                         JOIN written_by wb ON wb.author_id = auth.author_id
+                         AND wb.abstract_id = df.abstract_id
                          WHERE hc.competency_id= ?;"""
-    c = conn.cursor()
-    c.execute(sql_get_authors, (competency_id,))
-    result = c.fetchall()
+    cursor = conn.cursor()
+    cursor.execute(sql_get_authors, (competency_id,))
+    result = cursor.fetchall()
     if result is None:
         return 'There are no people with this competency.'
     conn.commit()
-    print(c.description)
-    return result 
+    print(cursor.description)
+    return result
 
-def get_abstracts_by_author(conn, author_first_name, author_last_name):
+
+def get_abstracts_by_author(conn, author_first_name: str,
+                            author_last_name: str) -> list[
+                                int, int, str, str, str]:
     """Returns all abstracts of a given author.
 
     Args:
@@ -500,7 +531,7 @@ def get_abstracts_by_author(conn, author_first_name, author_last_name):
         author_last_name (str): Last name of the author
 
     Returns:
-        list: List[abstract_id, year, title, content, institution]
+        list: list[abstract_id, year, title, content, institution]
     """
     sql_get_abstracts = """SELECT abs.abstract_id, abs.year, abs.title,
                            abs.content, abs.institution
@@ -520,7 +551,8 @@ def get_abstracts_by_author(conn, author_first_name, author_last_name):
     return result
 
 
-def get_abstracts_with_competency(conn, competency_id, author_id):
+def get_abstracts_with_competency(conn, competency_id: int,
+                                  author_id: int) -> list[int]:
     """Returns all abstracts_ids of the abstracts that proof that an author has
     a given competency.
 
@@ -530,7 +562,7 @@ def get_abstracts_with_competency(conn, competency_id, author_id):
         author_id (int): Id of the author
 
     Returns:
-        list: List[abstract_id]
+        list: list[abstract_id]
     """
     sql_get_abstracts_with_competency = """SELECT wb.abstract_id
                                            FROM derived_from df
@@ -604,7 +636,7 @@ def get_abstracts_with_competency(conn, competency_id, author_id):
     # return relevancy
 
 
-def get_author_name(conn, author_id):
+def get_author_name(conn, author_id: int) -> list[str, str]:
     """Returns the name of an author.
 
     Args:
@@ -628,14 +660,14 @@ def get_author_name(conn, author_id):
     return author
 
 
-def get_all_authors(conn):
+def get_all_authors(conn) -> list[int, str, str]:
     """Returns all entries in the author relation in the database.
 
     Args:
         conn (Connection): Connection to the database
 
     Returns:
-        list: List[author_id, first_name, last_name]
+        list: list[author_id, first_name, last_name]
     """
     sql_get_authors = """SELECT * FROM author;"""
     cursor = conn.cursor()

@@ -1,11 +1,24 @@
-from django.shortcuts import render
-import pandas as pd
-from result_page.models import Author
+"""This module contains the views for the result_page app.
+"""
+
 import json
+from typing import Optional
+from django.shortcuts import render
+from result_page.models import Author
 import access
+from django.http import HttpRequest
+from django.http.response import HttpResponse as HttpResponse
 
 
-def get_author_by_competency_id(competency_id):
+def get_author_by_competency_id(competency_id: int):
+    """Fetches all authors for a given competency id from the database.
+
+    Args:
+        competency_id (int): The id of the competency.
+
+    Returns:s
+        list: list[Author]
+    """
     authors_db_entry = access.get_request_from_api("/authors_by_competency_id/"
                                                    + str(competency_id))
     authors = {}
@@ -21,22 +34,48 @@ def get_author_by_competency_id(competency_id):
                                         author_last_name, {})
 
         authors[author_id].add_abstract(abstract_id, relevancy)
+    print(authors)
     return authors
 
 
-def get_competency_name_by_id(competency_id):
+def get_competency_name_by_id(competency_id: int):
+    """Fetches the name of a competency by its id.
+
+    Args:
+        competency_id (int): The id of the competency.
+
+    Returns:
+        json: The name of the competency.
+    """
     return access.get_request_from_api("/competency_name_by_id/"
                                        + str(competency_id))
 
 
-def get_competency_id_by_name(competency_name):
+def get_competency_id_by_name(competency_name: str):
+    """Fetches the id of a competency by its name.
+
+    Args:
+        competency_name (str): The name of the competency.
+
+    Returns:
+        json: {[id, name]]}
+    """
     return access.get_request_from_api("/competency_id_by_name/"
                                        + str(competency_name))
 
 
-def results(request, id=None):
-    """if ?q=... exists its preferred, else id is used. When no authors found
-    user is informed in frontend"""
+def results(request: HttpRequest, id: Optional[int] = None) -> HttpResponse:
+    """Renders the results page.
+    If ?q=... exists its preferred, else id is used. When no authors are
+    found, the user is informed in frontend.
+
+    Args:
+        request (HttpRequest): The request object.
+        int: ID of the competency. Defaults to None.
+
+    Returns:
+        HttpResponse: The rendered results page.
+    """
     found_id = False
     found_authors = False
     searchquery = request.GET.get('q', '')
@@ -49,7 +88,7 @@ def results(request, id=None):
         result = get_competency_id_by_name(searchquery)
         if result is not None:
             competency_id = result[0]
-            found_id = True     
+            found_id = True
     if found_id:
         authors = get_author_by_competency_id(competency_id)
         if len(authors) != 0:
@@ -58,7 +97,8 @@ def results(request, id=None):
 
     all_competencies = access.get_request_from_api("/all_competencies/")
 
-    return render(request, 'result_page.html', {'has_found': found_authors,
-                  'competency': competency,
-                  'authors': authors,
-                  'all_competencies': json.dumps(all_competencies)})
+    return render(request, 'result.html', {'has_found': found_authors,
+                                           'competency': competency,
+                                           'authors': authors,
+                                           'all_competencies': json.dumps(
+                                            all_competencies)})

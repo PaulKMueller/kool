@@ -189,15 +189,33 @@ async def getcategoryname(category_id):
     conn.close()
     return response
 
+
 @app.get("/competency_name_by_id/{competency_id}")
 async def get_competency_name_by_id(competency_id):
+    """Endpoint to get the name of a competency by its id.
+
+    Args:
+        competency_id (int): The id of the competency.
+
+    Returns:
+        str: The name of the competency.
+    """
     conn = adapter.create_connection()
     response = adapter.get_competency_name_by_id(conn, competency_id)
     conn.close()
     return response
-    
+
+
 @app.get("/competency_id_by_name/{competency_name}")
 async def get_competency_id_by_name(competency_name):
+    """Endpoint to get the id of a competency by its name.
+
+    Args:
+        competency_name (str): The name of the competency.
+
+    Returns:
+        int: The id of the competency.
+    """
     conn = adapter.create_connection()
     response = adapter.get_competency_id_by_name(conn, competency_name)
     conn.close()

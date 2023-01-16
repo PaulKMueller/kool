@@ -1,5 +1,4 @@
-
-    #tabelle {
+#tabelle {
     width: 80%;
     height: 200px;
     background-color: white;
@@ -20,7 +19,7 @@
     text-align: top;
     margin: auto;
 }
- #logbutton {
+#logbutton {
     border: none;
     line-height: 50px;
     width: 70px;
@@ -33,13 +32,14 @@
     right:0;
     background-color:#9EC4D5;
 }
-#logbutton:hover {background-color: #9EC4D5}
-
-#logbutton:active {
-background-color:#9EC4D5 ;
-transform: translateY(4px);
+#logbutton:hover {
+   background-color: #9EC4D5
 }
-  #regbutton {
+#logbutton:active {
+    background-color:#9EC4D5 ;
+    transform: translateY(4px);
+}
+#regbutton {
     margin: 0px;
     border: none;
     line-height: 50px;
@@ -54,14 +54,12 @@ transform: translateY(4px);
     background-color:#9EC4D5;
 }
 #regbutton:hover {
-background-color: #9EC4D5
+    background-color: #9EC4D5 
 }
-
 #regbutton:active {
-background-color:#9EC4D5 ;
-transform: translateY(4px);
+    background-color:#9EC4D5 ;
+    transform: translateY(4px);
 }
-
 #aboutbutton {
     margin: 0px;
     border: none;
@@ -77,13 +75,12 @@ transform: translateY(4px);
     background-color:white;
 }
 #aboutbutton:hover {
-background-color: white
+    background-color: white 
 }
-
 #aboutbutton:active {
- background-color:white;
- transform: translateY(4px);
-} 
+    background-color:white;
+    transform: translateY(4px);
+}
 #privacybutton {
     margin: 0px;
     border: none;
@@ -99,14 +96,13 @@ background-color: white
     background-color:white;
 }
 #privacybutton:hover {
-background-color: white
+    background-color: white 
 }
-
 #privacybutton:active {
- background-color:white;
- transform: translateY(4px);
-} 
-   #imprintbutton {
+    background-color:white;
+    transform: translateY(4px);
+}
+#imprintbutton {
     margin: 0px;
     border: none;
     line-height: 50px;
@@ -121,16 +117,13 @@ background-color: white
     background-color:white;
 }
 #imprintbutton:hover {
-background-color: white
+    background-color: white 
 }
-
 #imprintbutton:active {
- background-color:white;
- transform: translateY(4px);
-} 
-
-
-    #showallbutton {
+    background-color:white;
+    transform: translateY(4px);
+}
+#showallbutton {
     margin: 13px;
     line-height: 20px;
     border-radius: 8px;
@@ -142,21 +135,19 @@ background-color: white
     central:10;
     background-color:white;
     border-color: grey;
-   }
-  #showallbutton:hover {
-        background-color: white;
-        border-color: grey;
 }
-
- #showallbutton:active {
-        background-color: white;
-        transform: translateY(4px);
-        border-color: grey;
-     } 
-
+#showallbutton:hover {
+    background-color: white;
+    border-color: grey;
+}
+#showallbutton:active {
+    background-color: white;
+    transform: translateY(4px);
+    border-color: grey;
+}
 #showcomp {
-width: 450px;
-font-size:5pt;
+    width: 450px;
+    font-size:5pt;
 }
 h3{
     font-family:tahoma;
@@ -165,16 +156,10 @@ h3{
 button {
     float: right;
 }
-
 #bottomDiv{
-position: absolute;
-margin-left:5px;
-height:5%;
-bottom: 0;
-left: 0;
+    position: absolute;
+    margin-left:5px;
+    height:5%;
+    bottom: 0;
+    left: 0;
 }
-
-
-
-
-

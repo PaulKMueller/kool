@@ -1,3 +1,6 @@
+"""Defines the models used in the result page.
+"""
+
 import access
 
 

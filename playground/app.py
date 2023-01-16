@@ -2,13 +2,12 @@
 The playground is used to test the model_api and the database_api.
 """
 
+import os
+import requests
 import streamlit as st
 from pandas import DataFrame
-from keybert import KeyBERT
 import seaborn as sns
 from download_button import download
-import requests
-import os
 
 ENVIRONMENT_VARIABLE_MODEL_API_PORT = "MODEL_API_PORT"
 MODEL_API_PORT = os.environ.get(ENVIRONMENT_VARIABLE_MODEL_API_PORT)
@@ -88,70 +87,6 @@ with st.form(key="my_form"):
                   "In application's frontend, DistilBERT is used."),
         )
 
-        # top_N = st.slider(
-        #     "# of results",
-        #     min_value=1,
-        #     max_value=30,
-        #     value=10,
-        #     help=("You can choose the number of keywords/keyphrases "
-        #           "to display. Between 1 and 30, default number is 10."),
-        # )
-
-        # min_Ngrams = st.number_input(
-        #     "Minimum Ngram",
-        #     min_value=1,
-        #     max_value=4,
-        #     help=("The minimum value for the ngram range."
-        #           "\n\n*Keyphrase_ngram_range* sets the length"
-        #           "of the resulting keywords/keyphrases."
-        #           "\n\nTo extract keyphrases, simply set "
-        #           "*keyphrase_ngram_range* to (1, 2) or higher depending "
-        #           "on the number of words you would "
-        #           "like in the resulting keyphrases."),
-
-        # )
-
-        # max_Ngrams = st.number_input(
-        #     "Maximum Ngram",
-        #     value=2,
-        #     min_value=1,
-        #     max_value=4,
-        #     help=("The maximum value for the keyphrase_ngram_range."
-        #           "\n\n*Keyphrase_ngram_range* sets the length "
-        #           "of the resulting keywords/keyphrases."
-        #           "\n\nTo extract keyphrases, simply set "
-        #           "*keyphrase_ngram_range* to (1, 2) or higher "
-        #           "depending on the number of words you would "
-        #           "like in the resulting keyphrases."),
-        # )
-        
-        # StopWordsCheckbox = st.checkbox(
-        #     "Remove stop words",
-        #     help=("Tick this box to remove stop words "
-        #           "from the document (currently English only)"),
-        # )
-
-        # use_MMR = st.checkbox(
-        #     "Use MMR",
-        #     value=True,
-        #     help=("You can use Maximal Margin Relevance "
-        #           "(MMR) to diversify the results. "
-        #           "It creates keywords/keyphrases based on cosine similarity. "
-        #           "Try high/low 'Diversity' settings "
-        #           "below for interesting variations."),
-        # )
-
-        # Diversity = st.slider(
-        #     "Keyword diversity (MMR only)",
-        #     value=0.5,
-        #     min_value=0.0,
-        #     max_value=1.0,
-        #     step=0.1,
-        #     help=("The higher the setting, the more diverse the keywords."
-        #           "\n\nNote that the *Keyword diversity* slider "
-        #           "only works if the *MMR* checkbox is ticked."),
-        # )
-
     with c2:
         doc = st.text_area(
             "Paste your text below (max 1000 words)",
@@ -177,10 +112,6 @@ with st.form(key="my_form"):
 
 if not submit_button:
     st.stop()
-
-# if min_Ngrams > max_Ngrams:
-#     st.warning("min_Ngrams can't be greater than max_Ngrams")
-#     st.stop()
 
 keywords = []
 if ModelType == "KeyBERT":
