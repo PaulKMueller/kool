@@ -8,6 +8,7 @@ import os
 ENVIRONMENT_VARIABLE_DATABASE_API_PORT = "DATABASE_API_PORT"
 DATABASE_API_PORT = os.environ.get(ENVIRONMENT_VARIABLE_DATABASE_API_PORT)
 
+
 def run_database_api():
     """Starts the fastapi server for the database_api
     """
