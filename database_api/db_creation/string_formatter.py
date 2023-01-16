@@ -1,7 +1,7 @@
 """String formatting for database_from_csv.py,
 depends on structure of KIT-Open's results"""
 
-
+ 
 import re
 
 

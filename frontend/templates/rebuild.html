@@ -6,18 +6,26 @@
 {% include 'includes/navbar_admin.html' %}
 
 <div class="container transparent" style="padding-top: 100px;">
+    <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
     <div class="container">
         <div class="input-field">
             <select>
                 <option selected="selected" value="" disabled>Choose the model</option>
-                <option value="1">Opt 1</option>
-                <option value="2">Opt 2</option>
-                <option value="3">Opt 3</option>
+                <option value="1">KeyBERT</option>
+                <option value="2">Galactica</option>
+                <option value="3">GPTNeo</option>
             </select>
             <label>ML Model for creating database</label>
         </div>
     </div>
-    <button class="btn-large waves-effect waves-ligh red roundedcorners">Rebuild</button>
+    <button type="submit" class="btn-large waves-effect waves-ligh red roundedcorners">Rebuild</button>
+    {% if success %}
+    <div class="container">
+        <p>Rebuild successfull</p>
+    </div>
+    {% endif %}
+    </form>
 </div>
 
 <script>
