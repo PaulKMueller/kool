@@ -19,5 +19,4 @@ def get_request_from_api(endpoint):
         json: a JSON Object containing the GET request's answer
     """
     response = requests.get(MAIN_URL + endpoint)
-    print(response.json())
     return response.json()

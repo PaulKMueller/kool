@@ -19,9 +19,13 @@ def home(request: HttpRequest) -> HttpResponse:
     Returns:
         HttpResponse: The rendered home page.
     """
+    # TODO: remove Test
+
+
     competencies = access.get_request_from_api("/all_competencies/")
-    return render(request, 'home.html',
+    response = render(request, 'home.html',
                   {'all_competencies': json.dumps(competencies)})
+    return response
 
 
 def aboutkoolpage(request: HttpRequest) -> HttpResponse:
