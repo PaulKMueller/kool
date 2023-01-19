@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 
-
 {% block main_content %}
 
 <!-- NavBar & Searchbar using include -->
@@ -28,6 +27,9 @@
                    <p>
                         {{author.first_name}} {{ author.last_name }}
                    </p>
+                </div>
+                <div class="rankingbar">
+                    <div class="indicator"></div>
                 </div>
                 <div class="infoboxresult col">
                     <div> {{author.get_last_publication_year }} </div>
@@ -84,10 +86,7 @@
     {% endif %}
     
 </div>
-
-
-
-
+  
 <script>
     function expand(tabContent) {
         status = window.getComputedStyle(document.getElementById(tabContent)).display 
@@ -98,6 +97,15 @@
         }
         
     }
+
+    function moveIndicator(position) {
+        var indicator = document.querySelector('.indicator');
+        var bar = document.querySelector('.bar');
+        var width = bar.offsetWidth;
+        indicator.style.left = (position * width) + 'px';
+    }
+
+    
 </script>
 
 {% endblock %}

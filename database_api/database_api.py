@@ -157,21 +157,21 @@ async def get_abstract_by_author(first_name, last_name):
     return response
 
 
-# @app.get("/relevancy/{author_id}/{competency_id}")
-# async def getrelevancy(author_id, competency_id):
-#     """Endpoint to get the relevancy of a competency for an author.
+@app.get("/ranking_score/{author_id}/{competency_id}")
+async def getrankingscore(author_id, competency_id):
+    """Endpoint to get the relevancy of a competency for an author.
 
-#     Args:
-#         author_id (int): The id of the author.
-#         competency_id (int): The id of the competency.
+    Args:
+        author_id (int): The id of the author.
+        competency_id (int): The id of the competency.
 
-#     Returns:
-#         int: The relevancy of the competency for the author.
-#     """
-#     conn = adapter.create_connection()
-#     response = adapter.get_relevancy(conn, author_id, competency_id)
-#     conn.close()
-#     return response
+    Returns:
+         int: The relevancy of the competency for the author.
+    """
+    conn = adapter.create_connection()
+    response = adapter.get_ranking_score(conn, author_id, competency_id)
+    conn.close()
+    return response
 
 
 @app.get("/category_name/{category_id}")

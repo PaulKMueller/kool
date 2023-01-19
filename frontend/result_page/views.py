@@ -33,6 +33,13 @@ def get_competency_id_by_name(competency_name):
     return access.get_request_from_api("/competency_id_by_name/"
                                        + str(competency_name))
 
+# TODO: test if it works
+def get_ranking_scores(authors, competency_id):
+    relevancy = {}
+    for author in authors:
+        relevancy[author] = access.get_request_from_api("/ranking_score/{author.id}/{competency_id}")
+    return relevancy
+    
 
 def results(request, id=None):
     """if ?q=... exists its preferred, else id is used. When no authors found
@@ -58,7 +65,11 @@ def results(request, id=None):
 
     all_competencies = access.get_request_from_api("/all_competencies/")
 
+    # TODO: test if it works
+    relevancies = get_ranking_scores(authors, competency_id)
+
     return render(request, 'result_page.html', {'has_found': found_authors,
                   'competency': competency,
                   'authors': authors,
-                  'all_competencies': json.dumps(all_competencies)})
+                  'all_competencies': json.dumps(all_competencies),
+                  'left': relevancies})
