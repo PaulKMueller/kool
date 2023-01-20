@@ -15,7 +15,8 @@ Let people know what your project can do specifically. Provide context and add a
 1. [Install Docker Desktop](https://docs.docker.com/get-docker/)
 2. Clone this Repository and open it up using an IDE (we recommend using VS Code) or in the command shell.
 3. Open up the ".env" file and specify the IPv4 addresses of the Frontend and Playground Host and the ports, which the Services should be running on. 
->[!important]
+> ⚠**IMPORTANT**
+>
 >**Generate a new Secret Key**, e.g. by running the secret_key_generator.py in the frontend folder or following [this Tutorial](https://www.educative.io/answers/how-to-generate-a-django-secretkey). **DONT SHARE** your .env after that as this is a huge security risk when running the application in production
 4. Open a command shell in the main directory of the project and type
 > docker compose up
@@ -32,7 +33,8 @@ Let people know what your project can do specifically. Provide context and add a
 1. Make sure your system meets the [requirements](#installation)  
 2. Clone this Repository and open it up using an IDE (we recommend using VS Code) or in the command shell.
 3. Open up the ".env" file and specify the IPv4 addresses of the Frontend and Playground Host and the ports, which the Services should be running on.  
->[!important]
+> ⚠**IMPORTANT**
+>
 >**Generate a new Secret Key**, e.g. by running the secret_key_generator.py in the frontend folder or following [this Tutorial](https://www.educative.io/answers/how-to-generate-a-django-secretkey). **DONT SHARE** your .env after that as this is a huge security risk when running the application in production
 4. If you only want to run the Main-Application (Frontend and Database) without the playground and model_api open up the docker-compose.yml and comment it from line 35 (model_api) till the end using a # in each line
 5. Open a command shell (Terminal -> New Terminal in VS Code) in the main directory (where the docker-compose.yml sits) and run
