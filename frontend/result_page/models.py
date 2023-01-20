@@ -7,11 +7,12 @@ import access
 class Author:
     '''Represents an author'''
     def __init__(self, id: int, first_name: str, last_name: str,
-                 abstracts: dict):
+                 abstracts: dict, competency_status: str):
         self.id = id
         self.first_name = first_name
         self.last_name = last_name
         self.abstracts = abstracts
+        self.competency_status = competency_status
 
     def add_abstract(self, abstract_id: int, relevancy: float):
         '''
@@ -23,9 +24,12 @@ class Author:
         '''
         abstract_db_entry = access.get_request_from_api("/abstract_by_id/"
                                                         + str(abstract_id))
-        abstract = Abstract(abstract_db_entry[0], abstract_db_entry[1],
-                            abstract_db_entry[2], abstract_db_entry[3],
-                            abstract_db_entry[4], abstract_db_entry[5])
+        abstract = Abstract(id=abstract_db_entry[0],
+                            year=abstract_db_entry[1],
+                            title=abstract_db_entry[2],
+                            content=abstract_db_entry[3],
+                            doctype=abstract_db_entry[4],
+                            institution=abstract_db_entry[5])
         self.abstracts[abstract_id] = (abstract, relevancy)
         print(self.abstracts)
 

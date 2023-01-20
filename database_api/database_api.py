@@ -245,7 +245,7 @@ async def rebuild():
     database_from_csv.build()
     return "[success]"
 
-
+'''
 @app.get("/rebuild_newdatabase")
 async def rebuild_newdatabase(df):
     """Endpoint for rebuilding database with new data
@@ -253,3 +253,12 @@ async def rebuild_newdatabase(df):
     """
     database_from_csv.build(df)
     return "[success]"
+'''
+
+
+@app.get("/change_status/{author_id}/{competency_id}/{competency_status}")
+async def change_status(author_id, competency_id, competency_status):
+    conn = adapter.create_connection()
+    response = adapter.change_status(conn, author_id, competency_id, competency_status)
+    conn.close()
+    return response

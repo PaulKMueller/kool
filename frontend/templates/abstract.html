@@ -73,6 +73,7 @@
         </h5>
         <div style="height: 60vh; overflow: scroll; overflow-x: hidden">
           {% for competency in competencies_auth %}
+          {% if user.is_authenticated or  author.competency_status != "Hidden" %}
           <a
             class="competency"
             href="/results/{{ competency.id }}"

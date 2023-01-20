@@ -2,6 +2,7 @@
 
 import os
 import requests
+from requests import JSONDecodeError
 
 ENVIRONMENT_VARIABLE_DATABASE_API_PORT = "DATABASE_API_PORT"
 DATABASE_API_PORT = os.environ.get(ENVIRONMENT_VARIABLE_DATABASE_API_PORT)

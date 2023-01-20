@@ -3,12 +3,12 @@
 
 import json
 from typing import Optional
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from result_page.models import Author
 import access
 from django.http import HttpRequest
 from django.http.response import HttpResponse as HttpResponse
-
+from django.contrib.auth.decorators import login_required
 
 def get_author_by_competency_id(competency_id: int):
     """Fetches all authors for a given competency id from the database.
@@ -28,13 +28,15 @@ def get_author_by_competency_id(competency_id: int):
         author_last_name = author_entry[2]
         abstract_id = author_entry[3]
         relevancy = author_entry[4]
-
+        status = author_entry[5]
         if author_id not in authors:
-            authors[author_id] = Author(author_id, author_first_name,
-                                        author_last_name, {})
+            authors[author_id] = Author(id=author_id,
+                                        first_name=author_first_name,
+                                        last_name=author_last_name,
+                                        abstracts={},
+                                        competency_status=status)
 
         authors[author_id].add_abstract(abstract_id, relevancy)
-    print(authors)
     return authors
 
 
@@ -99,6 +101,21 @@ def results(request: HttpRequest, id: Optional[int] = None) -> HttpResponse:
 
     return render(request, 'result.html', {'has_found': found_authors,
                                            'competency': competency,
+                                           'competency_id': competency_id,
                                            'authors': authors,
                                            'all_competencies': json.dumps(
                                             all_competencies)})
+
+
+@login_required
+def change_status(request):
+    if request.method == 'POST':
+        competency_id = request.POST['competency_id']
+        author_id = request.POST['author_id']
+        new_status = request.POST['new_status'] 
+        print("-----------   -")
+        print(competency_id, author_id, new_status)
+        access.get_request_from_api("/change_status/" + author_id + "/" + competency_id + "/" + new_status)
+        return redirect('/results/' + competency_id)
+    else:
+        return render(request, 'result.html')

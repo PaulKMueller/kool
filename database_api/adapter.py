@@ -306,8 +306,6 @@ def get_category_name_by_id(conn, category_id: int) -> str:
     cursor = conn.cursor()
     cursor.execute(sql_command, (category_id,))
     category_name = cursor.fetchone()
-    print("-------------------")
-    print(category_name)
     return category_name
 
 
@@ -353,7 +351,6 @@ def get_competencies_by_category_id(conn, category_id: int) -> list[int, str]:
     cursor = conn.cursor()
     cursor.execute(sql_get_competencies, (category_id,))
     result = cursor.fetchall()
-    print(result)
     if result is None:
         return 'There are no competencies for this category.'
     conn.commit()
@@ -378,7 +375,6 @@ def get_competencies_by_author_id(conn, author_id: int) -> list[int, str]:
     cursor = conn.cursor()
     cursor.execute(sql_get_competencies, (author_id,))
     result = cursor.fetchall()
-    print(result)
     if result is None:
         return 'There are no competencies for this author.'
     conn.commit()
@@ -403,7 +399,6 @@ def get_competencies_by_abstract_id(conn, abstract_id: int) -> list[int, str]:
     cursor = conn.cursor()
     cursor.execute(sql_get_competencies, (abstract_id,))
     result = cursor.fetchall()
-    print(result)
     if result is None:
         return 'There are no competencies for this author.'
     conn.commit()
@@ -499,10 +494,10 @@ def get_authors_by_competency_id(conn,
         competency_id (int): Id of the competency
 
     Returns:
-        list: List[author_id, first_name, last_name, relevancy, status]
+        list: List[author_id, first_name, last_name, abstract_id, relevancy, status]
     """
     sql_get_authors = """SELECT auth.author_id, auth.first_name,
-                         auth.last_name, df.abstract_id, df.relevancy
+                         auth.last_name, df.abstract_id, df.relevancy, status
                          FROM author auth JOIN has_competency hc
                          ON auth.author_id = hc.author_id
                          LEFT JOIN derived_from df
@@ -516,7 +511,6 @@ def get_authors_by_competency_id(conn,
     if result is None:
         return 'There are no people with this competency.'
     conn.commit()
-    print(cursor.description)
     return result
 
 
@@ -677,4 +671,28 @@ def get_all_authors(conn) -> list[int, str, str]:
         return ("Something went wrong. Result for the query to fetch",
                 "all entries of the author relation is None.")
     conn.commit()
+    return result
+
+
+def change_status(conn, author_id: int, competency_id: int, competency_status: str) -> list[str]:
+    """Changes given competency status in database of author with competency
+
+    Args:
+        conn (Connection): Connection to the database
+        author_id: author where it should be changed
+        competency_id: for which competency the status should be changed
+        
+    
+    """
+    sql_change_status = """ UPDATE has_competency
+                            SET status = ?
+                            WHERE author_id = ? AND
+                            competency_id = ?
+                        """
+    cursor = conn.cursor()
+    cursor.execute(sql_change_status,
+                   (competency_status, author_id, competency_id))
+    cursor.fetchall()
+    conn.commit()
+    result = ["success"]
     return result
