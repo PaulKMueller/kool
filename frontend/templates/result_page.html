@@ -21,7 +21,6 @@
 
     <div class="container-fixed transparent" style="width: 100%; margin-top: 48px">
         {% for author_id, author in authors.items %}
-        {{relevancies.author_id }}
         <div class="col resultbox container l10  grey lighten-3 roundedcorners  z-depth-1">
                 <i class="small material-icons" style="margin-left: 3%">account_circle</i>
                 <div class="resulttext col">
@@ -29,9 +28,8 @@
                         {{author.first_name}} {{ author.last_name }}
                    </p>
                 </div>
-                <img src="" alt="" width="0px" height="0px" onload="moveIndicator({{ author.ranking }}, {{ author_id }})" >
                 <div class="rankingbar">
-                    <div class="indicator" id="indicator-{{ author_id }}"></div>
+                    <div class="indicator" style="left: calc({{author.ranking}} * 100%);"></div>
                 </div>
                 <div class="infoboxresult col">
                     <div> {{author.get_last_publication_year }} </div>
@@ -97,16 +95,7 @@
         }  else {
             document.getElementById(tabContent).style.display = 'none'
         }
-
-        function moveIndicator(position) {
-            var indicator = document.querySelector('.indicator');
-            var bar = document.querySelector('.rankingbar');
-            var width = bar.offsetWidth;
-            indicator.style.left = (position * width) + 'px';
-        }
     }
-
-    
 </script>
 
 {% endblock %}
