@@ -15,7 +15,7 @@ def get_author_by_competency_id(competency_id):
         author_last_name = author_entry[2]
         abstract_id = author_entry[3]
         relevancy_of_abstract = author_entry[4]
-        ranking =  access.get_request_from_api("/ranking_score/{author_id}/{competency_id}")
+        ranking =  access.get_request_from_api("/ranking_score/" + str(author_id) + "/" + str(competency_id))
 
         if author_id not in authors:
             authors[author_id] = Author(author_id, author_first_name,
@@ -57,10 +57,16 @@ def results(request, id=None):
         if len(authors) != 0:
             found_authors = True
             competency = get_competency_name_by_id(competency_id)[0]
-
+    authors = sort_authors(authors)
     all_competencies = access.get_request_from_api("/all_competencies/")
-
     return render(request, 'result_page.html', {'has_found': found_authors,
                   'competency': competency,
                   'authors': authors,
                   'all_competencies': json.dumps(all_competencies)})
+
+
+def sort_authors(authors):
+    author_list = [(key, value) for key, value in authors.items()]
+    sorted_list = sorted(author_list, key=lambda x: x[1].ranking, reverse=True)
+    sorted_dict = dict(sorted_list)
+    return sorted_dict
