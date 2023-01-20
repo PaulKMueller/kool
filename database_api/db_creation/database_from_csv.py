@@ -6,7 +6,8 @@
 import os
 import pandas as pd
 from langdetect import detect
-import string_formatter
+from . import string_formatter
+import yaml
 import adapter
 from tqdm import tqdm
 import requests
@@ -61,61 +62,69 @@ categories = ["Mathematics", "Computer and Informations Sciences",
               "Ethics and Religion"]
 
 
-df = pd.read_csv(PATH_TO_FILE)
 
-# Filters out rows with nan values
-df = df[~df.isnull().any(axis=1)]
+def get_df_from_csv(PATH_TO_FILE):
+    return pd.read_csv(PATH_TO_FILE)
 
-conn = adapter.create_connection()
 
-# Inserts categories for competencies
-for index, category in enumerate(categories):
-    adapter.insert_category(conn, category_name=category, category_id=index)
+def build():
+    fill_database(get_df_from_csv(PATH_TO_FILE))
 
-# This loop iterates the rows and stores calls the inserting functions
-for index, row in tqdm(df.iterrows(), total=df.shape[0]):
-    abstract_content = row.loc["Abstract"]
 
-    # We focus on english abstracts
-    if detect(abstract_content) != "en":
-        continue
+def fill_database(df):
+    # Filters out rows with nan values
+    df = df[~df.isnull().any(axis=1)]
 
-    abstract_title = row.loc["Title"]
-    doctype = row.loc["Doc-Type"]
-    authors = string_formatter.format_authors(row.loc["Authors"])
-    year = row.loc["Year"]
-    institution = row.loc["Institutions"]
+    conn = adapter.create_connection()
 
-    competencies = get_request_from_api("/get_competency/" + abstract_content)
-    competency_ids = {}
+    # Inserts categories for competencies
+    for index, category in enumerate(categories):
+        adapter.insert_category(conn, category_name=category, category_id=index)
 
-    for competency in competencies:
-        competency_name = competency[0]
-        relevancy = competency[1]
+    # This loop iterates the rows and stores calls the inserting functions
+    for index, row in tqdm(df.iterrows(), total=df.shape[0]):
+        abstract_content = row.loc["Abstract"]
 
-        # get or create new id for competency
-        competency_ids[competency] = adapter.get_competency_id_by_name(
-            conn, competency_name)
+        # We focus on english abstracts
+        if detect(abstract_content) != "en":
+            continue
 
-        # get category of competency from model_api
-        category_id = int(get_request_from_api("/get_category_of_competency/" +
-                                               competency_name))
+        abstract_title = row.loc["Title"]
+        doctype = row.loc["Doc-Type"]
+        authors = string_formatter.format_authors(row.loc["Authors"])
+        year = row.loc["Year"]
+        institution = row.loc["Institutions"]
 
-        adapter.insert_derived_from(conn, competency_ids[competency],
-                                    abstract_id=index, relevancy=relevancy)
-        adapter.insert_has_category(conn, category_id,
-                                    competency_ids[competency])
+        competencies = get_request_from_api("/get_competency/" + abstract_content)
+        competency_ids = {}
 
-    for author in authors:
-        first_name, last_name = string_formatter.get_first_and_last_name(
-            author)
-        author_id = adapter.get_author_id_by_name(conn, first_name, last_name)
-        adapter.insert_written_by(conn, index, author_id)
         for competency in competencies:
             competency_name = competency[0]
-            adapter.insert_has_competency(conn, author_id,
-                                          competency_ids[competency],
-                                          "Unvalidated")
+            relevancy = competency[1]
 
-    adapter.insert_abstract(conn, (index, year, abstract_title,
-                                   abstract_content, doctype, institution))
+            # get or create new id for competency
+            competency_ids[competency] = adapter.get_competency_id_by_name(
+                conn, competency_name)
+
+            # get category of competency from model_api
+            category_id = int(get_request_from_api("/get_category_of_competency/" +
+                                                competency_name))
+
+            adapter.insert_derived_from(conn, competency_ids[competency],
+                                        abstract_id=index, relevancy=relevancy)
+            adapter.insert_has_category(conn, category_id,
+                                        competency_ids[competency])
+
+        for author in authors:
+            first_name, last_name = string_formatter.get_first_and_last_name(
+                author)
+            author_id = adapter.get_author_id_by_name(conn, first_name, last_name)
+            adapter.insert_written_by(conn, index, author_id)
+            for competency in competencies:
+                competency_name = competency[0]
+                adapter.insert_has_competency(conn, author_id,
+                                            competency_ids[competency],
+                                            "Unvalidated")
+
+        adapter.insert_abstract(conn, (index, year, abstract_title,
+                                    abstract_content, doctype, institution))

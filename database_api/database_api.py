@@ -5,6 +5,7 @@ to access the database.
 
 from fastapi import FastAPI
 import adapter
+from db_creation import database_from_csv
 
 app = FastAPI()
 
@@ -233,3 +234,22 @@ async def get_authors():
     response = adapter.get_all_authors(conn)
     conn.close()
     return response
+
+
+
+@app.get("/rebuild")
+async def rebuild():
+    """Endpoint for rebuilding database with old data
+    
+    """
+    database_from_csv.build()
+    return "[success]"
+
+
+@app.get("/rebuild_newdatabase")
+async def rebuild_newdatabase(df):
+    """Endpoint for rebuilding database with new data
+    
+    """
+    database_from_csv.build(df)
+    return "[success]"

@@ -27,9 +27,9 @@
             <div class="input-field">
                 <select>
                     <option selected="selected" value="" disabled>Choose the model</option>
-                    <option value="1">Opt 1</option>
-                    <option value="2">Opt 2</option>
-                    <option value="3">Opt 3</option>
+                    <option value="1">KeyBERT</option>
+                    <option value="2">Galactica</option>
+                    <option value="3">GPTNeo</option>
                 </select>
                 <label>ML Model for creating database</label>
             </div>
@@ -39,7 +39,7 @@
                 <i class="material-icons right">arrow_circle_right</i>
             </button>
         </div>
-        {% if True %}
+        {% if success %}
         <div class="container">
             <p>Attacke successfull <span>&#9989;</span></p>
         </div>
@@ -51,14 +51,7 @@
     $(document).ready(function() {
     $('select').formSelect();
     });
-    
-    /*
-    function submit() {
-        print("Hallo")
-        file = request.FILES['new_database']
-        print(file)
-    }
-    */
+
 </script>
 
 {% endblock %}
