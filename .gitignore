@@ -7,5 +7,5 @@ frontend/__pycache__
 frontend/competency_page/__pycache__
 frontend/result_page/__pycache__
 frontend/abstract_page/__pycache__
-frontend/landingpage/__pycache__
+frontend/landingpage/__pycache__ 
 *.pyc
