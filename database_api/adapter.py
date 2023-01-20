@@ -296,8 +296,6 @@ def get_category_name_by_id(conn, category_id):
     cursor = conn.cursor()
     cursor.execute(sql_command, (category_id,))
     category_name = cursor.fetchone()
-    print("-------------------")
-    print(category_name)
     return category_name
 
 
@@ -343,7 +341,6 @@ def get_competencies_by_category_id(conn, category_id):
     cursor = conn.cursor()
     cursor.execute(sql_get_competencies, (category_id,))
     result = cursor.fetchall()
-    print(result)
     if result is None:
         return 'There are no competencies for this category.'
     conn.commit()
@@ -368,7 +365,6 @@ def get_competencies_by_author_id(conn, author_id):
     cursor = conn.cursor()
     cursor.execute(sql_get_competencies, (author_id,))
     result = cursor.fetchall()
-    print(result)
     if result is None:
         return 'There are no competencies for this author.'
     conn.commit()
@@ -393,7 +389,6 @@ def get_competencies_by_abstract_id(conn, abstract_id):
     cursor = conn.cursor()
     cursor.execute(sql_get_competencies, (abstract_id,))
     result = cursor.fetchall()
-    print(result)
     if result is None:
         return 'There are no competencies for this author.'
     conn.commit()
@@ -488,7 +483,6 @@ def get_authors_by_competency_id(conn, competency_id):
     if result is None:
         return 'There are no people with this competency.'
     conn.commit()
-    print(c.description)
     return result 
 
 def get_abstracts_by_author(conn, author_first_name, author_last_name):
@@ -559,7 +553,7 @@ def get_ranking_score(conn, author_id, competency_id):
         _type_: _description_
     """
     
-    FAILURE_DEFAULT = -1
+    FAILURE_DEFAULT = 1
     sql_get_relevancies = """SELECT relevancy
                              FROM derived_from df JOIN
                              written_by wb ON df.abstract_id = wb.abstract_id

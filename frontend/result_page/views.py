@@ -14,13 +14,14 @@ def get_author_by_competency_id(competency_id):
         author_first_name = author_entry[1]
         author_last_name = author_entry[2]
         abstract_id = author_entry[3]
-        relevancy = author_entry[4]
+        relevancy_of_abstract = author_entry[4]
+        ranking =  access.get_request_from_api("/ranking_score/{author_id}/{competency_id}")
 
         if author_id not in authors:
             authors[author_id] = Author(author_id, author_first_name,
-                                        author_last_name, {})
+                                        author_last_name, {}, ranking)
 
-        authors[author_id].add_abstract(abstract_id, relevancy)
+        authors[author_id].add_abstract(abstract_id, relevancy_of_abstract)
     return authors
 
 
@@ -33,12 +34,6 @@ def get_competency_id_by_name(competency_name):
     return access.get_request_from_api("/competency_id_by_name/"
                                        + str(competency_name))
 
-# TODO: test if it works
-def get_ranking_scores(authors, competency_id):
-    relevancy = {}
-    for author in authors:
-        relevancy[author] = access.get_request_from_api("/ranking_score/{author.id}/{competency_id}")
-    return relevancy
     
 
 def results(request, id=None):
@@ -65,11 +60,7 @@ def results(request, id=None):
 
     all_competencies = access.get_request_from_api("/all_competencies/")
 
-    # TODO: test if it works
-    relevancies = get_ranking_scores(authors, competency_id)
-
     return render(request, 'result_page.html', {'has_found': found_authors,
                   'competency': competency,
                   'authors': authors,
-                  'all_competencies': json.dumps(all_competencies),
-                  'left': relevancies})
+                  'all_competencies': json.dumps(all_competencies)})
