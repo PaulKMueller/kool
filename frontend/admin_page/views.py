@@ -10,6 +10,10 @@ from django.contrib.auth.decorators import login_required
 ENVIRONMENT_VARIABLE_PLAYGROUND_PORT = "PLAYGROUND_PORT"
 PLAYGROUND_PORT = os.environ.get(ENVIRONMENT_VARIABLE_PLAYGROUND_PORT)
 
+
+ENVIRONMENT_VARIABLE_PLAYGROUND_HOST = "PLAYGROUND_HOST"
+PLAYGROUND_HOST = os.environ.get(ENVIRONMENT_VARIABLE_PLAYGROUND_HOST)
+
 @login_required
 def adminpage(request: HttpRequest):
 
@@ -43,6 +47,4 @@ def scraper(request):
 
 @login_required
 def playground(request):
-    url = "http://" + str(socket.gethostbyname("playground")) + ":" + str(PLAYGROUND_PORT)
-    print(url)
-    return render(request, 'playground.html', {"url": url})
+    return render(request, 'playground.html', {'playground_host': PLAYGROUND_HOST})

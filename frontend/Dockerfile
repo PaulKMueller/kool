@@ -9,8 +9,8 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-# Starts the Frontend on Port
-# TODO Make this beautiful
-ENTRYPOINT ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
+# Starts the Frontend on Port FRONTEND_PORT
+# shell form so passing of ENV works
+ENTRYPOINT python3 manage.py runserver 0.0.0.0:$FRONTEND_PORT
 
 

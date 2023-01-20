@@ -13,6 +13,12 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import os
 from pathlib import Path
 
+ENVIRONMENT_VARIABLE_FRONTEND_HOST = "FRONTEND_HOST"
+FRONTEND_HOST = os.environ.get(ENVIRONMENT_VARIABLE_FRONTEND_HOST)
+
+ENVIRONMENT_VARIABLE_SECRET_KEY = "DJANGO_SECRET_KEY"
+DJANGO_SECRET_KEY = os.environ.get(ENVIRONMENT_VARIABLE_SECRET_KEY)
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -21,14 +27,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ("django-insecure-^zpfa9cpggduevlm4q!)",
-              "3bnmt(dyq-o&brx&!9g%z=c+vrr3v2")
+SECRET_KEY = (DJANGO_SECRET_KEY)
 
+# TODO: Change DEBUG to False
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["192.168.143.41", "192.168.143.116",
-                 "localhost", "192.168.143.95"]
+ALLOWED_HOSTS = ["localhost", FRONTEND_HOST]
 
 
 # Application definition

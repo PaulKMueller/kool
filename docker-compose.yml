@@ -3,22 +3,23 @@ version: '3.8'
 services:
   frontend:
     env_file:
-       - 'variables.env'
+       - '.env'
     ports:
-      # Use Port specified in FRONTEND_PORT in variables.env
-      - 8000:8000
+      - $FRONTEND_PORT:$FRONTEND_PORT
     volumes:
       - ./frontend:/usr/src/app
-
     build:
       context: ./frontend
+      args:
+      # pass variable so Dockerfile can use it
+        FRONTEND_PORT: $FRONTEND_PORT
 
     depends_on:
       - database_api
 
   database_api:
     env_file:
-       - 'variables.env'
+       - '.env'
     environment:
       - PATH_TO_DB=database.db
       - PATH_TO_CSV=db_creation/data.csv
@@ -33,7 +34,7 @@ services:
 
   model_api:
    env_file:
-       - 'variables.env'
+       - '.env'
    restart: unless-stopped
 
    volumes:
@@ -45,12 +46,10 @@ services:
 
   playground:
    env_file:
-       - 'variables.env'
+       - '.env'
    ports:
-    # Use Port specified in PLAYGROUND_PORT in variables.env
-     - 8030:8030
+     - $PLAYGROUND_PORT:$PLAYGROUND_PORT
    restart: unless-stopped
-
    volumes:
      - ./playground:/usr/src/app
    build:
