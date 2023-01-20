@@ -530,8 +530,8 @@ def get_abstracts_with_competency(conn, competency_id, author_id):
                                            FROM derived_from df
                                            JOIN written_by wb
                                            ON df.abstract_id = wb.abstract_id
-                                           WHERE competency_id = ?
-                                           AND author_id = ?
+                                           WHERE df.competency_id = ?
+                                           AND wb.author_id = ?
                                            """
     cursor = conn.cursor()
     cursor.execute(sql_get_abstracts_with_competency,
@@ -552,8 +552,7 @@ def get_ranking_score(conn, author_id, competency_id):
     Returns:
         _type_: _description_
     """
-    
-    FAILURE_DEFAULT = 1
+    FAILURE_DEFAULT = -1
     sql_get_relevancies = """SELECT relevancy
                              FROM derived_from df JOIN
                              written_by wb ON df.abstract_id = wb.abstract_id
@@ -563,7 +562,7 @@ def get_ranking_score(conn, author_id, competency_id):
     cursor = conn.cursor()
     cursor.execute(sql_get_relevancies, (competency_id, author_id))
     relevancies = cursor.fetchall()
-    if relevancies is None:
+    if relevancies is None or -1 in relevancies:    # no relevancies or dummy relevancies
         return FAILURE_DEFAULT
     conn.commit()
 
@@ -585,12 +584,17 @@ def get_ranking_score(conn, author_id, competency_id):
     amount_abstracts_with_competency = len(abstracts_with_competency)
 
     proportion_competency = amount_abstracts_with_competency / total_abstracts
-
     mean_relevancy = np.mean(relevancies)
 
-    ranking_score = mean_relevancy + proportion_competency * (1 - mean_relevancy)
+    # no bonus if 1/1 abstract shows competency
+    if amount_abstracts_with_competency != 1 and total_abstracts != 1:
+        bonus = proportion_competency * (1 - mean_relevancy)
+    else:
+        bonus = 0
 
-    # calculation of relevancy: relevanc mean plus bonus for proportion with the competency
+    # calculation of relevancy: relevancy mean plus bonus for proportion with the competency
+    ranking_score = mean_relevancy + bonus
+
     return ranking_score
 
 
