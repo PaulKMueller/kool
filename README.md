@@ -9,21 +9,38 @@ kool (KompetenzpOOL)
 ## Description
 Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+## Quick-Installation guide
+
+1. [Install Docker Desktop](https://docs.docker.com/get-docker/)
+2. Clone this Repository and open it up using an IDE (we recommend using VS Code) or in the command shell.
+3. Open up the ".env" file and specify the IPv4 addresses of the Frontend and Playground Host and the ports, which the Services should be running on.  
+4. Open a command shell in the main folder and type
+> docker compose up
+5. The Application should now be running on http://FRONTEND_HOST:FRONTEND_PORT, e.g. http://localhost:8000
+
+*View detailed Installation Guide for more information*
+
+## Installation Guide
+### Requirements
+- When installing model_api and playground we recommend at least 10GB of storage as the models are big. When you dont want to install them view [...]
+- Docker must be installed (Tested on Docker version 20.10.20 and Docker Desktop v4.13.1, but other versions might work too)
+- When running the model_api you either need a good GPU or much patience
+### Installation
+1. Make sure your system meets the [requirements](kool#Installation Guide#Installation)  
+2. Clone this Repository and open it up using an IDE (we recommend using VS Code) or in the command shell.
+3. Open up the ".env" file and specify the IPv4 addresses of the Frontend and Playground Host and the ports, which the Services should be running on.  
+4. If you only want to run the Main-Application (Frontend and Database) without the playground and model_api open up the docker-compose.yml and comment it from line 35 (model_api) till the end using a # in each line
+5. Open a command shell (Terminal -> New Terminal in VS Code) in the main directory (where the docker-compose.yml sits) and run
+> docker compose up
+*if you already build the container in the past but changed something in the docker-compose-yml or in one of the Dockerfiles run*
+> docker compose up --build
+*to apply those changes*
+6. Wait for the container to build. When installing model_api and playground go grab a coffee. Building the container can take up to 20 min (at least on our crappy laptops)
+7. The Application should now be running on http://FRONTEND_HOST:FRONTEND_PORT, e.g. http://localhost:8000
 
 ## Visuals
 Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
 
-## Installation
-
-1. We recommend using VS Code. Install the 'Dev Container' and 'Docker' extensions in VS Code and Docker Desktop on your Computer. 
-2. Clone Repository
-3. Let VS Code open the Dev Container which is configurated in the Dockerfile.
-4. Install required packages using
-'''pip install -r requirements.txt'''
-5. Navigate to kool/kool and run
-'''python manage.py runserver'''
 
 ## Usage
 Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
