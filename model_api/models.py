@@ -119,6 +119,9 @@ def ask_galactica(abstract: str):
     # Remove unnecessary whitespaces
     competency_list = [competency.strip() for competency in competency_list]
 
+    # Lowercase all competencies
+    competency_list = [competency.lower() for competency in competency_list]
+
     # Remove duplicates
     competency_list = list(dict.fromkeys(competency_list))
 
@@ -135,6 +138,8 @@ def ask_galactica(abstract: str):
             if competency in other_competency and competency != other_competency:
                 competency_list.remove(competency)
 
+    # Set the score of each competency to -1 (default relevancy
+    # for all models that do not calculate relevancy)
     competency_list = [(competency, -1) for competency in competency_list]
     return competency_list
 
@@ -233,7 +238,7 @@ def get_category_of_competency(competence: str):
     return index
 
 
-def generate_text(abstract: str):
+def ask_gpt_neo(abstract: str):
     """Generates text based on an abstract using GPT-Neo.
 
     Args:
@@ -242,11 +247,50 @@ def generate_text(abstract: str):
     Returns:
         list: A list of generated texts
     """
-    prompt = "The competencies of the person who wrote this abstract are:"
+    prompt = f"Extract keywords from this abstract:{abstract} \n\n Keywords:"
     generator = pipeline(
                          "text-generation",
-                         model="EleutherAI/gpt-neo-2.7B",
-                         min_length=100,
-                         max_length=100
+                         model="EleutherAI/gpt-neo-125M",
+                         max_length=512,
+                         do_sample=True,
                          )
-    return generator(abstract + prompt)
+    response = generator(prompt)[0]['generated_text']
+
+    # Remove prompt and abstract from response
+    response = response.replace(abstract, "")
+    response = response.replace("Extract keywords from this abstract:", "")
+    response = response.replace("\n\n Keywords:", "")
+
+    # Split response to get single competencies
+    competency_list = response.split(',')
+
+    # Remove unnecessary whitespaces
+    competency_list = [competency.strip() for competency in competency_list]
+
+    # Lowercase all competencies
+    competency_list = [competency.lower() for competency in competency_list]
+
+    # Remove duplicates
+    competency_list = list(dict.fromkeys(competency_list))
+
+    # Add -1 as relevancy for each competency (default value
+    # for models that do not calcute relevancy)
+    competency_list = [(competency, -1) for competency in competency_list]
+
+
+    # Remove empty competencies
+    competency_list = [competency for competency in competency_list if competency[0] != '']
+
+    # If a competency is part of another competency, remove it
+    competency_list_copy = competency_list.copy()
+    for competency in competency_list:
+        for other_competency in competency_list_copy:
+            if competency in other_competency and competency != other_competency:
+                competency_list_copy.remove(competency)
+
+    competency_list = competency_list_copy
+
+    # Remove all competencies that have more than 4 words
+    competency_list = [competency for competency in competency_list if len(competency[0].split()) <= 4]
+
+    return competency_list

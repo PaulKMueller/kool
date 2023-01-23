@@ -82,9 +82,9 @@ with st.form(key="my_form"):
     with c1:
         ModelType = st.radio(
             "Choose your model",
-            ["KeyBERT", "Galactica 125M"],
+            ["KeyBERT", "Galactica 125M", "GPT-Neo 125M",],
             help=("These are the available models. "
-                  "In application's frontend, DistilBERT is used."),
+                  "In application's frontend, KeyBERT is used."),
         )
 
     with c2:
@@ -118,6 +118,8 @@ if ModelType == "KeyBERT":
     keywords = get_request_from_api("/get_competency/" + doc)
 elif ModelType == "Galactica 125M":
     keywords = get_request_from_api("/ask_galactica/" + doc)
+elif ModelType == "GPT-Neo 125M":
+    keywords = get_request_from_api("/ask_gpt_neo/" + doc)
 
 st.markdown("## **🔎 Check & download results **")
 
