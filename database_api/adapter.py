@@ -5,6 +5,7 @@ Provides functionality to interact with the database.
 import sqlite3
 from sqlite3 import Error
 import os
+import numpy as np
 
 
 # Path to existing database or where the database should be created
