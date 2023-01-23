@@ -44,13 +44,13 @@ services:
   
   # uncomment when you want to run the playground
 
-  playground:
-   env_file:
-       - '.env'
-   ports:
-     - $PLAYGROUND_PORT:$PLAYGROUND_PORT
-   restart: unless-stopped
-   volumes:
-     - ./playground:/usr/src/app
-   build:
-     context: ./playground
+  # playground:
+  #  env_file:
+  #      - '.env'
+  #  ports:
+  #    - $PLAYGROUND_PORT:$PLAYGROUND_PORT
+  #  restart: unless-stopped
+  #  volumes:
+  #    - ./playground:/usr/src/app
+  #  build:
+  #    context: ./playground
