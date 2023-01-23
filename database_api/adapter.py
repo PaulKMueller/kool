@@ -562,8 +562,8 @@ def get_abstracts_with_competency(conn, competency_id: int,
                                            FROM derived_from df
                                            JOIN written_by wb
                                            ON df.abstract_id = wb.abstract_id
-                                           WHERE competency_id = ?
-                                           AND author_id = ?
+                                           WHERE df.competency_id = ?
+                                           AND wb.author_id = ?
                                            """
     cursor = conn.cursor()
     cursor.execute(sql_get_abstracts_with_competency,
@@ -573,61 +573,61 @@ def get_abstracts_with_competency(conn, competency_id: int,
     return abstracts
 
 
-# def get_relevancy(conn, author_id, competency_id):
-    # """Returns the relevancy of a given competency for a given author.
+def get_ranking_score(conn, author_id, competency_id):
+    """Returns the ranking score of a given competency for a given author.
 
-    # Args:
-    #     conn (Connection): Connection to the database
-    #     author_id (int): Id of the author
-    #     competency_id (int): Id of the competency
+    Args:
+        conn (Connection): Connection to the database
+        author_id (int): Id of the author
+        competency_id (int): Id of the competency
 
-    # Returns:
-    #     _type_: _description_
-    # """
+    Returns:
+        _type_: _description_
+    """
+    FAILURE_DEFAULT = -1
+    sql_get_relevancies = """SELECT relevancy
+                             FROM derived_from df JOIN
+                             written_by wb ON df.abstract_id = wb.abstract_id
+                             WHERE competency_id = ? AND
+                             author_id = ?
+                            """
+    cursor = conn.cursor()
+    cursor.execute(sql_get_relevancies, (competency_id, author_id))
+    relevancies = cursor.fetchall()
+    if relevancies is None or -1 in relevancies:    # no relevancies or dummy relevancies
+        return FAILURE_DEFAULT
+    conn.commit()
 
-    # # TODO Funktionalität überarbeiten, macht ziemlich sicher
-    # # nicht das was sie soll. Außerdem umbennenen, nicht get_relevancy,
-    # da der Begriff "relevancy" schon in anderem Kontext verwendet wird.
-    # FAILURE_DEFAULT = -1
-    # sql_get_relevancies = """SELECT relevancy
-    #                          FROM derived_from df JOIN
-    #                          written_by wb ON df.abstract_id = wb.abstract_id
-    #                          WHERE competency_id = ? AND
-    #                          author_id = ?
-    #                         """
-    # cursor = conn.cursor()
-    # cursor.execute(sql_get_relevancies, (competency_id, author_id))
-    # relevancies = cursor.fetchall()
-    # if relevancies is None:
-    #     return FAILURE_DEFAULT
-    # conn.commit()
+    author_first_name, author_last_name = get_author_name(conn, author_id)
+    if author_first_name is None and author_last_name is None:
+        return FAILURE_DEFAULT
 
-    # author_first_name, author_last_name = get_author_name(conn, author_id)
-    # if author_first_name is None and author_last_name and None:
-    #     return FAILURE_DEFAULT
+    abstracts_by_author = get_abstracts_by_author(conn, author_first_name,
+                                                  author_last_name)
+    if abstracts_by_author == 'There are no abstracts from this author.':
+        return FAILURE_DEFAULT
+    total_abstracts = len(abstracts_by_author)
 
-    # abstracts_by_author = get_abstracts_by_author(conn, author_first_name,
-    #                                               author_last_name)
-    # if abstracts_by_author == 'There are no abstracts from this author.':
-    #     return FAILURE_DEFAULT
-    # total_abstracts = len(abstracts_by_author)
+    abstracts_with_competency = get_abstracts_with_competency(conn,
+                                                              competency_id,
+                                                              author_id)
+    if abstracts_with_competency == []:
+        return FAILURE_DEFAULT
+    amount_abstracts_with_competency = len(abstracts_with_competency)
 
-    # abstracts_with_competency = get_abstracts_with_competency(conn,
-    #                                                           competency_id,
-    #                                                           author_id)
-    # if abstracts_with_competency == []:
-    #     return FAILURE_DEFAULT
-    # amount_abstracts_with_competency = len(abstracts_with_competency)
+    proportion_competency = amount_abstracts_with_competency / total_abstracts
+    mean_relevancy = np.mean(relevancies)
 
-    #  proportion_competency = amount_abstracts_with_competency /
-    # total_abstracts
+    # no bonus if 1/1 abstract shows competency
+    if amount_abstracts_with_competency != 1 and total_abstracts != 1:
+        bonus = proportion_competency * (1 - mean_relevancy)
+    else:
+        bonus = 0
 
-    # max = np.amax(relevancies)
+    # calculation of relevancy: relevancy mean plus bonus for proportion with the competency
+    ranking_score = mean_relevancy + bonus
 
-    # relevancy = np.mean([max, proportion_competency])
-    # # arbitrary calculation of relevancy
-    # # (mean of highest relevancy and proportion)
-    # return relevancy
+    return ranking_score
 
 
 def get_author_name(conn, author_id: int) -> list[str, str]:

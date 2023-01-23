@@ -27,16 +27,19 @@ def get_author_by_competency_id(competency_id: int):
         author_first_name = author_entry[1]
         author_last_name = author_entry[2]
         abstract_id = author_entry[3]
-        relevancy = author_entry[4]
-        status = author_entry[5]
+        relevancy_of_abstract = author_entry[4]
+        status = author_entry[5]        
+        ranking =  access.get_request_from_api("/ranking_score/" + str(author_id) + "/" + str(competency_id))
+
         if author_id not in authors:
             authors[author_id] = Author(id=author_id,
                                         first_name=author_first_name,
                                         last_name=author_last_name,
                                         abstracts={},
-                                        competency_status=status)
+                                        competency_status=status, 
+                                        ranking=ranking)
 
-        authors[author_id].add_abstract(abstract_id, relevancy)
+        authors[author_id].add_abstract(abstract_id, relevancy_of_abstract)
     return authors
 
 
@@ -96,7 +99,7 @@ def results(request: HttpRequest, id: Optional[int] = None) -> HttpResponse:
         if len(authors) != 0:
             found_authors = True
             competency = get_competency_name_by_id(competency_id)[0]
-
+    authors = sort_authors(authors)
     all_competencies = access.get_request_from_api("/all_competencies/")
 
     return render(request, 'result.html', {'has_found': found_authors,
@@ -113,9 +116,13 @@ def change_status(request):
         competency_id = request.POST['competency_id']
         author_id = request.POST['author_id']
         new_status = request.POST['new_status'] 
-        print("-----------   -")
-        print(competency_id, author_id, new_status)
         access.get_request_from_api("/change_status/" + author_id + "/" + competency_id + "/" + new_status)
         return redirect('/results/' + competency_id)
     else:
         return render(request, 'result.html')
+
+def sort_authors(authors):
+    author_list = [(key, value) for key, value in authors.items()]
+    sorted_list = sorted(author_list, key=lambda x: x[1].ranking, reverse=True)
+    sorted_dict = dict(sorted_list)
+    return sorted_dict

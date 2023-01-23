@@ -7,12 +7,13 @@ import access
 class Author:
     '''Represents an author'''
     def __init__(self, id: int, first_name: str, last_name: str,
-                 abstracts: dict, competency_status: str):
+                 abstracts: dict, competency_status: str, ranking: float):
         self.id = id
         self.first_name = first_name
         self.last_name = last_name
         self.abstracts = abstracts
         self.competency_status = competency_status
+        self.ranking = ranking
 
     def add_abstract(self, abstract_id: int, relevancy: float):
         '''

@@ -16,7 +16,7 @@ a {
 body {
     display: flex;
     justify-content: center;
-    color:rgb(88, 88, 88);
+    color: rgb(88, 88, 88);
     text-align: center;
 }
 .tablecontainer {
@@ -28,7 +28,8 @@ body {
 .roundedcorners {
     border-radius: 10px 
 }
-.autocom-box li{
+
+.autocom-box li {
     list-style: none;
     padding: 8px 12px;
     display: none;
@@ -36,7 +37,9 @@ body {
     cursor: default;
     border-radius: 3px;
 }
-.autocom-box li{
+
+
+.autocom-box li {
     list-style: none;
     padding: 8px 12px;
     display: none;
@@ -44,6 +47,12 @@ body {
     cursor: default;
     border-radius: 3px;
 }
+
+
+
+
+
+
 .searchbaroffset {
     bottom: -35px;
     left: 5%;
@@ -87,4 +96,21 @@ body {
     border: 1px #00509F;
     border-style: solid;
     color: #00509F;
+}
+
+.rankingbar {
+    width: 15%;
+    height: 5px;
+    position: relative;
+    background-image: linear-gradient(to right, red, yellow, green);
+}
+
+.indicator {
+    width: 2px;
+    height: 15px;
+    background-color: black;
+    position: absolute;
+    margin-top: -5px;
+    margin-bottom: -5px;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
 }
