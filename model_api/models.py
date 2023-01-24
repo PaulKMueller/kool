@@ -253,12 +253,13 @@ def ask_gpt_neo(abstract: str):
                          model="EleutherAI/gpt-neo-125M",
                          max_length=512,
                          do_sample=True,
+                         temperature=0.00001
                          )
     response = generator(prompt)[0]['generated_text']
 
     # Remove prompt and abstract from response
     response = response.replace(abstract, "")
-    response = response.replace("Extract keywords from this abstract:", "")
+    response = response.replace("Extract skills from this abstract:", "")
     response = response.replace("\n\n Keywords:", "")
 
     # Split response to get single competencies
