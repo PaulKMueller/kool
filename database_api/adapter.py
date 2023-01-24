@@ -221,6 +221,32 @@ def get_all_competencies(conn) -> list[int, str, float]:
     return result
 
 
+def get_first_available_abstract_id(conn) -> int:
+    """Returns next available abstract_id meaning highest_abstract_id + 1.
+    Ignoring if some abstracts have been deleted in between, so potential
+    for optimization.
+
+    Args:
+        conn (Connection): Connection to the database
+
+    Returns:
+        int: next abstract id
+    """    
+    sql_get_highest_abstract_id = """SELECT MAX(abstract_id)
+                                     FROM abstract
+                                  """
+    cursor = conn.cursor()
+    cursor.execute(sql_get_highest_abstract_id)
+    highest_abstract_id = cursor.fetchone()
+    if highest_abstract_id is None:
+        highest_abstract_id = 0
+    else:
+        highest_abstract_id = highest_abstract_id[0]
+    next_available = highest_abstract_id + 1
+    conn.commit()
+    return next_available
+
+
 def get_or_generate_competency_id_by_name(conn, competency_name: str) -> int:
     """Returns the id of a competency by its name or creates an id if the
     competency's id has not been created yet.

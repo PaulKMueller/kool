@@ -6,42 +6,46 @@
 {% include 'includes/navbar_admin.html' %}
 
 <div class="container transparent" style="padding-top: 100px;">
+    <div class="container">
+        <p class="flow-text">Please upload your csv. Note the following columns:</p>
+        <script src="https://git.scc.kit.edu/utmyn/scraper/-/snippets/715.js"></script>
+    </div>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="container">
             <div class="file-field input-field">
                <div class="btn-large red roundedcorners">
                   <span>Upload</span>
-                  <input type="file" name="new_database"/>
+                  <input type="file" name="new_database" accept=".csv" />
                </div>
                
                <div class="file-path-wrapper">
-                  <input class="file-path validate" type="text" placeholder="Upload csv" />
+                  <input class="file-path validate" type="text" placeholder="Upload csv with given header!" />
                </div>
             </div>
         </div>
-        <div class="container" style="height: 100px;">
-            <p class="flow-text">Please upload your csv. Note the following columns: --</p>
-        </div>
         <div class="container">
             <div class="input-field">
-                <select>
-                    <option selected="selected" value="" disabled>Choose the model</option>
-                    <option value="1">KeyBERT</option>
-                    <option value="2">Galactica</option>
-                    <option value="3">GPTNeo</option>
+                <select name="model">
+                    <option value="keybert">KeyBERT</option>
+                    <option value="galactica">Galactica</option>
+                    <option value="gpt-neo">GPTNeo</option>
                 </select>
                 <label>ML Model for creating database</label>
             </div>
         </div>
         <div class="container">
-            <button class="btn-large waves-effect waves-ligh red roundedcorners" type="submit" name="action"> Attacke
+            <button class="btn-large waves-effect waves-ligh red roundedcorners" type="submit" name="action"> Submit
                 <i class="material-icons right">arrow_circle_right</i>
             </button>
         </div>
-        {% if success %}
+        {% if success == 1%}
         <div class="container">
-            <p>Attacke successfull <span>&#9989;</span></p>
+            <p style="font-size:large">Submit successfull <span>&#9989;</span></p>
+        </div>
+        {% elif success == 2 %}
+        <div class="container">
+            <p style="font-size:large">Submit unsuccessfull (Note to upload in .csv format)🙁</p>
         </div>
         {% endif %}
     </form>

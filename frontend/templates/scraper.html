@@ -6,13 +6,13 @@
 {% include 'includes/navbar_admin.html' %}
 <div class="container transparent" style="padding-top: 100px;">
     
-<script src="https://git.scc.kit.edu/von-bis/praktikum/teamprojekt-softwareentwicklung/ws2223/kompetenzpool/kool-scraper/-/snippets/711"></script>
-
-    <div>
        <h3>Download our scraper from gitlab</h3>
-    </div>
-    <img width="0px" height="0px" onload="moveIndicator({revelancy.author})">
-    <a class="btn-large waves-effect waves-ligh red roundedcorners" href="https://git.scc.kit.edu/von-bis/praktikum/teamprojekt-softwareentwicklung/ws2223/kompetenzpool/kool-scraper/-/blob/6a0959fa7c86061436933c268c3be2573fb17c5f/scraper.py"> Download Scraper </a>
-</div>
+       
+       <p style="text-align: justify; font-size: large;">
+        This is Python code that uses the Selenium web scraping library to scrape publications from the KIT Open website (https://primo.bibliothek.kit.edu/primo-explore/search?tab=kit_evastar&sortby=date&vid=KIT). The code navigates to the website, sets filters, and then scrapes the information for each publication. It saves the scraped data in a CSV file, with the structure defined in the "HEADER" variable. The code uses the Chrome browser, which can be run in headless mode (without the GUI) if the "HEADLESS" variable is set to True. The Chrome Driver and the Chrome browser executable must be specified in the "DRIVER_PATH" and "CHROME_PATH" variables, respectively. The output file path is specified in the "OUTPUT_PATH" variable, and the number of results to be scraped is defined in the "NUMBER_OF_RESULTS" variable.
+         </p>
+       <script src="https://git.scc.kit.edu/utmyn/scraper/-/snippets/713.js"></script>
+   
+  </div>
 
 {% endblock %}
