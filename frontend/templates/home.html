@@ -20,19 +20,62 @@
 <div class="row" style="margin-top: 80px; width: 97%; position: relative; z-index: 2">
 <div class="container">
    <div class="nav-wrapper white z-depth-4 roundedcorners" style="top: 140px; left: 25%; position: absolute; width: 50%; height: 100px; border: 1px black; border-style: solid; align-items: center; display: flex; border-radius: 10px">
-      <form id="searchbar" style="flex: 100" autocomplete="off" method="get" action="/results">
-         <div class="input-field" style="position: relative">
+      
+   
+      <div class="switch" onchange="switchflipped()" name="searchResearcher" style="position: relative; padding-left: 5%; z-index: 2;">
+         <label>
+            <input id="searchcheckbox" type="checkbox" onchange="switchflipped()">
+            <span class="lever"></span>
+         </label>
+      </div>
+      
+      
+      
+      <form id="searchbar" style="flex: 100; margin-left: -10%;" autocomplete="off" method="get" action="/results">
+         
+         <div class="input-field" style="position: relative" onchange="success()">
             {% comment %} list="list-competency" zu input {% endcomment %}
-            <input name="q" placeholder="Search Competency" id="auto" type="text" class="autocomplete" style="width: 65%; margin: 0;font-size:30px">
+            <input name="q" placeholder="Search Competency" id="search-input"
+                              id="auto" type="text" class="autocomplete" 
+                              style="width: 65%; margin: 0;font-size:30px">
+
             <label for="auto" class="label-icon" for="search" style="left: auto; right: 0; width: auto, margin-left: 0; margin-right: 5%; margin-top:0%", type="submit", name="action">
-            <button class="transparent" style="border: none" type="submit">
+            <button class="transparent" id="searchbutton" disabled style="border: none" type="submit">
             <i class="material-icons">search</i>
             </button>
             </label>
          </div>
+         
       </form>
    </div>
 </div>
+
+
+<script>
+   function switchflipped() { {% comment %} # TODO {% endcomment %}
+      if(document.getElementById("searchcheckbox").checked) {  
+
+      } else{
+
+      }
+   }
+
+</script>
+
+
+<script>
+   function success() {
+       if(document.getElementById("search-input").value=="") { 
+              document.getElementById('searchbutton').disabled = true; 
+          } else { 
+              document.getElementById('searchbutton').disabled = false;
+          }
+      }
+</script>
+
+
+
+
 <script>  
    document.addEventListener('DOMContentLoaded', function() {
        var dict = JSON.parse('{{all_competencies|escapejs}}');
@@ -55,12 +98,16 @@
 <div class="container" style="margin-top: 280px;">
 <div style="align: central">
    <div id="showcomp" align="left">
-      <h3> Popular competencies<button id="showallbutton"> 
-         <a href="/category/"><span class="black-text text-darken-2"> 
-         show all</span> </a></button>
+      <h3> Popular competencies<button id="showallbutton" onclick="location.href=/category/">
+         <span class="black-text
+            text-darken-2">
+            show all
+         </span> 
+      </button>
+
       </h3>
-      </div
    </div>
+</div>
    <div class="row">
       <div class="col s1 m3">
          <div class="card blue-grey">
