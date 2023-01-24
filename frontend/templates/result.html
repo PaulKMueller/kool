@@ -43,21 +43,21 @@
                                 <input type="hidden" name ="author_id" value="{{ author_id }}">
                                 <input type="hidden" name ="competency_id" value="{{ competency_id }}">
                                 <input type="hidden" name ="new_status" value="Hidden">
-                                <button type="submit" style="border:none" class="material-icons {% if author.competency_status == 'Hidden' %}clicked #e0e0e0 red lighten-2 roundedcorners{% endif %}">visibility_off</button>
+                                <button type="submit" class="material-icons status-button {% if author.competency_status == 'Hidden' %}clicked #e0e0e0 red lighten-2 roundedcorners{% endif %}">visibility_off</button>
                             </form>
                             <form action="{% url 'change_status' %}" method="post">
                                 {% csrf_token %}
                                 <input type="hidden" name ="author_id" value="{{ author_id }}">
                                 <input type="hidden" name ="competency_id" value="{{ competency_id }}">
                                 <input type="hidden" name ="new_status" value="Unvalidated">
-                                <button type="submit" style="border:none" class="material-icons {% if author.competency_status == 'Unvalidated' %}clicked #e0e0e0 grey lighten-2 roundedcorners{% endif %}">visibility</button>
+                                <button type="submit" class="material-icons status-button {% if author.competency_status == 'Unvalidated' %}clicked #e0e0e0 grey lighten-2 roundedcorners{% endif %}">visibility</button>
                             </form>
                             <form action="{% url 'change_status' %}" method="post">
                                 {% csrf_token %}
                                 <input type="hidden" name ="author_id" value="{{ author_id }}">
                                 <input type="hidden" name ="competency_id" value="{{ competency_id }}">
                                 <input type="hidden" name ="new_status" value="Validated">
-                                <button type="submit" style="border:none" class="material-icons {% if author.competency_status == 'Validated' %}clicked #e0e0e0 green lighten-2 roundedcorners{% endif %}">check</button>
+                                <button type="submit" class="material-icons status-button {% if author.competency_status == 'Validated' %}clicked #e0e0e0 green lighten-2 roundedcorners{% endif %}">check</button>
                             </form>
                         </div>
                     </div>

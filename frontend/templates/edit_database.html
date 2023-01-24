@@ -4,13 +4,58 @@
 {% block main_content %}
 
 {% include 'includes/navbar_admin.html' %}
-<div style="padding-top: 50px;">
-<h1>How to Edit the Database?</h1>
-<div class="card col l8">
-<img src="\static\images\edit_db_1.png">
+<div class="container transparent" style="padding-top: 100px;">
+
+    <h3>How to edit the database</h3>
+    <h4 style="text-align:left">Option 1 (preferred): Editting entries using the GUI</h4>
+    <p class="flow-text" style="text-align:left">
+        When you want to <b>edit the status of competencies</b>, e.g. because you believe a researcher in 
+        actually having a specific competency, or if a researcher doesn't want to be associated
+        with another competency, you can accomplish this by logging in as an admin (done, otherwise
+        you're [hopefully] not able to read this) and navigating to the competency of interest using
+        the searchbar. <br>
+        The color of the navbar and status buttons indicate that you're in admin mode.
+    </p>
+    <table>
+        <thead>
+            <th>Admin View (logged in)</th>
+            <th>User view (not logged in)</th>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <img class="responsive-img" src="\static\images\edit_db_1.png">
+                    <p>
+                        Now you can edit the visibility of competencies (only for specific authors).
+                        The check mark means verified, the open eye unvalidated and the crossed eye
+                        hidden.
+                    </p>
+                </td>
+                <td style="vertical-align: top">
+                    <img class="responsive-img"  src="\static\images\edit_db_not_logged_in_1.png">
+                </td>
+            </tr>
+            <tr>
+                <td style="vertical-align: top">
+                    <img class="responsive-img" src="\static\images\edit_db_2.png">
+                </td>
+                <td>
+                    <img class="responsive-img" src="\static\images\edit_db_not_logged_in_2.png">
+                    <p>
+                        After some editing of the admin view and refreshing of the user view, you 
+                        can see, that Sascha Wirges entry is hidden, Adrian Englhardts entry is 
+                        verified and Finn Sartoris entry remains untouched.
+                    </p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <h4 style="text-align:left">Option 2: Use a database viewer</h4>
+    <p class="flow-text" style="text-align:left">
+        Open the database.db (located in database_api) with a database viewer like 
+        DBeaver and edit the database manually. But please make a backup before and 
+        edit at your own risk.
+    </p>
 </div>
-<img src="\static\images\edit_db_2.png">
-<img src="\static\images\edit_db_1.png">
-<img src="\static\images\edit_db_1.png">
-</div>
+
 {% endblock %}

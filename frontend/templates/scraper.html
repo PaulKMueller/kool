@@ -6,13 +6,33 @@
 {% include 'includes/navbar_admin.html' %}
 <div class="container transparent" style="padding-top: 100px;">
     
-       <h3>Download our scraper from gitlab</h3>
+       <h3>Scrape entries from KIT Open</h3>
        
-       <p style="text-align: justify; font-size: large;">
-        This is Python code that uses the Selenium web scraping library to scrape publications from the KIT Open website (https://primo.bibliothek.kit.edu/primo-explore/search?tab=kit_evastar&sortby=date&vid=KIT). The code navigates to the website, sets filters, and then scrapes the information for each publication. It saves the scraped data in a CSV file, with the structure defined in the "HEADER" variable. The code uses the Chrome browser, which can be run in headless mode (without the GUI) if the "HEADLESS" variable is set to True. The Chrome Driver and the Chrome browser executable must be specified in the "DRIVER_PATH" and "CHROME_PATH" variables, respectively. The output file path is specified in the "OUTPUT_PATH" variable, and the number of results to be scraped is defined in the "NUMBER_OF_RESULTS" variable.
-         </p>
-       <script src="https://git.scc.kit.edu/utmyn/scraper/-/snippets/713.js"></script>
-   
+       <p class="flow-text" style="text-align: justify">
+        Our Scraper is Python code that uses the <i>Selenium web scraping library</i> to scrape 
+        publications from the KIT Open website (https://primo.bibliothek.kit.edu/primo-explore/search?tab=kit_evastar&sortby=date&vid=KIT).
+        <br>
+        The code navigates to the website, sets filters, and then scrapes the information for 
+        each publication. It saves the scraped data in a CSV file, with the structure defined 
+        in the "HEADER" variable. 
+        <br><br>
+        The code uses the <b>Chrome browser</b>, which can be run in headless mode (without the GUI) 
+        if the "HEADLESS" variable is set to True. The <i>Chrome Driver and the Chrome browser 
+        executable must be specified</i> in the "DRIVER_PATH" and "CHROME_PATH" variables, respectively.
+        <br><br>
+        The output file path is specified in the "OUTPUT_PATH" variable, and the number of 
+        results to be scraped is defined in the "NUMBER_OF_RESULTS" variable.
+        <br><br>
+        In Google Chrome, there are several ways to <b>view the XPaths of elements</b> on a website.
+        We recommend to just use the developer tools: You can open Chrome's developer tools by 
+        clicking the "F12" button or by going to the browser menu and selecting "Developer" and 
+        then "Developer tools". Then click on the "Elements" icon and select the element whose XPath
+        you want to view. The XPath of the element will be displayed in the lower section of the
+        developer tools.
+      </p>
+       
+         <script src="https://git.scc.kit.edu/utmyn/scraper/-/snippets/713.js"></script>
+        
   </div>
 
 {% endblock %}
