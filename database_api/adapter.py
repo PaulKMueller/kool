@@ -574,7 +574,7 @@ def get_abstracts_with_competency(conn, competency_id: int,
     return abstracts
 
 
-def get_ranking_score(conn, author_id, competency_id):
+def get_ranking_score(conn, author_id, competency_id) -> int:
     """Returns the ranking score of a given competency for a given author.
 
     Args:
