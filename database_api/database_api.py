@@ -262,3 +262,19 @@ async def change_status(author_id, competency_id, competency_status):
     response = adapter.change_status(conn, author_id, competency_id, competency_status)
     conn.close()
     return response
+
+
+@app.get("/author_by_id/{author_id}")
+async def get_author_by_id(author_id):
+    """Endpoint to get the name of an author by his id.
+
+    Args:
+        competency_name (int): The id of the author.
+
+    Returns:
+        list: List[first_name, last_name]
+    """
+    conn = adapter.create_connection()
+    response = adapter.get_author_name(conn, int(author_id))
+    conn.close()
+    return response

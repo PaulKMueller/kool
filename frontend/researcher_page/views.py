@@ -12,8 +12,7 @@ from django.contrib.auth.decorators import login_required
 
 def researcher(request: HttpRequest, id: Optional[int] = None) -> HttpResponse:
     """Renders the researcher page.
-    If ?q=... exists its preferred, else id is used. When no authors are
-    found, the user is informed in frontend.
+    When no authors are found, the user is informed in frontend.
 
     Args:
         request (HttpRequest): The request object.
@@ -22,6 +21,28 @@ def researcher(request: HttpRequest, id: Optional[int] = None) -> HttpResponse:
     Returns:
         HttpResponse: The rendered researcher page.
     """
+
+
+
+    found_id = False
+    author_first_name = None
+    author_last_name = None
+    competencies = None
+
+    if id:
+        author = access.get_request_from_api("/author_by_id/" + str(id))
+        author_first_name = author[0]
+        author_last_name = author[1]
+        competencies = access.get_request_from_api("/competencies_by_author_id/{author_id}")
+    
+    if author_first_name and author_last_name:
+        found_id = True
+
     all_competencies = access.get_request_from_api("/all_competencies/")
 
-    return render(request, 'researcher_page.html', {'all_competencies': json.dumps(all_competencies)})
+    return render(request, 'researcher_page.html', {'has_found': found_id,
+                                                    'id': id,
+                                                    'competencies': competencies,
+                                                    'author_first_name': author_first_name,
+                                                    'author_last_name': author_last_name,
+                                                    'all_competencies': json.dumps(all_competencies)})
