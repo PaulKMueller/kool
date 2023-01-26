@@ -13,9 +13,7 @@
 <div class="container-fixed transparent" style="margin-top: 180px; width: 100%">
     {% if has_found %}
     
-    <div class="flow-text container left-align resultsshower competency" style="height: 36px">
-        Results: {{author_first_name}} {{author_last_name}}
-    </div>
+    
     
 
 
@@ -24,11 +22,11 @@
 
 
     <div class="col s12 l3">
-        <div class="card roundedcorners" style="padding: 16px">
+        <div class="card roundedcorners" style="padding: 16px; width: 90%; margin-left: 5%;">
           <h5 style="text-align: left; font-weight: 500">
             {{ author_first_name }} {{ author_last_name }}
           </h5>
-          <div style="height: 60vh; overflow: scroll; overflow-x: hidden">
+          <div style="height: 60vh; overflow: visible; overflow-x: hidden">
             {% for competency in competencies %}
             <a
               class="competency"
