@@ -4,6 +4,26 @@
 from sqlite3 import Error
 import adapter
 
+# All available categories
+categories = ["Mathematics", "Computer and Informations Sciences",
+              "Physical Sciences", "Chemical Sciences",
+              "Environmental Sciences",
+              "Earth Sciences", "Biological Sciences",
+              "Civil Engineering",
+              "Electrical Engineering", "Mechanical Engineering",
+              "Chemical Engineering", "Materials Engineering",
+              "Medical Engineering", "Nano-technology", "Medicine",
+              "Health Sciences", "Agriculture, Forestry, and Fisheries",
+              "Animal and Dairy Sciences", "Veterinary Sciences",
+              "Agricultural Engineering", "Psychology",
+              "Economics and Business",
+              "Educational Sciences", "Sociology",
+              "Law", "Political Sciences",
+              "Geography", "Media and Communication",
+              "History and Archeology",
+              "Languages and Literature", "Philosophy",
+              "Ethics and Religion"]
+
 # SQL-Commands to create tables
 SQL_CREATE_TABLE_ABSTRACT = """CREATE TABLE IF NOT EXISTS abstract(
                                     abstract_id int IDENTITY(1,1) PRIMARY KEY,
@@ -105,3 +125,14 @@ def create_database():
     if conn is not None:
         for sql_command in sql_commands:
             create_table(conn, sql_command)
+    add_categories(conn)
+
+
+def add_categories(conn):
+    """Inserts categories for competencies
+
+    Args:
+        conn (Connection): Connection to the database
+    """
+    for index, category in enumerate(categories):
+        adapter.insert_category(conn, category_name=category, category_id=index)

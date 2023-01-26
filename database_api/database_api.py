@@ -3,7 +3,8 @@ This is the backend's database_api. It contains the endpoints
 to access the database.
 """
 
-from fastapi import FastAPI
+from fastapi import FastAPI, File, UploadFile, HTTPException, Form
+from pydantic import BaseModel
 import adapter
 from db_creation import database_from_csv
 
@@ -245,15 +246,28 @@ async def rebuild():
     database_from_csv.build()
     return "[success]"
 
-'''
-@app.get("/rebuild_newdatabase")
-async def rebuild_newdatabase(df):
+class Data(BaseModel):
+    model: str
+    file: str
+
+@app.post("/add_entries/")
+async def add_entries(data: Data):
     """Endpoint for rebuilding database with new data
-    
-    """
-    database_from_csv.build(df)
+
+    Args:
+        file (UploadFile): data to be saved in csv format
+
+    Raises:
+        HTTPException: if file is not csv format
+
+    Returns:
+        _type_: _description_
+    """ 
+    f = open("db_creation/csv_files/last_added.csv", "w")
+    f.write(data.file)
+    f.close()
+    database_from_csv.fill_database_from_added_entries()
     return "[success]"
-'''
 
 
 @app.get("/change_status/{author_id}/{competency_id}/{competency_status}")

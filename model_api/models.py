@@ -226,15 +226,14 @@ def get_category_of_competency(competence: str):
     Args:
         competence (str): The string representation of a competence
     """
-
     competency_and_categories = [competence] + CATEGORIES
     model = SentenceTransformer("bert-base-nli-mean-tokens")
     categories_embeddings = model.encode(competency_and_categories)
     similarities = cosine_similarity([categories_embeddings[0]],
                                      categories_embeddings[1:])
-
-    # Get index with maximum similarity
-    index = similarities[0].argmax()
+    # Get index with maximum similarity, convertion to int, as fastapi
+    # cant handle numpy int
+    index = int(similarities[0].argmax())
     return index
 
 
