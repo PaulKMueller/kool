@@ -24,5 +24,4 @@ urlpatterns = [
     path('abstract/', include('abstract_page.urls')),
     path('admin_page/', include('admin_page.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('researcher/', include('researcher_page.urls')),
 ]

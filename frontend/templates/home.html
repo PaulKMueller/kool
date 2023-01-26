@@ -39,7 +39,7 @@
                               id="auto" type="text" class="autocomplete" 
                               style="width: 65%; margin: 0;font-size:30px">
 
-            <label for="auto" class="label-icon" for="search" style="left: auto; right: 0; width: auto, margin-left: 0; margin-right: 5%; margin-top:0%", type="submit", name="action">
+            <label for="auto" class="label-icon" for="search" style="left: auto; right: 0; width: auto, margin-left:0; margin-right:5%; margin-top:0%", type="submit", name="action">
             <button class="transparent" id="searchbutton" disabled style="border: none" type="submit">
             <i class="material-icons">search</i>
             </button>
@@ -52,13 +52,42 @@
 
 
 <script>
+   
+
+   document.addEventListener('DOMContentLoaded', function() {
+      var dict = JSON.parse('{{all_competencies|escapejs}}');
+      var elems = document.querySelectorAll('.autocomplete');
+      options = {
+         data: {},limit: 10, onAutocomplete: function(selectedValue) {
+            document.getElementById("searchbar").submit();
+            }
+         }
+      for (var key in dict){
+         options.data[dict[key][1]] = null
+      }
+      var instances = M.Autocomplete.init(elems, options);
+   });
+   
+</script>
+
+<script>
+
    function switchflipped() { 
       if(document.getElementById("searchcheckbox").checked) {
          document.getElementById("search-input").placeholder = "Search Researcher"
-         {% comment %} TODO change list of searchbar {% endcomment %}
+         
+         
+         {% comment %} TODO remove event listener and add new one {% endcomment %}
+
+
+
+
       } else{
-         document.getElementById("search-input").placeholder = "Search Competency"
-         {% comment %} TODO change list of searchbar back {% endcomment %}
+         document.getElementById("search-input").placeholder = "Search Competency";
+
+         {% comment %} TODO remove event listener and add old one {% endcomment %}
+
+
       }
    }
 
@@ -78,24 +107,7 @@
 
 
 
-<script>  
-   document.addEventListener('DOMContentLoaded', function() {
-       var dict = JSON.parse('{{all_competencies|escapejs}}');
-       var elems = document.querySelectorAll('.autocomplete');
-       options = {
-           data: {
-           },
-           limit: 10,
-           onAutocomplete: function(selectedValue) {
-               document.getElementById("searchbar").submit();
-           }
-       }
-       for (var key in dict){
-           options.data[dict[key][1]] = null
-       }
-       var instances = M.Autocomplete.init(elems, options);
-   });
-</script>
+
 {% comment %} popular comp mit show all button und vier blöcken mit popular comp und show scientists button {% endcomment %}
 <div class="container" style="margin-top: 280px;">
 <div style="align: central">

@@ -23,8 +23,12 @@ def home(request: HttpRequest) -> HttpResponse:
 
 
     competencies = access.get_request_from_api("/all_competencies/")
+    authors = access.get_request_from_api("/all_authors/")
     response = render(request, 'home.html',
-                  {'all_competencies': json.dumps(competencies)})
+                    {'all_competencies': json.dumps(competencies), 
+                    'all_authors': json.dumps(authors)}
+                    
+                  )
     return response
 
 
