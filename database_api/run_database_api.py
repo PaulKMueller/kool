@@ -14,7 +14,8 @@ def run_database_api():
     """Starts the fastapi server for the database_api
     """
     # TODO: change to production type
-    database_from_csv.fill_database_from_added_entries()
+    # The next line of code is not working yet and throws an error
+    # database_from_csv.fill_database_from_added_entries()
     os.system('uvicorn database_api:app --reload --port ' + DATABASE_API_PORT
               + ' --host 0.0.0.0')
 
