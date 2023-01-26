@@ -83,6 +83,7 @@ def results(request: HttpRequest, id: Optional[int] = None) -> HttpResponse:
     """
     found_id = False
     found_authors = False
+    competency_id = None
     searchquery = request.GET.get('q', '')
     authors = {}
     if searchquery == "":
