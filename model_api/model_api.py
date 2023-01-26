@@ -7,7 +7,7 @@ import uvicorn
 from fastapi import FastAPI
 from models import (answer_abstract_question, summarize, get_mock_competency,
                     ask_galactica, ask_xlnet, ask_bloom, ask_keybert,
-                    get_competency_from_backend, generate_text, get_category_of_competency)
+                    get_competency_from_backend, ask_gpt_neo, get_category_of_competency)
 
 
 app = FastAPI()
@@ -52,7 +52,7 @@ def get_category(competency: str):
     return get_category_of_competency(competency)
 
 
-@app.get("/generate_text/{abstract}")
+@app.get("/ask_gpt_neo/{abstract}")
 async def get_competencies_from_abstract(abstract: str):
     """Returns a list of competencies from an abstract using gpt-neo-2.7B
 
@@ -63,7 +63,7 @@ async def get_competencies_from_abstract(abstract: str):
     Returns:
         string: Response from the model
     """
-    return generate_text(abstract)
+    return ask_gpt_neo(abstract)
 
 
 @app.get("/question_answering/{abstract}")
