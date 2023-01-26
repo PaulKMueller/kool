@@ -14,6 +14,7 @@ PLAYGROUND_PORT = os.environ.get(ENVIRONMENT_VARIABLE_PLAYGROUND_PORT)
 ENVIRONMENT_VARIABLE_PLAYGROUND_HOST = "PLAYGROUND_HOST"
 PLAYGROUND_HOST = os.environ.get(ENVIRONMENT_VARIABLE_PLAYGROUND_HOST)
 
+
 @login_required
 def adminpage(request: HttpRequest):
 
@@ -22,6 +23,7 @@ def adminpage(request: HttpRequest):
     response = render(request, 'admin.html', {"is_admin": is_admin})
 
     return response
+
 
 @login_required
 def add_entries(request):
@@ -33,17 +35,21 @@ def add_entries(request):
         return render(request, 'admin.html')
     return render(request, 'add_entries.html')
 
+
 @login_required
 def edit_database(request):
     return render(request, 'edit_database.html')
+
 
 @login_required
 def rebuild(request):
     return render(request, 'rebuild.html')
 
+
 @login_required
 def scraper(request):
     return render(request, 'scraper.html')
+
 
 @login_required
 def playground(request):
