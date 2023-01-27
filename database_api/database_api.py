@@ -275,6 +275,6 @@ async def get_author_by_id(author_id):
         list: List[first_name, last_name]
     """
     conn = adapter.create_connection()
-    response = adapter.get_author_name(conn, int(author_id))
+    response = adapter.get_author_name(conn, author_id)
     conn.close()
     return response
