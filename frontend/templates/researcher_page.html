@@ -23,20 +23,27 @@
 
     <div class="col s12 l3">
         <div class="card roundedcorners" style="padding: 16px; width: 90%; margin-left: 5%;">
-          <h5 style="text-align: left; font-weight: 500">
-            {{ author_first_name }} {{ author_last_name }}
+          <h5 style="text-align: center; font-weight: 500">
+            {{ author.first_name }} {{ author.last_name }} 
           </h5>
           <div style="height: 60vh; overflow: visible; overflow-x: hidden">
             {% for competency in competencies %}
-            <a
-              class="competency"
+            {% if user.is_authenticated or  author.competency_status != "Hidden" %}
+            <a class="competency"
               href="/results/{{ competency.id }}"
-              style="text-align: left"
-            >
+              style="text-align: left">
               <p>{{ competency.name }}</p>
             </a>
             <div class="divider"></div>
-            {% endfor %}
+
+
+
+
+
+
+
+          {% endif %}
+          {% endfor %}
           </div>
           <a
             class="waves-effect waves-light btn-large"
