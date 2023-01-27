@@ -27,28 +27,34 @@
   <div class="col s12 l3">
     <div class="card roundedcorners" style="padding: 16px; width: 90%;
       margin-left: 5%;">
-      <h5 style="text-align: center; font-weight: 500">
-        {{ author.first_name }} {{ author.last_name }}
-      </h5>
+      
+      <div class="container-fixed transparent" style="display:flex; justify-content: center;";>
+        <div style="align-self: center;">
+            <h4 style="font-weight: 500;">
+                {{ author.first_name }} {{ author.last_name }}
+              </h4>
+        </div>
+        <div id="Total" style="align-self:center; padding-left: 20%;">
+            <h5 style="font-weight: 500;">Total: {{ author.get_number_of_publications }}
+                Publication{% if author.get_number_of_publications > 1 %}s
+            {% endif %}
+            </h5>
+        </div>
+        </div>
 
 
       
-      <div class="container-fixed transparent" style="margin-top: 180px; width: 100%">
+      <div class="container-fixed transparent" style="margin-top: 18px; width: 100%">
         {% if has_found %}
-        
-        <div class="flow-text container left-align resultsshower competency" style="height: 36px">
-            Results: {{ competency }}
-        </div>
-    
         <div class="container-fixed transparent" style="width: 100%; margin-top: 48px">
-            {% for competency in competencies %}
+            {% for competency in author.competencies %}
             {% if user.is_authenticated or competency.competency_status != "Hidden" %}
                 <div class="col resultbox container l10  grey lighten-3 roundedcorners  z-depth-1">
                         <i class="small material-icons" style="margin-left: 3%">account_circle</i>
                         <div class="resulttext col">
                         <p>
     
-                                <a href="/result/{{ competency.id }}">{{competency.name}}</a> 
+                                <a href="/results/{{ competency.id }}">{{competency.name}}</a> 
                                 
                                 {% if competency.competency_status == 'Validated' %}
                                 <img src="/static/images/verified.png" width="24px" height="24px">
@@ -56,7 +62,8 @@
                         </p>
                         </div>
                         <div class="rankingbar">
-                            <div class="indicator" style="left: calc({{0}} * 100%)"></div>
+                            <div class="indicator" style="left: 
+                            calc(1 * 100%)"></div>
                         </div>    
                         {% if user.is_authenticated %}
                         <div class="col" style="width: 130px">
@@ -105,7 +112,6 @@
                             <tr>
                                 <th>Competency</th>
                                 <th>Title</th>
-                                <th>Type</th>
                                 <th></th>
                                 <th>Publicated</th>
                             </tr>
@@ -115,16 +121,15 @@
                                         
                             <tr>
                                 <th class="competency" style="font-weight: normal">{{ competency.name }}</th>
-                                <th style="font-weight: normal">{{ abstract.0.title }}</th>
-                                <th style="font-weight: normal">{{ abstract.0.doctype }}</th>
+                                <th style="font-weight: normal">{{ abstract.title }}</th>
                                 <th>
-                                    <a href="/abstract/{{abstract_id}}/detailed/{{author_id}}">
+                                    <a href="/abstract/{{abstract.id}}/detailed/{{author.id}}">
                                     <button class="buttonabstract btn-medium btn-flat waves-effect roundedcorners">
                                         View Abstract
                                     </button>
                                     </a>
                                 </th>
-                                <th style="font-weight: normal">{{ abstract.0.year }}</th>
+                                <th style="font-weight: normal">{{ abstract.year }}</th>
                             </tr>
                             {% endfor %}
                         </tbody>

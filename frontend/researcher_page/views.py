@@ -50,7 +50,7 @@ def researcher(request: HttpRequest, id: Optional[int] = None) -> HttpResponse:
                 author_abstracts.append(Abstract(abstract[0], abstract[1], abstract[2], abstract[3], abstract[4]))
                 """[abstract_id, year, title, content, institution]"""
                 
-            author = Author(id=id, first_name=author_first_name, last_name=author_last_name, abstracts=author_abstracts)
+            author = Author(id=id, first_name=author_first_name, last_name=author_last_name, abstracts=author_abstracts, competencies=competencies)
     
     
     
