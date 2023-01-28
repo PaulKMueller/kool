@@ -63,7 +63,7 @@
                         </div>
                         <div class="rankingbar">
                             <div class="indicator" style="left: 
-                            calc(1 * 100%)"></div>
+                            calc({{competency.ranking}} * 100%)"></div>
                         </div>    
                         {% if user.is_authenticated %}
                         <div class="col" style="width: 130px">
@@ -93,12 +93,13 @@
                         </div>
                         {% endif %}
                         <div class="infoboxresult col">
-                            <div> {{ "Platzhalter 1" }} </div>
+                            <div> {{ competency.get_last_publication_year }} </div>
                             <div> Last relevant publication </div>
                         </div>
                         <div class="resultcount col">
-                            <div> {{ "Platzhalter 2" }} </div>
-                            <div> Relevant publications </div>
+                            <div> {{ competency.get_number_of_publications }} </div>
+                            <div> Relevant publication{% if competency.get_number_of_publications > 1 %}s
+                                {% endif %} </div>
                         </div>
                         
     
@@ -112,16 +113,18 @@
                             <tr>
                                 <th>Competency</th>
                                 <th>Title</th>
+                                <th>Type</th>
                                 <th></th>
                                 <th>Publicated</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for abstract in author.abstracts %}
+                            {% for abstract in competency.abstracts %}
                                         
                             <tr>
                                 <th class="competency" style="font-weight: normal">{{ competency.name }}</th>
                                 <th style="font-weight: normal">{{ abstract.title }}</th>
+                                <th style="font-weight: normal">{{ abstract.doctype }}</th>
                                 <th>
                                     <a href="/abstract/{{abstract.id}}/detailed/{{author.id}}">
                                     <button class="buttonabstract btn-medium btn-flat waves-effect roundedcorners">

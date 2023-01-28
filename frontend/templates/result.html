@@ -70,7 +70,8 @@
                     </div>
                     <div class="resultcount col">
                         <div> {{ author.get_number_of_publications }} </div>
-                        <div> Relevant publications </div>
+                        <div> Relevant publication{% if author.get_number_of_publications > 1 %}s
+                            {% endif %} </div>
                     </div>
                     
 
