@@ -39,7 +39,7 @@
                               id="auto" type="text" class="autocomplete" 
                               style="width: 65%; margin: 0;font-size:30px">
 
-            <label for="auto" class="label-icon" for="search" style="left: auto; right: 0; width: auto, margin-left:0; margin-right:5%; margin-top:0%", type="submit", name="action">
+            <label for="auto" class="label-icon" for="search" style="left: auto; right: 0; width: auto, margin-left: 0; margin-right: 5%; margin-top:0%", type="submit", name="action">
             <button class="transparent" id="searchbutton" disabled style="border: none" type="submit">
             <i class="material-icons">search</i>
             </button>
@@ -51,58 +51,6 @@
 </div>
 
 
-<script>
-   
-
-   document.addEventListener('DOMContentLoaded', function() {
-      var dict = JSON.parse('{{all_competencies|escapejs}}');
-      var elems = document.querySelectorAll('.autocomplete');
-      options = {
-         data: {},limit: 10, onAutocomplete: function(selectedValue) {
-            document.getElementById("searchbar").submit();
-            }
-         }
-      for (var key in dict){
-         options.data[dict[key][1]] = null
-      }
-      var instances = M.Autocomplete.init(elems, options);
-   });
-   
-</script>
-
-<script>
-
-   function switchflipped() { 
-      if(document.getElementById("searchcheckbox").checked) {
-         document.getElementById("search-input").placeholder = "Search Researcher"
-         
-         
-         {% comment %} TODO remove event listener and add new one {% endcomment %}
-
-
-
-
-      } else{
-         document.getElementById("search-input").placeholder = "Search Competency";
-
-         {% comment %} TODO remove event listener and add old one {% endcomment %}
-
-
-      }
-   }
-
-</script>
-
-
-<script>
-   function success() {
-       if(document.getElementById("search-input").value=="") { 
-              document.getElementById('searchbutton').disabled = true; 
-          } else { 
-              document.getElementById('searchbutton').disabled = false;
-          }
-      }
-</script>
 
 
 
@@ -148,11 +96,11 @@
       <div class="col s1 m3">
          <div class="card blue-grey">
             <div class="card-content white-text">
-               <span class="card-title">Modern Society</span>
-               <p>Modern society is characterized by advanced social, economic and technological development and urbanization.</p>
+               <span class="card-title">Convergence Analysis</span>
+               <p>Convergence analysis evaluates the rate of change of a sequence to a limit/solution as the number of iterations increases.</p>
             </div>
             <div class="card-action">
-               <a href="/results/?q=modern+society"><span class="white-text text-darken-2">Search Scientists</span></a>
+               <a href="/results/?q=convergence+analysis"><span class="white-text text-darken-2">Search Scientists</span></a>
             </div>
          </div>
       </div>
@@ -182,4 +130,75 @@
       </nav>
    </div>
 </div>
+
+
+
+<script>
+   
+   document.addEventListener('DOMContentLoaded', eventCompetency());
+
+   function eventResearcher(){
+      var dict = JSON.parse('{{all_authors|escapejs}}');
+      var elems = document.querySelectorAll('.autocomplete');
+      options = {
+      data: {},limit: 10, onAutocomplete: function(selectedValue) {
+         document.getElementById("searchbar").submit();
+         }
+      }
+      for (var key in dict){
+         options.data[dict[key][1] + " " + dict[key][2]] = null
+      }
+      var instances = M.Autocomplete.init(elems, options);
+   }
+
+   function eventCompetency() {
+      var dict = JSON.parse('{{all_competencies|escapejs}}');
+      var elems = document.querySelectorAll('.autocomplete');
+      options = {
+      data: {},limit: 10, onAutocomplete: function(selectedValue) {
+         document.getElementById("searchbar").submit();
+         }
+      }
+      for (var key in dict){
+         options.data[dict[key][1]] = null
+      }
+      var instances = M.Autocomplete.init(elems, options);
+   }
+
+   
+
+
+
+   function switchflipped() { 
+      if(document.getElementById("searchcheckbox").checked) {
+         document.getElementById("search-input").placeholder = "Search Researcher"
+
+         document.removeEventListener('DOMContentLoaded', eventCompetency());
+         document.addEventListener('DOMContentLoaded', eventResearcher());
+
+
+
+
+      } else{
+         document.getElementById("search-input").placeholder = "Search Competency";
+
+         document.removeEventListener('DOMContentLoaded', eventResearcher());
+         document.addEventListener('DOMContentLoaded', eventCompetency());
+         
+
+         {% comment %} TODO remove event listener and add old one {% endcomment %}
+
+
+      }
+   }
+
+
+   function success() {
+       if(document.getElementById("search-input").value=="") { 
+              document.getElementById('searchbutton').disabled = true; 
+          } else { 
+              document.getElementById('searchbutton').disabled = false;
+          }
+      }
+</script>
 {% endblock %}

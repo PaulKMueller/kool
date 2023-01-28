@@ -37,6 +37,11 @@ async def get_categories():
 
 @app.get("/all_competencies/")
 async def get_all_competencies():
+    """Endpoint to get all competencies from the database.
+
+    Returns:
+        list: list[competency_id, competency_name]
+    """
     conn = adapter.create_connection()
     response = adapter.get_all_competencies(conn)
     conn.close()

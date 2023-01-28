@@ -6,7 +6,8 @@ import access
 
 class Author:
     '''Represents an author'''
-    def __init__(self, id: int, first_name: str, last_name: str, competencies: dict):
+    def __init__(self, id: int, first_name: str, last_name: str, 
+                 competencies: dict):
         self.id = id
         self.first_name = first_name
         self.last_name = last_name
@@ -26,7 +27,8 @@ class Author:
 
 class Abstract:
     '''Represents an abstract'''
-    def __init__(self, id: int, year: int, title: str, content: str, doctype: str, institution: str):
+    def __init__(self, id: int, year: int, title: str, content: str, 
+                 doctype: str, institution: str):
         self.id = id
         self.year = year
         self.title = title
@@ -34,9 +36,11 @@ class Abstract:
         self.doctype = doctype
         self.institution = institution
 
+
 class Competency:
     """Represents a competency"""
-    def __init__(self, id: int, name: str, competency_status: str, ranking: int, abstracts: dict):
+    def __init__(self, id: int, name: str, competency_status: str, 
+                 ranking: int, abstracts: dict):
         """Creates a Competency object
 
         Args:

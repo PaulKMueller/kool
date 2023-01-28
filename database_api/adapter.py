@@ -202,14 +202,14 @@ def get_all_categories(conn) -> list[int, str]:
     return result
 
 
-def get_all_competencies(conn) -> list[int, str, float]:
+def get_all_competencies(conn) -> list[int, str]:
     """Returns all entries in the competency relation in the database.
 
     Args:
         conn (Connection): Connection to the database
 
     Returns:
-        list: list[competency_id, competency_name, relevancy]
+        list: list[competency_id, competency_name]
     """
     sql_get_categories = """SELECT * FROM competency;"""
     cursor = conn.cursor()

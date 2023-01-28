@@ -29,7 +29,6 @@ def researcher(request: HttpRequest, id: Optional[int] = None) -> HttpResponse:
     competencies = []
     author_first_name = None
     author_last_name = None
-    author_abstracts = []
 
     if id:
         author_response = access.get_request_from_api("/author_by_id/" + str(id))
@@ -40,10 +39,12 @@ def researcher(request: HttpRequest, id: Optional[int] = None) -> HttpResponse:
             found_id = True
             author_id = id
 
-            author_competencies = access.get_request_from_api("/competencies_by_author_id/" + str(author_id))
+            author_competencies = access.get_request_from_api(
+                    "/competencies_by_author_id/" + str(author_id))
             for competency in author_competencies:
                 competency_id = competency[0]
-                ranking = access.get_request_from_api("/ranking_score/" + str(author_id) + "/" + str(competency_id))
+                ranking = access.get_request_from_api("/ranking_score/" + 
+                            str(author_id) + "/" + str(competency_id))
 
                 relevant_abstract_ids = access.get_request_from_api("/abstracts_with_competency_by_author/" + str(competency_id) + "/" + str(author_id))
                 relevant_abstracts = []
@@ -54,11 +55,8 @@ def researcher(request: HttpRequest, id: Optional[int] = None) -> HttpResponse:
                 competencies.append(Competency(competency_id, competency[1], competency[2], ranking, relevant_abstracts))
                 
             author = Author(id=author_id, first_name=author_first_name, last_name=author_last_name, competencies=competencies)
+            competencies = sort_competencies(competencies)
     
-    
-    
-
-
     return render(request, 'researcher_page.html', {'has_found': found_id,
                                                     'id': id,
                                                     'competencies': competencies,
@@ -66,4 +64,6 @@ def researcher(request: HttpRequest, id: Optional[int] = None) -> HttpResponse:
                                                     })
 
 
-
+def sort_competencies(competencies: list):
+    competencies.sort(key= lambda x: x.ranking, reverse=True)
+    return competencies
