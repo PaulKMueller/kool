@@ -31,8 +31,10 @@ def researcher(request: HttpRequest, id: Optional[int] = None) -> HttpResponse:
 
     if searchquery == "":
         author_id = id
+        searched = id
     else:
         author_id = get_author_id(searchquery)
+        searched = searchquery
 
     author_response = get_author_by_id(author_id)
 
@@ -67,28 +69,28 @@ def researcher(request: HttpRequest, id: Optional[int] = None) -> HttpResponse:
                                                competency[2],
                                                ranking,
                                                relevant_abstracts))
-                
+
             author = Author(id=author_id,
                             first_name=author_first_name,
                             last_name=author_last_name,
                             competencies=competencies)
 
             competencies = sort_competencies(competencies)
-    
+
     return render(request, 'researcher_page.html', {'has_found': found_id,
-                                                    'id': id,
+                                                    'searched': searched,
                                                     'competencies':
                                                         competencies,
-
-                                                    'author': author,
-                                                    'searchquery': searchquery,
-                                                    'author_id': author_id
+                                                    'author': author
                                                     })
 
 
 def get_author_id(searchquery):
-    return int(access.get_request_from_api("/author_id_by_full_name/" +
-                                           searchquery)[0])
+    result = access.get_request_from_api("/author_id_by_full_name/" +
+                                         searchquery)
+    if not result:
+        return None
+    return int(result[0])
 
 
 def get_author_by_id(author_id):

@@ -33,7 +33,7 @@
         </div>
 
       <div class="container-fixed transparent" style="margin-top: 18px; width: 100%">
-        {% if has_found %}
+        
         <div class="container-fixed transparent" style="width: 100%; margin-top: 48px">
             {% for competency in author.competencies %}
             {% if user.is_authenticated or competency.competency_status != "Hidden" %}
@@ -131,16 +131,10 @@
             {% endfor %}
         </div>
     
-        {% else %}
-            <div class="flow-text">
-                No results for "{{id}}"
-            </div>
-        {% endif %}
-    
   </div>
   {% else %}
   <div class="flow-text">
-    No results for "{{ id }}"
+    No results for "{{ searched }}"
   </div>
   {% endif %}
 
