@@ -3,7 +3,7 @@
 {% block main_content %}
 
 <!-- NavBar using include -->
-<div class="navbar-fixed z-depth-2" style="background-color: #9EC4D5; width: 100%; height: 120px; position: fixed; z-index: 1">
+<div class="navbar-fixed {% if user.is_authenticated %} blue {% endif %} z-depth-2" style="background-color: #9EC4D5; width: 100%; height: 120px; position: fixed; z-index: 1">
   {% include 'includes/navbar.html' %}
 </div>
 
