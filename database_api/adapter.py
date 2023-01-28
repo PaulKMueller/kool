@@ -675,7 +675,8 @@ def get_all_authors(conn) -> list[int, str, str]:
     return result
 
 
-def change_status(conn, author_id: int, competency_id: int, competency_status: str) -> list[str]:
+def change_status(conn, author_id: int, competency_id: int,
+                  competency_status: str) -> list[str]:
     """Changes given competency status in database of author with competency
 
     Args:
@@ -712,7 +713,8 @@ def get_author_id_by_full_name(conn, full_name: str) -> int:
     """
     sql_get_author_id_by_full_name = """SELECT author_id
                            FROM author
-                           WHERE first_name || ' ' || last_name = '{}'""".format(full_name)
+                           WHERE first_name || ' ' || last_name = 
+                           '{}'""".format(full_name)
     cursor = conn.cursor()
     cursor.execute(sql_get_author_id_by_full_name)
     result = cursor.fetchone()

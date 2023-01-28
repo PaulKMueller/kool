@@ -35,6 +35,7 @@ async def get_categories():
     conn.close()
     return response
 
+
 @app.get("/all_competencies/")
 async def get_all_competencies():
     """Endpoint to get all competencies from the database.
@@ -287,8 +288,8 @@ async def get_author_by_id(author_id):
 
 @app.get("/abstracts_with_competency_by_author/{competency_id}/{author_id}")
 async def get_abstracts_with_competency_by_author(competency_id, author_id):
-    """Endpoint to get all abstracts_ids of the abstracts that proof that an author has
-    a given competency.
+    """Endpoint to get all abstracts_ids of the abstracts that proof that an 
+    author has a given competency.
 
     Args:
         competency_id (int): Id of the competency
@@ -298,7 +299,8 @@ async def get_abstracts_with_competency_by_author(competency_id, author_id):
         list: list[abstract_id]
     """
     conn = adapter.create_connection()
-    response = adapter.get_abstracts_with_competency(conn, competency_id, author_id)
+    response = adapter.get_abstracts_with_competency(conn, competency_id,
+                                                     author_id)
     conn.close()
     return response
 

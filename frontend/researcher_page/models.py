@@ -22,12 +22,13 @@ class Author:
         return len(abstract_ids)
     
     def get_ranking_for_competency_by_id(self, competency_id:int):
-        return access.get_request_from_api("/ranking_score/{author_id}/{competency_id}")
+        return access.get_request_from_api(
+            "/ranking_score/{author_id}/{competency_id}")
 
 
 class Abstract:
     '''Represents an abstract'''
-    def __init__(self, id: int, year: int, title: str, content: str, 
+    def __init__(self, id: int, year: int, title: str, content: str,
                  doctype: str, institution: str):
         self.id = id
         self.year = year
@@ -39,7 +40,7 @@ class Abstract:
 
 class Competency:
     """Represents a competency"""
-    def __init__(self, id: int, name: str, competency_status: str, 
+    def __init__(self, id: int, name: str, competency_status: str,
                  ranking: int, abstracts: dict):
         """Creates a Competency object
 
