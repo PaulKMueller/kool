@@ -27,7 +27,7 @@
         </div>
         <div id="Total" style="align-self:center; padding-left: 20%;">
             <h5 style="font-weight: 500;">Total: {{ author.get_number_of_publications }}
-                Publication{% if author.get_number_of_publications > 1 %}s
+                Publication{% if author.get_number_of_publications != 1 %}s
             {% endif %}
             </h5>
         </div>
@@ -87,7 +87,7 @@
                         </div>
                         <div class="resultcount col">
                             <div> {{ competency.get_number_of_publications }} </div>
-                            <div> Relevant publication{% if competency.get_number_of_publications > 1 %}s
+                            <div> Relevant publication{% if competency.get_number_of_publications != 1 %}s
                                 {% endif %} </div>
                         </div>
                         
@@ -134,16 +134,11 @@
     
         {% else %}
             <div class="flow-text">
-                No results for "{{competency}}"
+                No results for "{{id}}"
             </div>
     
         {% endif %}
-        
-    </div>
-      <a class="waves-effect waves-light btn-large" style="background-color:
-        #6592bf; margin-top: 20px"><i
-          class="material-icons left">mail</i>contact me</a>
-    </div>
+    
   </div>
   {% else %}
   <div class="flow-text">

@@ -33,7 +33,7 @@
       
       <form id="searchbar" style="flex: 100; margin-left: -10%;" autocomplete="off" method="get" action="/results">
          
-         <div class="input-field" style="position: relative" onchange="success()">
+         <div class="input-field" style="position: relative" onchange="search_allowed()">
             {% comment %} list="list-competency" zu input {% endcomment %}
             <input name="q" placeholder="Search Competency" id="search-input"
                               id="auto" type="text" class="autocomplete" 
@@ -166,34 +166,22 @@
    }
 
    
-
-
-
    function switchflipped() { 
       if(document.getElementById("searchcheckbox").checked) {
          document.getElementById("search-input").placeholder = "Search Researcher"
-
          document.removeEventListener('DOMContentLoaded', eventCompetency());
          document.addEventListener('DOMContentLoaded', eventResearcher());
-
-
-
-
+         document.getElementById("searchbar").action = action="/researcher"
       } else{
          document.getElementById("search-input").placeholder = "Search Competency";
-
          document.removeEventListener('DOMContentLoaded', eventResearcher());
          document.addEventListener('DOMContentLoaded', eventCompetency());
-         
-
-         {% comment %} TODO remove event listener and add old one {% endcomment %}
-
-
+         document.getElementById("searchbar").action = action="/results"
       }
    }
 
 
-   function success() {
+   function search_allowed() {
        if(document.getElementById("search-input").value=="") { 
               document.getElementById('searchbutton').disabled = true; 
           } else { 

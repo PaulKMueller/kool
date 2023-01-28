@@ -697,3 +697,24 @@ def change_status(conn, author_id: int, competency_id: int, competency_status: s
     conn.commit()
     result = ["success"]
     return result
+
+
+def get_author_id_by_full_name(conn, full_name: str) -> int:
+    """Returns the id of an author by its name or creates an id if the author's
+    id has not been created yet.
+
+    Args:
+        conn (Connection): Connection to the database
+        full_name (str): Full name of the author
+
+    Returns:
+        int: Id of the author
+    """
+    sql_get_author_id_by_full_name = """SELECT author_id
+                           FROM author
+                           WHERE first_name || ' ' || last_name = '{}'""".format(full_name)
+    cursor = conn.cursor()
+    cursor.execute(sql_get_author_id_by_full_name)
+    result = cursor.fetchone()
+    conn.commit()
+    return result

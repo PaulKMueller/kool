@@ -10,6 +10,7 @@ from django.http import HttpRequest
 from django.http.response import HttpResponse as HttpResponse
 from django.contrib.auth.decorators import login_required
 
+
 def get_author_by_competency_id(competency_id: int):
     """Fetches all authors for a given competency id from the database.
 
@@ -29,14 +30,14 @@ def get_author_by_competency_id(competency_id: int):
         abstract_id = author_entry[3]
         relevancy_of_abstract = author_entry[4]
         status = author_entry[5]        
-        ranking =  access.get_request_from_api("/ranking_score/" + str(author_id) + "/" + str(competency_id))
+        ranking = access.get_request_from_api("/ranking_score/" + str(author_id) + "/" + str(competency_id))
 
         if author_id not in authors:
             authors[author_id] = Author(id=author_id,
                                         first_name=author_first_name,
                                         last_name=author_last_name,
                                         abstracts={},
-                                        competency_status=status, 
+                                        competency_status=status,
                                         ranking=ranking)
 
         authors[author_id].add_abstract(abstract_id, relevancy_of_abstract)
@@ -121,6 +122,7 @@ def change_status(request):
         return redirect('/results/' + competency_id)
     else:
         return render(request, 'result.html')
+
 
 def sort_authors(authors):
     author_list = [(key, value) for key, value in authors.items()]

@@ -1,9 +1,8 @@
 """This module contains the views for the result_page app.
 """
 
-import json
 from typing import Optional
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from researcher_page.models import Author, Abstract, Competency
 import access
 from django.http import HttpRequest
@@ -21,23 +20,27 @@ def researcher(request: HttpRequest, id: Optional[int] = None) -> HttpResponse:
     Returns:
         HttpResponse: The rendered researcher page.
     """
-
-
-
     found_id = False
     author = None
+    author_id = None
     competencies = []
     author_first_name = None
     author_last_name = None
+    searchquery = request.GET.get('q', '')
 
-    if id:
-        author_response = access.get_request_from_api("/author_by_id/" + str(id))
-        author_first_name = author_response[0]
-        author_last_name = author_response[1]
+    if searchquery == "":
+        author_id = id
+    else:
+        author_id = int(access.get_request_from_api("/author_id_by_full_name/" + searchquery)[0])
+
+    author_response = access.get_request_from_api("/author_by_id/" + str(author_id))
+    author_first_name = author_response[0]
+    author_last_name = author_response[1]
+
+    if author_id:
 
         if author_first_name and author_last_name:
             found_id = True
-            author_id = id
 
             author_competencies = access.get_request_from_api(
                     "/competencies_by_author_id/" + str(author_id))
@@ -60,10 +63,12 @@ def researcher(request: HttpRequest, id: Optional[int] = None) -> HttpResponse:
     return render(request, 'researcher_page.html', {'has_found': found_id,
                                                     'id': id,
                                                     'competencies': competencies,
-                                                    'author': author
+                                                    'author': author,
+                                                    'searchquery': searchquery,
+                                                    'author_id': author_id
                                                     })
 
 
 def sort_competencies(competencies: list):
-    competencies.sort(key= lambda x: x.ranking, reverse=True)
+    competencies.sort(key=lambda x: x.ranking, reverse=True)
     return competencies

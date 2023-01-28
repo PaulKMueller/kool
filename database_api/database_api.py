@@ -301,3 +301,19 @@ async def get_abstracts_with_competency_by_author(competency_id, author_id):
     response = adapter.get_abstracts_with_competency(conn, competency_id, author_id)
     conn.close()
     return response
+
+
+@app.get("/author_id_by_full_name/{author_full_name}")
+async def get_author_id_by_full_name(author_full_name):
+    """Endpoint to get the author id of the author with the name
+
+    Args:
+        author_full_name (str): Full name of the author
+
+    Returns:
+        int: The id of the author
+    """
+    conn = adapter.create_connection()
+    response = adapter.get_author_id_by_full_name(conn, author_full_name)
+    conn.close()
+    return response
