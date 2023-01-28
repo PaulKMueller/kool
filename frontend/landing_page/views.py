@@ -21,7 +21,6 @@ def home(request: HttpRequest) -> HttpResponse:
     """
     # TODO: remove Test
 
-
     competencies = access.get_request_from_api("/all_competencies/")
     authors = access.get_request_from_api("/all_authors/")
     response = render(request, 'home.html',
