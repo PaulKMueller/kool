@@ -585,7 +585,7 @@ def get_ranking_score(conn, author_id, competency_id) -> int:
     Returns:
         _type_: _description_
     """
-    FAILURE_DEFAULT = -1
+    FAILURE_DEFAULT = 0
     sql_get_relevancies = """SELECT relevancy
                              FROM derived_from df JOIN
                              written_by wb ON df.abstract_id = wb.abstract_id
