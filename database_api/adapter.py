@@ -202,14 +202,14 @@ def get_all_categories(conn) -> list[int, str]:
     return result
 
 
-def get_all_competencies(conn) -> list[int, str, float]:
+def get_all_competencies(conn) -> list[int, str]:
     """Returns all entries in the competency relation in the database.
 
     Args:
         conn (Connection): Connection to the database
 
     Returns:
-        list: list[competency_id, competency_name, relevancy]
+        list: list[competency_id, competency_name]
     """
     sql_get_categories = """SELECT * FROM competency;"""
     cursor = conn.cursor()
@@ -600,7 +600,7 @@ def get_abstracts_with_competency(conn, competency_id: int,
     return abstracts
 
 
-def get_ranking_score(conn, author_id, competency_id):
+def get_ranking_score(conn, author_id, competency_id) -> int:
     """Returns the ranking score of a given competency for a given author.
 
     Args:
@@ -611,7 +611,7 @@ def get_ranking_score(conn, author_id, competency_id):
     Returns:
         _type_: _description_
     """
-    FAILURE_DEFAULT = -1
+    FAILURE_DEFAULT = 0
     sql_get_relevancies = """SELECT relevancy
                              FROM derived_from df JOIN
                              written_by wb ON df.abstract_id = wb.abstract_id
@@ -701,7 +701,8 @@ def get_all_authors(conn) -> list[int, str, str]:
     return result
 
 
-def change_status(conn, author_id: int, competency_id: int, competency_status: str) -> list[str]:
+def change_status(conn, author_id: int, competency_id: int,
+                  competency_status: str) -> list[str]:
     """Changes given competency status in database of author with competency
 
     Args:
@@ -722,4 +723,26 @@ def change_status(conn, author_id: int, competency_id: int, competency_status: s
     cursor.fetchall()
     conn.commit()
     result = ["success"]
+    return result
+
+
+def get_author_id_by_full_name(conn, full_name: str) -> int:
+    """Returns the id of an author by its name or creates an id if the author's
+    id has not been created yet.
+
+    Args:
+        conn (Connection): Connection to the database
+        full_name (str): Full name of the author
+
+    Returns:
+        int: Id of the author
+    """
+    sql_get_author_id_by_full_name = """SELECT author_id
+                           FROM author
+                           WHERE first_name || ' ' || last_name = 
+                           '{}'""".format(full_name)
+    cursor = conn.cursor()
+    cursor.execute(sql_get_author_id_by_full_name)
+    result = cursor.fetchone()
+    conn.commit()
     return result

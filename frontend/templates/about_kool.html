@@ -3,7 +3,7 @@
 {% block main_content %}
 
 <!-- NavBar using include -->
-<div class="navbar-fixed z-depth-2" style="background-color: #9EC4D5; width: 100%; height: 120px; position: fixed; z-index: 1">
+<div class="navbar-fixed {% if user.is_authenticated %} blue {% endif %} z-depth-2" style="background-color: #9EC4D5; width: 100%; height: 120px; position: fixed; z-index: 1">
   {% include 'includes/navbar.html' %}
 </div>
 
@@ -25,10 +25,10 @@
     <a href="mailto:eh2321@kit.edu">Martin Forell</a>
     <br><br>
     Authors: 
-    <a href="mailto:XXXX?subject=Kool">Felix Wittmann</a>, 
+    <a href="mailto:felix.wittmann@student.kit.edu?subject=Kool">Felix Wittmann</a>, 
     <a href="mailto:jasmin.azarfar@student.kit.edu?subject=Kool">Jasmin Azarfar</a>, 
     <a href="mailto:jens.eberhardt@student.kit.edu?subject=Kool">Jens Eberhardt</a>, 
-    <a href="mailto:uuuqa@student.kit.edu?subject=Kool">Marc Furier</a>, 
+    <a href="mailto:marc.furier@student.kit.edu?subject=Kool">Marc Furier</a>, 
     <a href="mailto:moritz.spohn@student.kit.edu?subject=Kool">Moritz Spohn</a>, 
     <a href="mailto:paul.mueller@student.kit.edu?subject=Kool">Paul Müller</a>
   </p>

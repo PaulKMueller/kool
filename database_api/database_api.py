@@ -36,8 +36,14 @@ async def get_categories():
     conn.close()
     return response
 
+
 @app.get("/all_competencies/")
 async def get_all_competencies():
+    """Endpoint to get all competencies from the database.
+
+    Returns:
+        list: list[competency_id, competency_name]
+    """
     conn = adapter.create_connection()
     response = adapter.get_all_competencies(conn)
     conn.close()
@@ -274,5 +280,56 @@ async def add_entries(data: Data):
 async def change_status(author_id, competency_id, competency_status):
     conn = adapter.create_connection()
     response = adapter.change_status(conn, author_id, competency_id, competency_status)
+    conn.close()
+    return response
+
+
+@app.get("/author_by_id/{author_id}")
+async def get_author_by_id(author_id):
+    """Endpoint to get the name of an author by his id.
+
+    Args:
+        competency_name (int): The id of the author.
+
+    Returns:
+        list: List[first_name, last_name]
+    """
+    conn = adapter.create_connection()
+    response = adapter.get_author_name(conn, author_id)
+    conn.close()
+    return response
+
+
+@app.get("/abstracts_with_competency_by_author/{competency_id}/{author_id}")
+async def get_abstracts_with_competency_by_author(competency_id, author_id):
+    """Endpoint to get all abstracts_ids of the abstracts that proof that an 
+    author has a given competency.
+
+    Args:
+        competency_id (int): Id of the competency
+        author_id (int): Id of the author
+
+    Returns:
+        list: list[abstract_id]
+    """
+    conn = adapter.create_connection()
+    response = adapter.get_abstracts_with_competency(conn, competency_id,
+                                                     author_id)
+    conn.close()
+    return response
+
+
+@app.get("/author_id_by_full_name/{author_full_name}")
+async def get_author_id_by_full_name(author_full_name):
+    """Endpoint to get the author id of the author with the name
+
+    Args:
+        author_full_name (str): Full name of the author
+
+    Returns:
+        int: The id of the author
+    """
+    conn = adapter.create_connection()
+    response = adapter.get_author_id_by_full_name(conn, author_full_name)
     conn.close()
     return response

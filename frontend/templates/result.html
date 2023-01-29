@@ -26,7 +26,9 @@
                     <i class="small material-icons" style="margin-left: 3%">account_circle</i>
                     <div class="resulttext col">
                     <p>
-                            {{author.first_name}} {{ author.last_name }}
+
+                            <a href="/researcher/{{ author_id }}">{{author.first_name}} {{ author.last_name }}</a> 
+                            
                             {% if author.competency_status == 'Validated' %}
                             <img src="/static/images/verified.png" width="24px" height="24px">
                             {% endif %}
@@ -68,7 +70,8 @@
                     </div>
                     <div class="resultcount col">
                         <div> {{ author.get_number_of_publications }} </div>
-                        <div> Relevant publications </div>
+                        <div> Relevant publication{% if author.get_number_of_publications != 1 %}s
+                            {% endif %} </div>
                     </div>
                     
 

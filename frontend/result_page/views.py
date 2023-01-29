@@ -38,7 +38,7 @@ def get_author_by_competency_id(competency_id: int):
                                         first_name=author_first_name,
                                         last_name=author_last_name,
                                         abstracts={},
-                                        competency_status=status, 
+                                        competency_status=status,
                                         ranking=ranking)
 
         authors[author_id].add_abstract(abstract_id, relevancy_of_abstract)
@@ -85,6 +85,7 @@ def results(request: HttpRequest, id: Optional[int] = None) -> HttpResponse:
     """
     found_id = False
     found_authors = False
+    competency_id = None
     searchquery = request.GET.get('q', '')
     authors = {}
     if searchquery == "":
