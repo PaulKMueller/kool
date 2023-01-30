@@ -5,6 +5,7 @@
 
 import os
 import pandas as pd
+from db_creation.model_endpoint import ENDPOINT
 from langdetect import detect
 from db_creation import string_formatter
 import yaml
@@ -56,13 +57,14 @@ def get_df_from_csv(PATH_TO_FILE):
     return pd.read_csv(PATH_TO_FILE)
 
 
-def fill_database_from_added_entries():
+def fill_database_from_added_entries(model: str):
     """Fills database with all entries which haven't
     been added to the database yet.
     Safes all entries in current.csv.
     """
     new_entries = get_new_entries()
-    fill_database(new_entries)
+    print("New Entries" + str(new_entries))
+    fill_database(new_entries, model)
     # Safe all Entries to current.csv
     all_entries = get_all_entries()
     all_entries.to_csv("db_creation/csv_files/current.csv", index=False)
@@ -101,7 +103,8 @@ def find_difference(df1: pd.DataFrame, df2: pd.DataFrame) -> pd.DataFrame:
     Returns:
         dataframe: difference between dataframes
     """
-    return df1[~df1.isin(df2)].dropna()
+
+    return df1[~df1.isin(df2)].dropna(how = 'all')
 
 
 def build():
@@ -110,14 +113,16 @@ def build():
     fill_database(get_df_from_csv(PATH_TO_FILE))
 
 
-def fill_database(df):
+def fill_database(df, model: str):
     """Fills the database with the data from a given dataframe.
 
     Args:
         df (DataFrame): DataFrame with data for the database.
     """
     # Filters out rows with nan values
-    df = df[~df.isnull().any(axis=1)]
+    #df = df[~df.isnull().any(axis=1)]
+    COMPETENCY_ENDPOINT = ENDPOINT.get_endpoint(model)
+    print(COMPETENCY_ENDPOINT)
 
     conn = adapter.create_connection()
 
@@ -135,9 +140,10 @@ def fill_database(df):
         year = row.loc["Year"]
         institution = row.loc["Institutions"]
         abstract_id = adapter.get_first_available_abstract_id(conn)
+        print("ABSTRACT_ID: " + str(abstract_id))
 
         competencies = get_request_from_api(
-            "/get_competency/" + abstract_content)
+            COMPETENCY_ENDPOINT + abstract_content)
         print(competencies)
         competency_ids = {}
         for competency in competencies:
@@ -151,7 +157,7 @@ def fill_database(df):
             # get category of competency from model_api
             category_id = get_request_from_api(
                 "/get_category_of_competency/" + competency_name)
-
+            print("category of " + competency_name + ": " + str(category_id))
             adapter.insert_derived_from(conn, competency_ids[competency_name],
                                         abstract_id=abstract_id,
                                         relevancy=relevancy)
