@@ -1,19 +1,30 @@
 {% extends 'base.html' %}
 {% block main_content %}
-<div class="navbar-fixed z-depth-2" style="background-color: #9EC4D5; width: 100%; height: 270px; position: fixed; z-index: 1; background-image: url(static/images/background_img.png); background-position: 50% 10%; background-size: 70% auto; background-repeat: no-repeat">
+<div class="navbar z-depth-2" style="background-color: #9EC4D5; width: 100%; height: 270px; position: absolute; z-index: 1; background-image: url(static/images/background_img.png); background-position: 50% 10%; background-size: 70% auto; background-repeat: no-repeat">
    <nav class="nav-wrapper transparent z-depth-0" style="padding-left: 10px; padding-top: 10px; padding-right: 10px">
       <ul id="nav-bar">
-         <a href="/">
             <div class="left">
-               <p style="color: #333; font-size: 24px; font-weight: 700; display: inline">KOOL</p>
-               <p style="color: #333; font-size: 24px; display: inline"> - Find competent scientists</p>
+               <a href="/">
+                  <p style="color: #333; font-size: 24px; font-weight: 700; display: inline">KOOL</p>
+                  <p style="color: #333; font-size: 24px; display: inline"> - Find competent scientists</p>
+               </a>
             </div>
-         </a>
-         <a href="/admin_page/">
             <div class="right">
-               <p style="color: #333; font-size: 14px; display: inline">ADMIN PAGE</p>
+               <a href="/admin_page/">
+                  <p style="color: #333; font-size: 14px; display: inline">ADMIN PAGE</p>
+               </a>
             </div>
-         </a>
+            <div class="right">
+               <a href="/about_kool/">
+                  <p style="color: #333; font-size: 14px; display: inline">ABOUT KOOL</p>
+               </a>
+            </div>
+            <div class="right">
+               <a href="/category/">
+                  <p style="color: #333; font-size: 14px; display: inline">CATEGORIES</p>
+               </a>
+            </div>
+         
       </ul>
    </nav>
 </div>
@@ -22,11 +33,13 @@
    <div class="nav-wrapper white z-depth-4 roundedcorners" style="top: 140px; left: 25%; position: absolute; width: 50%; height: 100px; border: 1px black; border-style: solid; align-items: center; display: flex; border-radius: 10px">
       
    
-      <div class="switch" title="Switch is currently: OFF" style="position: relative; padding-left: 5%; z-index: 2;">
+      <div class="switch" title="Switch between Researcher and Competency Search" style="position: relative; padding-left: 5%; z-index: 2;">
+         <img src="/static/images/LightBulb.png" width="24px" height="24px" style="align-self: center;"/>
          <label>
             <input id="searchcheckbox" type="checkbox" onchange="switchflipped()">
             <span class="lever"></span>
          </label>
+         <img src="/static/images/googleaccount.png" width="24px" height="24px">
       </div>
       
       
@@ -71,7 +84,7 @@
    </div>
 </div>
    <div class="row">
-      <div class="col s1 m3">
+      <div class="col s1 m3" style="height: 30%;">
          <div class="card blue-grey">
             <div class="card-content white-text">
                <span class="card-title">Machine Learning</span>
@@ -82,7 +95,7 @@
             </div>
          </div>
       </div>
-      <div class="col s1 m3">
+      <div class="col s1 m3" style="height: 30%;">
          <div class="card blue-grey">
             <div class="card-content white-text">
                <span class="card-title">Maxwell Equations</span>
@@ -93,7 +106,7 @@
             </div>
          </div>
       </div>
-      <div class="col s1 m3">
+      <div class="col s1 m3" style="height: 30%;">
          <div class="card blue-grey">
             <div class="card-content white-text">
                <span class="card-title">Convergence Analysis</span>
@@ -104,7 +117,7 @@
             </div>
          </div>
       </div>
-      <div class="col s1 m3">
+      <div class="col s1 m3" style="height: 30%;">
          <div class="card blue-grey">
             <div class="card-content white-text">
                <span class="card-title">Renewable Energy</span>
@@ -115,20 +128,6 @@
             </div>
          </div>
       </div>
-   </div>
-</div>
-   {% comment %} untere Navbar mit Aboutkool, privacy und imprint {% endcomment %}
-   <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-   <div class="row" id="bottomDiv">
-      <nav>
-         <div class="nav-wrapper white">
-            <ul class="left hide-on-med-and-down">
-               <li><a href="about_kool/"><span class="black-text text-darken-2"><u>About Kool</u></span></a></li>
-               <li><a href=""><span class="black-text text-darken-2"><u>Privacy</u></span></a></li>
-               <li><a href=""><span class="black-text text-darken-2"><u>Imprint</u></span></a></li>
-            </ul>
-         </div>
-      </nav>
    </div>
 </div>
 
