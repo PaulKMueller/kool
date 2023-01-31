@@ -6,25 +6,81 @@
 {% include 'includes/navbar_admin.html' %}
 
 <div class="container transparent" style="padding-top: 100px;">
+    <h3>Rebuild Database</h3>
     <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    <div class="container">
+    <div class="container" style="width: 75%">
+        <p class="flow-text" style="text-align: justify">Rebuild the database using a different model:</p>
         <div class="input-field">
-            <select>
+            <select name="model">
                 <option selected="selected" value="" disabled>Choose the model</option>
-                <option value="1">KeyBERT</option>
-                <option value="2">Galactica</option>
-                <option value="3">GPTNeo</option>
+                <option value="keybert">KeyBERT</option>
+                <option value="galactica">Galactica</option>
+                <option value="gpt-neo">GPTNeo</option>
+                <option value="xlnet">XLNET (not supported yet)</option>
+                <option value="bloom">Bloom (not supported yet)</option>
             </select>
             <label>ML Model for creating database</label>
         </div>
+        <button name="rebuild" type="submit" class="btn-large right waves-effect waves-light red roundedcorners">Rebuild</button>
     </div>
-    <button type="submit" class="btn-large middle waves-effect waves-ligh red roundedcorners">Rebuild</button>
     {% if success %}
     <div class="container">
         <p>Rebuild successfull</p>
     </div>
     {% endif %}
+    </form>
+    
+    </br>
+    </br>
+    </br>
+
+    <h3 style="text-align: center;">Database Selection</h3>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="container" style="width: 75%; text-align: left;">
+            <p class="flow-text" style="text-align: justify">Select the database which should be used in frontend:</p>
+            <table>
+                <thead>
+                    <th>Name</th>
+                    <th>Model</th>
+                    <th>Created</th>
+                    <th>Choose</th>
+                </thead>
+                <tbody>
+                {% for database_name, database_info in databases.items %}
+                    <tr>
+                        <td>
+                            {% if database_info.active == "True" %}
+                            <b> {{ database_name }} </b>
+                            {% else %}
+                            {{ database_name }}
+                            {% endif %}
+                        </td>
+                        <td>{{ database_info.model }}</td>
+                        <td>{{ database_info.generated }}</td>
+                        <td>
+                            <p>
+                                <label>
+                                    <input id="{{ database }}" name="database_selector" class="with-gap" type="radio" 
+                                    {% if database_info.active == "True" %}
+                                        checked 
+                                    {% else %} 
+                                        unchecked 
+                                    {% endif %}
+                                    />
+                                    <span></span>
+                                </label>
+                            </p>
+                            </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </br>
+        <button name="select" type="submit" class="btn-large right waves-effect waves-light red roundedcorners">Select Database</button>
+        </div>
     </form>
 </div>
 

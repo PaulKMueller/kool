@@ -5,6 +5,7 @@
 
 import os
 import pandas as pd
+from db_creation.model_endpoint import ENDPOINT
 from langdetect import detect
 from db_creation import string_formatter
 import yaml
@@ -56,16 +57,22 @@ def get_df_from_csv(PATH_TO_FILE):
     return pd.read_csv(PATH_TO_FILE)
 
 
-def fill_database_from_added_entries():
+def fill_database_from_added_entries(model: str):
     """Fills database with all entries which haven't
     been added to the database yet.
     Safes all entries in current.csv.
     """
     new_entries = get_new_entries()
-    fill_database(new_entries)
+    # using PATH_TO_DB to append currently used database
+    fill_database(df=new_entries, model=model, path_to_db=PATH_TO_DB)
     # Safe all Entries to current.csv
     all_entries = get_all_entries()
     all_entries.to_csv("db_creation/csv_files/current.csv", index=False)
+
+def build(model: str, path_to_db: str):
+    """Builds the database from the csv file.
+    """
+    fill_database(df=get_df_from_csv(PATH_TO_FILE), model=model, path_to_db=path_to_db)
 
 
 def get_all_entries() -> pd.DataFrame:
@@ -101,16 +108,13 @@ def find_difference(df1: pd.DataFrame, df2: pd.DataFrame) -> pd.DataFrame:
     Returns:
         dataframe: difference between dataframes
     """
-    return df1[~df1.isin(df2)].dropna()
+    # perform leftjoin 
+    df_merged = df1.merge(df2.drop_duplicates(), how="left", on="Abstract", indicator=True, suffixes=("", "_y"))
+    difference = df_merged.query("_merge == 'left_only'")[df1.columns]
+    return difference
 
 
-def build():
-    """Builds the database from the csv file.
-    """
-    fill_database(get_df_from_csv(PATH_TO_FILE))
-
-
-def fill_database(df):
+def fill_database(df, model: str, path_to_db):
     """Fills the database with the data from a given dataframe.
 
     Args:
@@ -118,8 +122,9 @@ def fill_database(df):
     """
     # Filters out rows with nan values
     df = df[~df.isnull().any(axis=1)]
+    COMPETENCY_ENDPOINT = ENDPOINT.get_endpoint(model)
 
-    conn = adapter.create_connection()
+    conn = adapter.create_connection_to(path_to_db=path_to_db)
 
     # This loop iterates the rows and stores calls the inserting functions
     for index, row in tqdm(df.iterrows(), total=df.shape[0]):
@@ -137,7 +142,7 @@ def fill_database(df):
         abstract_id = adapter.get_first_available_abstract_id(conn)
 
         competencies = get_request_from_api(
-            "/get_competency/" + abstract_content)
+            COMPETENCY_ENDPOINT + abstract_content)
         print(competencies)
         competency_ids = {}
         for competency in competencies:
@@ -147,11 +152,9 @@ def fill_database(df):
             # get or create new id for competency
             competency_ids[competency_name] = adapter.get_or_generate_competency_id_by_name(
                 conn, competency_name)
-            print(competency_ids[competency_name])
             # get category of competency from model_api
             category_id = get_request_from_api(
                 "/get_category_of_competency/" + competency_name)
-
             adapter.insert_derived_from(conn, competency_ids[competency_name],
                                         abstract_id=abstract_id,
                                         relevancy=relevancy)

@@ -14,14 +14,24 @@ PATH_TO_DB = os.environ.get('PATH_TO_DB')
 
 def create_connection():
     """Creates a connection to the database or creates a
-    new database if it does not existent
+    new database if it does not exist using the default path
+
+    Returns:
+        Connection: Connection to database
+    """
+    return create_connection_to(path_to_db=PATH_TO_DB)
+
+
+def create_connection_to(path_to_db: str):
+    """Creates a connection to the database or creates a
+    new database if it does not exist
 
     Returns:
         Connection: Connection to database
     """
     conn = None
     try:
-        conn = sqlite3.connect(PATH_TO_DB)
+        conn = sqlite3.connect(path_to_db)
     except Error as error:
         print(error)
 
@@ -113,7 +123,7 @@ def insert_has_category(conn, category_id: int, competency_id: int):
         category_id (int): Id of the category
         competency_id (int): Id of the competency
     """
-    sql_command = """INSERT INTO has_category(category_id, competency_id)
+    sql_command = """INSERT OR IGNORE INTO has_category(category_id, competency_id)
                     VALUES(?,?)"""
     cursor = conn.cursor()
     cursor.execute(sql_command, (category_id, competency_id))
@@ -238,7 +248,9 @@ def get_first_available_abstract_id(conn) -> int:
     cursor = conn.cursor()
     cursor.execute(sql_get_highest_abstract_id)
     highest_abstract_id = cursor.fetchone()
-    if highest_abstract_id is None:
+    print("HIGHEST ABSTRACT ID")
+    print(highest_abstract_id)
+    if highest_abstract_id[0] is None:
         highest_abstract_id = 0
     else:
         highest_abstract_id = highest_abstract_id[0]
@@ -270,8 +282,8 @@ def get_or_generate_competency_id_by_name(conn, competency_name: str) -> int:
         # competency not in db -> needs to be created
         competency_id = cursor.execute(sql_insert_competency,
                                        (competency_name,)).lastrowid
+        print("Wurde hinzugefügt mit id" + str(competency_id))
     else:
-
         competency_id = result[0]
 
     conn.commit()

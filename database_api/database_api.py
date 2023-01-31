@@ -7,6 +7,9 @@ from fastapi import FastAPI, File, UploadFile, HTTPException, Form
 from pydantic import BaseModel
 import adapter
 from db_creation import database_from_csv
+from db_creation import create_db
+import time
+import json
 
 app = FastAPI()
 
@@ -242,15 +245,48 @@ async def get_authors():
     conn.close()
     return response
 
+class Model(BaseModel):
+    model: str
 
-
-@app.get("/rebuild")
-async def rebuild():
+@app.post("/rebuild")
+async def rebuild(model: Model):
     """Endpoint for rebuilding database with old data
     
     """
-    database_from_csv.build()
+    ts = time.gmtime()
+    ts_readable = time.strftime("%Y-%m-%d-%H-%M-%S", ts)
+    db_name = "database-" + model.model + "-" + ts_readable + ".db"
+    path_to_db = "databases/" + db_name
+
+    print("Path to db " + path_to_db)
+    safe_new_database_info(db_name=db_name, path_to_db=path_to_db, model=model.model, generated=ts_readable)
+
+    # create new db with tables
+    create_db.create_database(path_to_db=path_to_db)
+
+    # fill db with data from model answers
+    database_from_csv.build(model=model.model, path_to_db=path_to_db)
+
+    # TODO: change database.db to generated db.
     return "[success]"
+
+
+@app.get("/get_database_info")
+async def get_database_info():
+    with open("databases/database_info.json", "r") as f:
+        return f.read()
+
+
+def safe_new_database_info(db_name: str, path_to_db: str, model: str, generated: str):
+    with open("databases/database_info.json", "r") as f:
+        dict = json.load(f)
+
+    with open("databases/database_info.json", "w") as f:
+        dict[db_name] = {"model": model,
+                         "generated": generated,
+                         "path": path_to_db,
+                         "active": "False"}
+        json.dump(dict, f)
 
 class Data(BaseModel):
     model: str
@@ -272,7 +308,7 @@ async def add_entries(data: Data):
     f = open("db_creation/csv_files/last_added.csv", "w")
     f.write(data.file)
     f.close()
-    database_from_csv.fill_database_from_added_entries()
+    database_from_csv.fill_database_from_added_entries(model=data.model)
     return "[success]"
 
 
