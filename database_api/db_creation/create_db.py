@@ -117,10 +117,10 @@ def create_table(conn, sql_command: str):
         print(error)
 
 
-def create_database():
+def create_database(path_to_db: str):
     """Creates the database and all tables specified in sql_commands.
     """
-    conn = adapter.create_connection()
+    conn = adapter.create_connection_to(path_to_db)
 
     if conn is not None:
         for sql_command in sql_commands:

@@ -10,14 +10,19 @@
     {% csrf_token %}
     <div class="container">
         <div class="input-field">
-            <select>
+            <select name="model">
                 <option selected="selected" value="" disabled>Choose the model</option>
-                <option value="1">KeyBERT</option>
-                <option value="2">Galactica</option>
-                <option value="3">GPTNeo</option>
+                <option value="keybert">KeyBERT</option>
+                <option value="galactica">Galactica</option>
+                <option value="gpt-neo">GPTNeo</option>
+                <option value="xlnet">XLNET (not supported yet)</option>
+                <option value="bloom">Bloom (not supported yet)</option>
             </select>
             <label>ML Model for creating database</label>
         </div>
+    </div>
+    <div class="container">
+        <
     </div>
     <button type="submit" class="btn-large middle waves-effect waves-ligh red roundedcorners">Rebuild</button>
     {% if success %}
