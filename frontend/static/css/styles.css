@@ -94,6 +94,9 @@ body {
     position: relative;
     background-image: linear-gradient(to right, red, yellow, green);
 }
+.btn-flat:hover {
+    background-color: lightgray;
+ }
 .indicator {
     width: 2px;
     height: 15px;
@@ -128,3 +131,7 @@ body {
     float: right;
     border: none;
 }
+.scrollable-horizontal {
+    overflow-x: scroll;
+    white-space: nowrap;
+  }

@@ -4,18 +4,25 @@ from competency_page.models import Category
 import access
 
 
-def categories_page(request):
-    '''Render Category Page, which shows all the categories'''
+def get_categories():
+    print("MOin meister")
+    '''Gets all categories from backend and builds objects containing
+    corresponding images and links'''
     category_names = access.get_request_from_api("/all_categories")
     category_names.sort(key=lambda a: a[1])
     categories_obj = []
-    print(category_names)
     for category in category_names:
         new_cat = Category()
         new_cat.name = category[1]
         new_cat.link = category[0]
         new_cat.img = "/static/images/" + str(category[0]) + ".jpg"
         categories_obj.append(new_cat)
+    return categories_obj
+
+
+def categories_page(request):
+    '''Render Category Page, which shows all the categories'''
+    categories_obj = get_categories()
     all_competencies = access.get_request_from_api("/all_competencies/")
 
     return render(request, 'competency_categories.html',

@@ -68,10 +68,7 @@
     </div>
     <div class="col s12 l3">
       <div class="card roundedcorners" style="padding: 16px">
-        <a href="/researcher/{{ detailed_auth.id }}"> <h5 style="text-align: left; font-weight: 500">
-          {{ detailed_auth.first_name }} {{ detailed_auth.last_name }}
-        </h5>
-      </a>
+        <a class="waves-effect btn-flat" style="font-size: large; text-transform:capitalize; display: block; width: 100%;" href="/researcher/{{ detailed_auth.id }}">{{ detailed_auth.first_name }} {{ detailed_auth.last_name }}</a>
         <div style="height: 60vh; overflow: scroll; overflow-x: hidden">
           {% for competency in competencies_auth %}
           <a

@@ -2,10 +2,11 @@
 
 {% block main_content %}
 
-{% if form.errors %}
-  <p>Your username and password didn't match. Please try again.</p>
-{% endif %}
+
 <div class="Container">
+  {% if form.errors %}
+    <p style="color:coral;">Your username and password didn't match. Please try again.</p>
+  {% endif %}
   {% if next %}
 
     {% if user.is_authenticated %}
@@ -44,6 +45,9 @@
       </div>
     </div>
   </form>
+
+  <a class="waves-effect btn-flat" style="align-self: center;color:darkslategrey; font-size:small;" onclick="href=/">Back to the Main Page</a>
+
 </div>
   
 {% endblock %}

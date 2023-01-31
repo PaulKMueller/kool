@@ -118,16 +118,16 @@ def change_status(request):
     if request.method == 'POST':
         competency_id = request.POST['competency_id']
         author_id = request.POST['author_id']
-        new_status = request.POST['new_status'] 
+        new_status = request.POST['new_status']
         access.get_request_from_api(
-            "/change_status/" + author_id + "/" + competency_id + "/" + new_status)
+            "/change_status/" + author_id + "/" + competency_id + "/" +
+            new_status)
         return redirect('/results/' + competency_id)
     else:
         return render(request, 'result.html')
 
 
 def sort_authors(authors):
-    
     author_list = [(key, value) for key, value in authors.items()]
     sorted_list = sorted(author_list, key=lambda x: x[1].ranking, reverse=True)
     sorted_dict = dict(sorted_list)
