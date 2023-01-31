@@ -33,9 +33,14 @@
                             {% endif %}
                     </p>
                     </div>
-                    <div class="rankingbar">
-                        <div class="indicator" style="left: calc({{author.ranking}} * 100%);"></div>
-                    </div>    
+                    {% if author.ranking >= 0 %}
+                        {% if author.ranking <= 1 %} 
+                        <div class="rankingbar">
+                            <div class="indicator" style="left: calc({{author.ranking}} * 100%);"></div>
+                        </div>
+                        {%endif%}
+                    {%endif%}
+                    
                     {% if user.is_authenticated %}
                     <div class="col" style="width: 130px">
                         <div class="row">
