@@ -9,7 +9,12 @@ import adapter
 from db_creation import database_from_csv
 from db_creation import create_db
 import time
+import shutil
 import json
+import os
+
+PATH_TO_DB = os.environ.get("PATH_TO_DB")
+
 
 app = FastAPI()
 
@@ -270,11 +275,49 @@ async def rebuild(model: Model):
     # TODO: change database.db to generated db.
     return "[success]"
 
+class Database(BaseModel):
+    new_database: str
+
+@app.post("/change_active_database")
+async def change_active_database(new_database: Database):
+    """changing the active database
+    
+    """
+
+    print("DATABASE " + str(new_database.new_database))
+    with open("databases/database_info.json", "r") as f:
+        dict = json.load(f)
+
+    path_to_new_db = dict[new_database.new_database]['path']
+    shutil.copyfile(path_to_new_db, PATH_TO_DB)
+
+    change_db_active_status(database_name=get_active_db_name(), new_status="False")
+    change_db_active_status(database_name=new_database.new_database, new_status="True")
+    return "[success]"
+
 
 @app.get("/get_database_info")
 async def get_database_info():
     with open("databases/database_info.json", "r") as f:
         return f.read()
+
+def get_active_db_name():
+    with open("databases/database_info.json", "r") as f:
+        dict = json.load(f)
+    for key, value in dict.items():
+        if value['active'] == 'True':
+            return key
+
+    return ''
+
+def change_db_active_status(database_name: str, new_status: str):
+    with open("databases/database_info.json", "r") as f:
+        dict = json.load(f)
+
+    with open("databases/database_info.json", "w") as f:
+        dict[database_name]['active'] = new_status
+        json.dump(dict, f)
+
 
 
 def safe_new_database_info(db_name: str, path_to_db: str, model: str, generated: str):

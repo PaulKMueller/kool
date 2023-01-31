@@ -16,7 +16,7 @@
                 <option selected="selected" value="" disabled>Choose the model</option>
                 <option value="keybert">KeyBERT</option>
                 <option value="galactica">Galactica</option>
-                <option value="gpt-neo">GPTNeo</option>
+                <option value="gpt_neo">GPTNeo</option>
                 <option value="xlnet">XLNET (not supported yet)</option>
                 <option value="bloom">Bloom (not supported yet)</option>
             </select>
@@ -63,7 +63,7 @@
                         <td>
                             <p>
                                 <label>
-                                    <input id="{{ database }}" name="database_selector" class="with-gap" type="radio" 
+                                    <input id="{{ database_name }}" value="{{ database_name }}" name="database_selector" class="with-gap" type="radio" 
                                     {% if database_info.active == "True" %}
                                         checked 
                                     {% else %} 

@@ -5,22 +5,16 @@
       "path": "databases/database-keybert-base.db",
       "active": "True"
     },
-    "database-galactica-2023-01-31-09-24-30.db": {
+    "database-galactica-2023-01-31-16-58-36.db": {
       "model": "galactica",
-      "generated": "2023-01-31-09-24-30",
-      "path": "databases/database-galactica-2023-01-31-09-24-30.db",
+      "generated": "2023-01-31-16-58-36",
+      "path": "databases/database-galactica-2023-01-31-16-58-36.db",
       "active": "False"
     },
-    "database-galactica-2023-01-31-10-11-00.db": {
-      "model": "galactica",
-      "generated": "2023-01-31-10-11-00",
-      "path": "databases/database-galactica-2023-01-31-10-11-00.db",
-      "active": "False"
-    },
-    "database-galactica-2023-01-31-10-30-40.db": {
-      "model": "galactica",
-      "generated": "2023-01-31-10-30-40",
-      "path": "databases/database-galactica-2023-01-31-10-30-40.db",
+    "database-gptneo-2023-01-31-17-50-33.db": {
+      "model": "gptneo",
+      "generated": "2023-01-31-17-50-33",
+      "path": "databases/database-gptneo-2023-01-31-17-50-33.db",
       "active": "False"
     }
   }

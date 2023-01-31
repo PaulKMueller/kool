@@ -19,6 +19,7 @@ PLAYGROUND_HOST = os.environ.get(ENVIRONMENT_VARIABLE_PLAYGROUND_HOST)
 DATABASE_API_POST_FILE_ENDPOINT = "/add_entries/"
 DATABASE_API_REBUILD_ENDPOINT = "/rebuild"
 DATABASE_API_ENDPOINT_DATABASE_INFO = "/get_database_info/"
+DATABASE_CHANGE_DATABASE_ENDPOINT = "/change_active_database/"
 
 @login_required
 def adminpage(request: HttpRequest):
@@ -70,7 +71,10 @@ def change_database(request):
             if status == 200:
                 success=True
         elif 'select' in request.POST:
-            print("hellooo")
+            database = request.POST['database_selector']
+            data = {"new_database": database}
+            status = access.post_request_to_api(endpoint=DATABASE_CHANGE_DATABASE_ENDPOINT, data=data)
+
         
     databases = json.loads(access.get_request_from_api(endpoint=DATABASE_API_ENDPOINT_DATABASE_INFO))
     
