@@ -7,6 +7,7 @@ import os
 from django.http import HttpRequest
 from django.contrib.auth.decorators import login_required
 import requests
+import json
 import access
 
 ENVIRONMENT_VARIABLE_PLAYGROUND_PORT = "PLAYGROUND_PORT"
@@ -17,6 +18,7 @@ PLAYGROUND_HOST = os.environ.get(ENVIRONMENT_VARIABLE_PLAYGROUND_HOST)
 
 DATABASE_API_POST_FILE_ENDPOINT = "/add_entries/"
 DATABASE_API_REBUILD_ENDPOINT = "/rebuild"
+DATABASE_API_ENDPOINT_DATABASE_INFO = "/get_database_info/"
 
 @login_required
 def adminpage(request: HttpRequest):
@@ -54,15 +56,23 @@ def edit_database(request):
     return render(request, 'edit_database.html')
 
 @login_required
-def rebuild(request):
+def change_database(request):
     success=False
     if request.method == 'POST':
-        model = request.POST['model']
-        data =  {'model': model}
-        status = access.post_request_to_api(endpoint=DATABASE_API_REBUILD_ENDPOINT, data=data)
-        if status == 200:
-            success=True
-    return render(request, 'rebuild.html', {'success': success})
+        if 'rebuild' in request.POST:
+            model = request.POST['model']
+            data =  {'model': model}
+            status = access.post_request_to_api(endpoint=DATABASE_API_REBUILD_ENDPOINT, data=data)
+        
+            if status == 200:
+                success=True
+        elif 'select' in request.POST:
+            print("hellooo")
+        
+    databases = json.loads(access.get_request_from_api(endpoint=DATABASE_API_ENDPOINT_DATABASE_INFO))
+    
+    return render(request, 'rebuild.html', {'success': success,
+                                            'databases': databases})
 
 @login_required
 def scraper(request):

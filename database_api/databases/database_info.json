@@ -1,10 +1,26 @@
 {
     "database-keybert-base.db": {
-        "model": "keybert", 
-        "generated": "2022",
-        "path": "databases/database-keybert-base.db"},
+      "model": "keybert",
+      "generated": "2022",
+      "path": "databases/database-keybert-base.db",
+      "active": "True"
+    },
     "database-galactica-2023-01-31-09-24-30.db": {
-        "model": "galactica", 
-        "generated": "2023-01-31-09-24-30", 
-        "path": "databases/database-galactica-2023-01-31-09-24-30.db"}
-}
+      "model": "galactica",
+      "generated": "2023-01-31-09-24-30",
+      "path": "databases/database-galactica-2023-01-31-09-24-30.db",
+      "active": "False"
+    },
+    "database-galactica-2023-01-31-10-11-00.db": {
+      "model": "galactica",
+      "generated": "2023-01-31-10-11-00",
+      "path": "databases/database-galactica-2023-01-31-10-11-00.db",
+      "active": "False"
+    },
+    "database-galactica-2023-01-31-10-30-40.db": {
+      "model": "galactica",
+      "generated": "2023-01-31-10-30-40",
+      "path": "databases/database-galactica-2023-01-31-10-30-40.db",
+      "active": "False"
+    }
+  }

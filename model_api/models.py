@@ -130,10 +130,12 @@ def ask_galactica(abstract: str):
                                   competency_list))
 
     # If a competency is part of another competency, remove it
-    for competency in competency_list:
-        for other_competency in competency_list:
-            if competency in other_competency and competency != other_competency:
-                competency_list.remove(competency)
+    # first check if competency_list contains items
+    if competency_list:
+        for competency in competency_list:
+            for other_competency in competency_list:
+                if competency in other_competency and competency != other_competency:
+                    competency_list.remove(competency)
 
     competency_list = [(competency, -1.0) for competency in competency_list]
     return competency_list

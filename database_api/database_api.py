@@ -264,6 +264,13 @@ async def rebuild(model: Model):
     # TODO: change database.db to generated db.
     return "[success]"
 
+
+@app.get("/get_database_info")
+async def get_database_info():
+    with open("databases/database_info.json", "r") as f:
+        return f.read()
+
+
 def safe_new_database_info(db_name: str, path_to_db: str, model: str, generated: str):
     with open("databases/database_info.json", "r") as f:
         dict = json.load(f)
@@ -271,7 +278,8 @@ def safe_new_database_info(db_name: str, path_to_db: str, model: str, generated:
     with open("databases/database_info.json", "w") as f:
         dict[db_name] = {"model": model,
                          "generated": generated,
-                         "path": path_to_db}
+                         "path": path_to_db,
+                         "active": "False"}
         json.dump(dict, f)
 
 class Data(BaseModel):

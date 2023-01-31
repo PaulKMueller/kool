@@ -143,6 +143,7 @@ def fill_database(df, model: str, path_to_db):
 
         competencies = get_request_from_api(
             COMPETENCY_ENDPOINT + abstract_content)
+        print(competencies)
         competency_ids = {}
         for competency in competencies:
             competency_name = competency[0]
