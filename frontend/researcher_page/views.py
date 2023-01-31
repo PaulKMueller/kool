@@ -2,12 +2,13 @@
 """
 
 from typing import Optional
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from researcher_page.models import Author, Abstract, Competency
 import access
 from django.http import HttpRequest
 from django.http.response import HttpResponse as HttpResponse
 from django.contrib.auth.decorators import login_required
+import json
 
 
 def researcher(request: HttpRequest, id: Optional[int] = None) -> HttpResponse:
@@ -77,12 +78,15 @@ def researcher(request: HttpRequest, id: Optional[int] = None) -> HttpResponse:
 
             competencies = sort_competencies(competencies)
 
+    all_authors = access.get_request_from_api("/all_authors/")
     return render(request, 'researcher_page.html', {'has_found': found_id,
                                                     'searched': searched,
                                                     'competencies':
                                                         competencies,
-                                                    'author': author
-                                                    })
+                                                    'author': author,
+                                                    'all_authors': json.dumps(
+                                                        all_authors)}
+                  )
 
 
 def get_author_id(searchquery):
@@ -123,3 +127,17 @@ def get_abstract_by_id(abstract_id):
 def sort_competencies(competencies: list):
     competencies.sort(key=lambda x: x.ranking, reverse=True)
     return competencies
+
+
+@login_required
+def change_status_researcher(request):
+    if request.method == 'POST':
+        competency_id = request.POST['competency_id']
+        author_id = request.POST['author_id']
+        new_status = request.POST['new_status']
+        access.get_request_from_api(
+            "/change_status/" + author_id + "/" + competency_id + "/" +
+            new_status)
+        return redirect('/researcher/' + author_id)
+    else:
+        return render(request, 'researcher.html')

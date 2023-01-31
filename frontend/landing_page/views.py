@@ -8,6 +8,7 @@ from django.shortcuts import render
 import access
 from django.http import HttpRequest
 from django.http.response import HttpResponse as HttpResponse
+from competency_page import views as competency_page
 
 
 def home(request: HttpRequest) -> HttpResponse:
@@ -19,15 +20,14 @@ def home(request: HttpRequest) -> HttpResponse:
     Returns:
         HttpResponse: The rendered home page.
     """
-    # TODO: remove Test
-
+    categories_obj = competency_page.get_categories()
     competencies = access.get_request_from_api("/all_competencies/")
     authors = access.get_request_from_api("/all_authors/")
     response = render(request, 'home.html',
-                    {'all_competencies': json.dumps(competencies), 
-                    'all_authors': json.dumps(authors)}
-                    
-                  )
+                      {'all_competencies': json.dumps(competencies),
+                      'categories': categories_obj,
+                      'all_authors': json.dumps(authors)}
+                      )
     return response
 
 
