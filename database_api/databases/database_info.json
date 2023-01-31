@@ -1,0 +1,10 @@
+{
+    "database-keybert-base.db": {
+        "model": "keybert", 
+        "generated": "2022",
+        "path": "databases/database-keybert-base.db"},
+    "database-galactica-2023-01-31-09-24-30.db": {
+        "model": "galactica", 
+        "generated": "2023-01-31-09-24-30", 
+        "path": "databases/database-galactica-2023-01-31-09-24-30.db"}
+}
