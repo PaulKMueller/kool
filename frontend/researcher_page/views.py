@@ -79,7 +79,7 @@ def researcher(request: HttpRequest, id: Optional[int] = None) -> HttpResponse:
             competencies = sort_competencies(competencies)
 
     all_authors = access.get_request_from_api("/all_authors/")
-    return render(request, 'researcher_page.html', {'has_found': found_id,
+    return render(request, 'researcher.html', {'has_found': found_id,
                                                     'searched': searched,
                                                     'competencies':
                                                         competencies,
