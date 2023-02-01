@@ -1,1 +1,35 @@
-{"database-keybert-base.db": {"model": "keybert", "generated": "2022", "path": "databases/database-keybert-base.db", "active": "False", "status": {"is_running": "False", "at": 3500, "from": 3500}}, "database-galactica-2023-01-31-16-58-36.db": {"model": "galactica", "generated": "2023-01-31-16-58-36", "path": "databases/database-galactica-2023-01-31-16-58-36.db", "active": "False", "status": {"is_running": "False", "at": 28, "from": 3500}}, "database-gptneo-2023-01-31-17-50-33.db": {"model": "gptneo", "generated": "2023-01-31-17-50-33", "path": "databases/database-gptneo-2023-01-31-17-50-33.db", "active": "True", "status": {"is_running": "False", "at": 16, "from": 3500}}}
+{
+    "database-keybert-base.db": {
+        "model": "keybert",
+        "generated": "2022",
+        "path": "databases/database-keybert-base.db",
+        "active": "False",
+        "status": {
+            "is_running": "False",
+            "at": 3500,
+            "from": 3500
+        }
+    },
+    "database-galactica-2023-01-31-16-58-36.db": {
+        "model": "galactica",
+        "generated": "2023-01-31-16-58-36",
+        "path": "databases/database-galactica-2023-01-31-16-58-36.db",
+        "active": "False",
+        "status": {
+            "is_running": "False",
+            "at": 28,
+            "from": 3500
+        }
+    },
+    "database-gptneo-2023-01-31-17-50-33.db": {
+        "model": "gptneo",
+        "generated": "2023-01-31-17-50-33",
+        "path": "databases/database-gptneo-2023-01-31-17-50-33.db",
+        "active": "True",
+        "status": {
+            "is_running": "True",
+            "at": 16,
+            "from": 3500
+        }
+    }
+}
