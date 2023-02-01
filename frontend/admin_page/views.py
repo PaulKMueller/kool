@@ -4,7 +4,7 @@ from django.http.response import HttpResponse, HttpResponseRedirect
 from django.core.files.storage import FileSystemStorage
 import socket
 import os
-from django.http import HttpRequest
+from django.http import HttpRequest, JsonResponse
 from django.contrib.auth.decorators import login_required
 import requests
 import json
@@ -60,16 +60,22 @@ def edit_database(request):
 
 
 @login_required
+def get_status_of_db(request):
+    databases = json.loads(access.get_request_from_api(endpoint=DATABASE_API_ENDPOINT_DATABASE_INFO))
+    return JsonResponse(databases)
+
+
+@login_required
 def change_database(request):
     success=False
     if request.method == 'POST':
         if 'rebuild' in request.POST:
             model = request.POST['model']
-            data =  {'model': model}
+            data = {'model': model}
             status = access.post_request_to_api(endpoint=DATABASE_API_REBUILD_ENDPOINT, data=data)
         
             if status == 200:
-                success=True
+                success = True
         elif 'select' in request.POST:
             database = request.POST['database_selector']
             data = {"new_database": database}

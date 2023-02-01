@@ -10,4 +10,5 @@ urlpatterns = [
     path('change_database/', views.change_database, name='change_database'),
     path('scraper/', views.scraper, name='scraper'),
     path('playground/', views.playground, name='playground'),
+    path('get_status_of_db', views.get_status_of_db, name='get_status_of_db')
 ]

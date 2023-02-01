@@ -3,11 +3,13 @@ This is the backend's database_api. It contains the endpoints
 to access the database.
 """
 
-from fastapi import FastAPI, File, UploadFile, HTTPException, Form
+from fastapi import FastAPI, File, UploadFile, HTTPException, Form, BackgroundTasks
 from pydantic import BaseModel
+import asyncio
 import adapter
 from db_creation import database_from_csv
 from db_creation import create_db
+from databases import database_info_handler
 import time
 import shutil
 import json
@@ -250,11 +252,13 @@ async def get_authors():
     conn.close()
     return response
 
+
 class Model(BaseModel):
     model: str
 
+
 @app.post("/rebuild")
-async def rebuild(model: Model):
+async def rebuild(model: Model, background_tasks: BackgroundTasks):
     """Endpoint for rebuilding database with old data
     
     """
@@ -264,19 +268,22 @@ async def rebuild(model: Model):
     path_to_db = "databases/" + db_name
 
     print("Path to db " + path_to_db)
-    safe_new_database_info(db_name=db_name, path_to_db=path_to_db, model=model.model, generated=ts_readable)
+    database_info_handler.safe_new_database_info(db_name=db_name, 
+                                                 path_to_db=path_to_db,
+                                                 model=model.model,
+                                                 generated=ts_readable,
+                                                 is_running="True")
 
     # create new db with tables
     create_db.create_database(path_to_db=path_to_db)
 
-    # fill db with data from model answers
-    database_from_csv.build(model=model.model, path_to_db=path_to_db)
-
-    # TODO: change database.db to generated db.
+    background_tasks.add_task(database_from_csv.build, model=model.model, path_to_db=path_to_db)
     return "[success]"
+
 
 class Database(BaseModel):
     new_database: str
+
 
 @app.post("/change_active_database")
 async def change_active_database(new_database: Database):
@@ -291,49 +298,22 @@ async def change_active_database(new_database: Database):
     path_to_new_db = dict[new_database.new_database]['path']
     shutil.copyfile(path_to_new_db, PATH_TO_DB)
 
-    change_db_active_status(database_name=get_active_db_name(), new_status="False")
-    change_db_active_status(database_name=new_database.new_database, new_status="True")
+    database_info_handler.change_db_active_status(database_name=database_info_handler.get_active_db_name(), 
+                                                  new_status="False")
+    database_info_handler.change_db_active_status(database_name=new_database.new_database,
+                                                  new_status="True")
     return "[success]"
 
 
 @app.get("/get_database_info")
 async def get_database_info():
-    with open("databases/database_info.json", "r") as f:
-        return f.read()
+    return database_info_handler.get_database_info()
 
-def get_active_db_name():
-    with open("databases/database_info.json", "r") as f:
-        dict = json.load(f)
-    for key, value in dict.items():
-        if value['active'] == 'True':
-            return key
-
-    return ''
-
-def change_db_active_status(database_name: str, new_status: str):
-    with open("databases/database_info.json", "r") as f:
-        dict = json.load(f)
-
-    with open("databases/database_info.json", "w") as f:
-        dict[database_name]['active'] = new_status
-        json.dump(dict, f)
-
-
-
-def safe_new_database_info(db_name: str, path_to_db: str, model: str, generated: str):
-    with open("databases/database_info.json", "r") as f:
-        dict = json.load(f)
-
-    with open("databases/database_info.json", "w") as f:
-        dict[db_name] = {"model": model,
-                         "generated": generated,
-                         "path": path_to_db,
-                         "active": "False"}
-        json.dump(dict, f)
 
 class Data(BaseModel):
     model: str
     file: str
+
 
 @app.post("/add_entries/")
 async def add_entries(data: Data):

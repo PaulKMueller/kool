@@ -3,7 +3,7 @@ version: '3.8'
 services:
   frontend:
     env_file:
-       - '.env'
+      - '.env'
     ports:
       - $FRONTEND_PORT:$FRONTEND_PORT
     volumes:
@@ -11,7 +11,7 @@ services:
     build:
       context: ./frontend
       args:
-      # pass variable so Dockerfile can use it
+        # pass variable so Dockerfile can use it
         FRONTEND_PORT: $FRONTEND_PORT
 
     depends_on:
@@ -19,7 +19,7 @@ services:
 
   database_api:
     env_file:
-       - '.env'
+      - '.env'
     environment:
       - PATH_TO_DB=databases/database.db
       - PATH_TO_CSV=db_creation/csv_files/base.csv
@@ -29,28 +29,26 @@ services:
       - ./database_api:/usr/src/app
     build:
       context: ./database_api
-
   # uncomment when you want to run the ML Model API
 
   model_api:
-   env_file:
-       - '.env'
-   restart: unless-stopped
-
-   volumes:
-     - ./model_api:/usr/src/app
-   build:
-     context: ./model_api
+    env_file:
+        - '.env'
+    restart: unless-stopped
+    volumes:
+      - ./model_api:/usr/src/app
+    build:
+      context: ./model_api
 
   # uncomment when you want to run the playground
 
   playground:
-   env_file:
-       - '.env'
-   ports:
-     - $PLAYGROUND_PORT:$PLAYGROUND_PORT
-   restart: unless-stopped
-   volumes:
-     - ./playground:/usr/src/app
-   build:
-     context: ./playground
+    env_file:
+      - '.env'
+    ports:
+      - $PLAYGROUND_PORT:$PLAYGROUND_PORT
+    restart: unless-stopped
+    volumes:
+      - ./playground:/usr/src/app
+    build:
+      context: ./playground
