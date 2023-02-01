@@ -63,15 +63,22 @@ def safe_new_database_info(db_name: str, path_to_db: str, model: str, generated:
     write_dict_to_json(dict=dict)
 
 
-def update_abstract_count(db_name: str, new_count: int):
+def add_to_abstract_count(db_name: str, add_count: int):
     dict = load_dict()
-    dict[db_name]["build_status"]["from"] = new_count
+    current_count = dict[db_name]["build_status"]["from"]
+    dict[db_name]["build_status"]["from"] = current_count + add_count
     write_dict_to_json(dict=dict)
 
 
 def update_build_status(db_name: str, new_count: int):
     dict = load_dict()
     dict[db_name]["build_status"]["at"] = new_count
+    write_dict_to_json(dict=dict)
+
+
+def update_build_status_stopped(db_name: str):
+    dict = load_dict()
+    dict[db_name]["build_status"]["is_running"] = "False"
     write_dict_to_json(dict=dict)
 
 

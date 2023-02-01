@@ -23,18 +23,16 @@
             <label>ML Model for creating database</label>
         </div>
         <button name="rebuild" type="submit" class="btn-large right waves-effect waves-light red roundedcorners">Rebuild</button>
-    </div>
-    {% if success %}
-    <div class="container">
-        <p>Rebuild successfull</p>
-    </div>
-    {% endif %}
     </form>
+</br>
+</br>
+    {% if success %}
+        <p>Successfully started rebuild <span style="font-size: large;">&#9989;</span> 
+        You can see the status in Database Selection below. 
+        Please don't select a database when it's still building!</p>
+    {% endif %}
+    </div>
     
-    </br>
-    </br>
-    </br>
-
     <h3 style="text-align: center;">Database Selection</h3>
     
     <form method="post" enctype="multipart/form-data">
