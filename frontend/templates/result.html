@@ -37,7 +37,7 @@
                         {% if author.ranking <= 1 %} 
                         <div class="rankingbar">
                             <div class="indicator" style="left: calc({{author.ranking}} * 100%);"></div>
-                            <div class="tooltip">The ranking is calculated based on the average relevancy calculated by the ML model plus a bonus for multiple occurences. Ranking: {{author.ranking}}
+                            <div class="tooltip">The ranking is calculated based on the average relevancy given by the ML model plus a bonus for multiple occurences. Ranking: {{author.ranking}}
                             </div>
                         </div>
                         {%endif%}
