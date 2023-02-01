@@ -4,7 +4,7 @@ from django.http.response import HttpResponse, HttpResponseRedirect
 from django.core.files.storage import FileSystemStorage
 import socket
 import os
-from django.http import HttpRequest
+from django.http import HttpRequest, JsonResponse
 from django.contrib.auth.decorators import login_required
 import requests
 import json
@@ -57,6 +57,12 @@ def add_entries(request):
 @login_required
 def edit_database(request):
     return render(request, 'edit_database.html')
+
+
+@login_required
+def get_status_of_db(request):
+    databases = json.loads(access.get_request_from_api(endpoint=DATABASE_API_ENDPOINT_DATABASE_INFO))
+    return JsonResponse(databases)
 
 
 @login_required
