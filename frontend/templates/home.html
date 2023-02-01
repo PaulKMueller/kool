@@ -44,7 +44,7 @@
       <h3 align="left">Categories
          <a class="waves-effect btn-flat" style="align-self: center;font-size: medium; text-transform: none;" onclick="href=/category/">Show all</a>
       </h3>
-      <div class="scrollable-horizontal" style="height: auto; width: 100%;padding: 3px;">
+      <div class="scrollbar scrollbar-primary" style="height: auto; width: 100%;padding: 3px;">
          {% for category in categories %}
          <div class="card" href="category/{{category.link}}" style="display: inline-block;">
             <div class="card-image" stye="border-radius: 10px;">
@@ -61,7 +61,7 @@
          {% endfor %}
       </div>
       {% comment %} popular comp mit show all button und vier blöcken mit popular comp und show scientists button {% endcomment %}
-      <div style="align: central">
+      <div style="align: central;">
          <div id="showcomp" align="left">
             <h3>Popular competencies</h3>
          </div>
