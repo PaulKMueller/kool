@@ -31,25 +31,24 @@ services:
       context: ./database_api
   # uncomment when you want to run the ML Model API
 
-  #  model_api:
-  #   env_file:
-  #       - '.env'
-  #   restart: unless-stopped
-  #
-  #   volumes:
-  #     - ./model_api:/usr/src/app
-  #   build:
-  #     context: ./model_api
+  model_api:
+    env_file:
+        - '.env'
+    restart: unless-stopped
+    volumes:
+      - ./model_api:/usr/src/app
+    build:
+      context: ./model_api
 
   # uncomment when you want to run the playground
 
-  #  playground:
-  #    env_file:
-  #      - '.env'
-  #    ports:
-  #      - $PLAYGROUND_PORT:$PLAYGROUND_PORT
-  #    restart: unless-stopped
-  #    volumes:
-  #      - ./playground:/usr/src/app
-  #    build:
-  #      context: ./playground
+  playground:
+    env_file:
+      - '.env'
+    ports:
+      - $PLAYGROUND_PORT:$PLAYGROUND_PORT
+    restart: unless-stopped
+    volumes:
+      - ./playground:/usr/src/app
+    build:
+      context: ./playground

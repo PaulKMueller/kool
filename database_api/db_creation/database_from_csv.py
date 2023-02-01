@@ -5,9 +5,11 @@
 
 import os
 import pandas as pd
+import aiohttp
 from db_creation.model_endpoint import ENDPOINT
 from langdetect import detect
 from db_creation import string_formatter
+from databases import database_info_handler
 import yaml
 import adapter
 from tqdm import tqdm
@@ -31,6 +33,13 @@ def get_request_from_api(endpoint: str):
     """
     response = requests.get(URL_OF_MODEL_API + endpoint)
     return response.json()
+
+
+async def async_get_request_from_api(endpoint: str):
+    async with aiohttp.ClientSession() as session:
+        async with session.get(URL_OF_MODEL_API + endpoint) as response:
+            return await response.json()
+
 
 
 # Path to existing csv file with data for the database
@@ -68,6 +77,7 @@ def fill_database_from_added_entries(model: str):
     # Safe all Entries to current.csv
     all_entries = get_all_entries()
     all_entries.to_csv("db_creation/csv_files/current.csv", index=False)
+
 
 def build(model: str, path_to_db: str):
     """Builds the database from the csv file.
@@ -126,8 +136,16 @@ def fill_database(df, model: str, path_to_db):
 
     conn = adapter.create_connection_to(path_to_db=path_to_db)
 
+    total_number_of_abstracts = df.shape[0]
+
+    db_name = database_info_handler.get_db_name_from_path_to_db(path_to_db=path_to_db)
+    database_info_handler.update_abstract_count(db_name=db_name,
+                                                new_count=total_number_of_abstracts)
+
     # This loop iterates the rows and stores calls the inserting functions
     for index, row in tqdm(df.iterrows(), total=df.shape[0]):
+        database_info_handler.update_build_status(db_name=db_name,
+                                                  new_count=index)
         abstract_content = row.loc["Abstract"]
 
         # We focus on english abstracts

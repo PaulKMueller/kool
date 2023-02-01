@@ -3,8 +3,9 @@ This is the backend's database_api. It contains the endpoints
 to access the database.
 """
 
-from fastapi import FastAPI, File, UploadFile, HTTPException, Form
+from fastapi import FastAPI, File, UploadFile, HTTPException, Form, BackgroundTasks
 from pydantic import BaseModel
+import asyncio
 import adapter
 from db_creation import database_from_csv
 from db_creation import create_db
@@ -257,7 +258,7 @@ class Model(BaseModel):
 
 
 @app.post("/rebuild")
-async def rebuild(model: Model):
+async def rebuild(model: Model, background_tasks: BackgroundTasks):
     """Endpoint for rebuilding database with old data
     
     """
@@ -270,15 +271,13 @@ async def rebuild(model: Model):
     database_info_handler.safe_new_database_info(db_name=db_name, 
                                                  path_to_db=path_to_db,
                                                  model=model.model,
-                                                 generated=ts_readable)
+                                                 generated=ts_readable,
+                                                 is_running="True")
 
     # create new db with tables
     create_db.create_database(path_to_db=path_to_db)
 
-    # fill db with data from model answers
-    database_from_csv.build(model=model.model, path_to_db=path_to_db)
-
-    # TODO: change database.db to generated db.
+    background_tasks.add_task(database_from_csv.build, model=model.model, path_to_db=path_to_db)
     return "[success]"
 
 

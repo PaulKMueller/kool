@@ -65,11 +65,11 @@ def change_database(request):
     if request.method == 'POST':
         if 'rebuild' in request.POST:
             model = request.POST['model']
-            data =  {'model': model}
+            data = {'model': model}
             status = access.post_request_to_api(endpoint=DATABASE_API_REBUILD_ENDPOINT, data=data)
         
             if status == 200:
-                success=True
+                success = True
         elif 'select' in request.POST:
             database = request.POST['database_selector']
             data = {"new_database": database}
