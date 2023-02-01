@@ -106,20 +106,6 @@ body {
     margin-bottom: -5px;
     box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
 }
-#showallbutton {
-    margin: 13px;
-    line-height: 20px;
-    border-radius: 8px;
-    width: 100px;
-    font-size: 14pt;
-    font-family: tahoma;
-    position:absolute;
-    background-color:white;
-    border-color: grey;
-}
-#showallbutton:active {
-    transform: translateY(2px);
-}
 #bottomDiv{
     position: fixed;
     margin-left:5px;
@@ -134,4 +120,39 @@ body {
 .scrollable-horizontal {
     overflow-x: scroll;
     white-space: nowrap;
-  }
+}
+#category-link{
+    color: darkgray;
+    filter: brightness(60%);
+}
+#categories-card-title{
+    background-color: rgb(0, 0, 0, 0.1); 
+    font-size: 30px; line-break:auto;
+    padding: 10px;
+}
+#search-button{
+    right: 0;
+    width: auto, margin-left: 0; margin-right: 5%; 
+    margin-top:0%
+}
+#nav-wrapper{
+    top: 140px;
+    left: 25%;
+    position: absolute;
+    width: 50%; height: 100px;
+    border: 1px black;
+    border-style: solid;
+    align-items: center;
+    display: flex;
+    border-radius: 10px
+}
+#navbar-home{
+    background-color: #9EC4D5;
+    width: 100%;
+    height: 270px;
+    position: absolute;
+    z-index: 1;
+    background-position: 50% 10%;
+    background-size: 70% auto;
+    background-repeat: no-repeat
+}
