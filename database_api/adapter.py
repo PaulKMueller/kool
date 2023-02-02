@@ -665,6 +665,7 @@ def get_ranking_score(conn, author_id, competency_id) -> int:
 
     # calculation of relevancy: relevancy mean plus bonus for proportion with the competency
     ranking_score = mean_relevancy + bonus
+    ranking_score = round(ranking_score*100) / 100
 
     return ranking_score
 
