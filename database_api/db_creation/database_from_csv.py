@@ -5,7 +5,6 @@
 
 import os
 import pandas as pd
-import aiohttp
 from db_creation.model_endpoint import ENDPOINT
 from langdetect import detect
 from db_creation import string_formatter
@@ -33,13 +32,6 @@ def get_request_from_api(endpoint: str):
     """
     response = requests.get(URL_OF_MODEL_API + endpoint)
     return response.json()
-
-
-async def async_get_request_from_api(endpoint: str):
-    async with aiohttp.ClientSession() as session:
-        async with session.get(URL_OF_MODEL_API + endpoint) as response:
-            return await response.json()
-
 
 
 # Path to existing csv file with data for the database
