@@ -5,7 +5,6 @@ import access
 
 
 def get_categories():
-    print("MOin meister")
     '''Gets all categories from backend and builds objects containing
     corresponding images and links'''
     category_names = access.get_request_from_api("/all_categories")
@@ -34,8 +33,8 @@ def competency_page(request, id):
     '''Render Competency Page, which shows all the competencies to a given
     category id
 
-            Parameters:
-                    id (int): Category_id
+    Parameters:
+            id (int): Category_id
     '''
     competencies = access.get_request_from_api("/competencies_by_category_id/"
                                                + str(id))

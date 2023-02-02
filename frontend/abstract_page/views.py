@@ -77,7 +77,7 @@ def get_competencies_from_db_entry(db_entry):
         db_entry (json): a JSON Object containing the GET request's answer
 
     Returns:
-        competencies (list): List of competency objects 
+        competencies (list): List of competency objects
     """
     competencies = []
     for competency in db_entry:

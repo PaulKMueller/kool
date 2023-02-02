@@ -90,6 +90,14 @@ def researcher(request: HttpRequest, id: Optional[int] = None) -> HttpResponse:
 
 
 def get_author_id(searchquery):
+    """Returns the author id for a given searchquery
+
+    Args:
+        searchquery: The searchquery
+
+    Returns:
+        int: The author_id
+    """
     result = access.get_request_from_api("/author_id_by_full_name/" +
                                          searchquery)
     if not result:
@@ -98,39 +106,99 @@ def get_author_id(searchquery):
 
 
 def get_author_by_id(author_id):
+    """Returns the name of the author with the given id
+
+    Args:
+        author_id (int): the author id
+
+    Returns:
+        tuple: tuple(author_first_name, author_last_name)
+    """
     return access.get_request_from_api("/author_by_id/" +
                                        str(author_id))
 
 
 def get_competencies_of_author(author_id):
+    """Return the competencies of the author with the author id
+
+    Args:
+        author_id (int): The id of the author
+
+    Returns:
+        list: list[competency_id, competency_name, status]
+    """
     return access.get_request_from_api(
                     "/competencies_by_author_id/" + str(author_id))
 
 
 def get_relevant_abstract_ids(competency_id, author_id):
+    """Returns the relevant abstract ids
+    of abstracts by the author with a given relevancy.
+
+    Args:
+        competency_id (int): The competency id
+        author_id (int): The author id
+
+    Returns:
+        list: list[abstract_id]
+    """
     return access.get_request_from_api(
                     "/abstracts_with_competency_by_author/" +
                     str(competency_id) + "/" + str(author_id))
 
 
 def get_ranking_score(author_id, competency_id):
+    """returns the ranking soce of the author and
+    the competency.
+
+    Args:
+        author_id (int): The author id
+        competency_id (int): The competency id
+
+    Returns:
+        int: the rnaking score
+    """
     return access.get_request_from_api("/ranking_score/" +
                                        str(author_id) + "/" +
                                        str(competency_id))
 
 
 def get_abstract_by_id(abstract_id):
+    """Returns the abstracts properties of the abstract
+    with the given id.
+
+    Args:
+        abstract_id (int): The abstract id
+
+    Returns:
+        list: List[abstract_id, year, title, content, doctype, institution]
+    """
     return access.get_request_from_api("/abstract_by_id/" +
                                        str(abstract_id))
 
 
 def sort_competencies(competencies: list):
+    """Sorts the list of competencies by the ranking of the competencies.
+
+    Args:
+        competencies (list): list[Competency]
+
+    Returns:
+        list: list[Competency]
+    """
     competencies.sort(key=lambda x: x.ranking, reverse=True)
     return competencies
 
 
 @login_required
 def change_status_researcher(request):
+    """Changes the status of
+    a competency and a researcher.
+    Redirects back to the reseracher page.
+
+    Args:
+        request (HttpRequest): The request object.
+    """
     if request.method == 'POST':
         competency_id = request.POST['competency_id']
         author_id = request.POST['author_id']

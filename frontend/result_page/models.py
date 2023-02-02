@@ -32,7 +32,6 @@ class Author:
                             doctype=abstract_db_entry[4],
                             institution=abstract_db_entry[5])
         self.abstracts[abstract_id] = (abstract, relevancy)
-        print(self.abstracts)
 
     def get_last_publication_year(self):
         '''

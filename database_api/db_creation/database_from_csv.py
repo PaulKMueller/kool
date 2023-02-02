@@ -46,27 +46,31 @@ PATH_TO_DB = os.environ.get(ENVIRONMENT_VARIABLE_DB_FILE)
 DEFAULT_STATUS = "Unvalidated"
 
 
-def get_df_from_csv(PATH_TO_FILE):
+def get_df_from_csv(path_to_file: str) -> pd.DataFrame:
     """Returns a dataframe from a csv file.
 
     Args:
-        PATH_TO_FILE (str): Path to the csv file.
+        path_to_file (str): Path to the csv file.
 
     Returns:
         DataFrame: DataFrame from the csv file.
     """
-    return pd.read_csv(PATH_TO_FILE)
+    return pd.read_csv(path_to_file)
 
 
 def fill_database_from_added_entries(model: str):
     """Fills database with all entries which haven't
     been added to the database yet.
     Safes all entries in current.csv.
+
+    Args:
+        model (str): Model which should be used to get the
+        competencies, consult model_endpoint.py for accepted models
     """
     new_entries = get_new_entries()
     active_db_name = database_info_handler.get_active_db_name()
+    # using active_db_path to append currently active database
     active_db_path = database_info_handler.get_db_path_from_db_name(active_db_name)
-    # using PATH_TO_DB to append currently used database
     fill_database(df=new_entries, model=model, path_to_db=active_db_path)
     # Safe all Entries to current.csv
     all_entries = get_all_entries()
@@ -133,12 +137,12 @@ def fill_database(df, model: str, path_to_db):
     total_number_of_abstracts = df.shape[0]
 
     db_name = database_info_handler.get_db_name_from_path_to_db(path_to_db=path_to_db)
-    database_info_handler.add_to_abstract_count(db_name=db_name,
+    database_info_handler.increase_abstract_count(db_name=db_name,
                                                 add_count=total_number_of_abstracts)
     try:
         # This loop iterates the rows and stores calls the inserting functions
         for index, row in tqdm(df.iterrows(), total=df.shape[0]):
-            database_info_handler.add_to_build_status(db_name=db_name,
+            database_info_handler.increase_build_status(db_name=db_name,
                                                     add_count=1)
             abstract_content = row.loc["Abstract"]
 
@@ -155,7 +159,6 @@ def fill_database(df, model: str, path_to_db):
 
             competencies = get_request_from_api(
                 COMPETENCY_ENDPOINT + abstract_content)
-            print(competencies)
             competency_ids = {}
             for competency in competencies:
                 competency_name = competency[0]

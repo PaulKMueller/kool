@@ -260,14 +260,12 @@ class Model(BaseModel):
 @app.post("/rebuild")
 async def rebuild(model: Model, background_tasks: BackgroundTasks):
     """Endpoint for rebuilding database with old data
-    
     """
     ts = time.gmtime()
     ts_readable = time.strftime("%Y-%m-%d-%H-%M-%S", ts)
     db_name = "database-" + model.model + "-" + ts_readable + ".db"
     path_to_db = "databases/" + db_name
 
-    print("Path to db " + path_to_db)
     database_info_handler.safe_new_database_info(db_name=db_name, 
                                                  path_to_db=path_to_db,
                                                  model=model.model,
@@ -288,17 +286,15 @@ class Database(BaseModel):
 @app.post("/change_active_database")
 async def change_active_database(new_database: Database):
     """changing the active database
-    
     """
 
-    print("DATABASE " + str(new_database.new_database))
-    with open("databases/database_info.json", "r") as f:
+    with open("databases/database_info.json", "r", encoding="utf-8") as f:
         dict = json.load(f)
 
     path_to_new_db = dict[new_database.new_database]['path']
     shutil.copyfile(path_to_new_db, PATH_TO_DB)
 
-    database_info_handler.change_db_active_status(database_name=database_info_handler.get_active_db_name(), 
+    database_info_handler.change_db_active_status(database_name=database_info_handler.get_active_db_name(),
                                                   new_status="False")
     database_info_handler.change_db_active_status(database_name=new_database.new_database,
                                                   new_status="True")
@@ -327,7 +323,7 @@ async def add_entries(data: Data):
 
     Returns:
         _type_: _description_
-    """ 
+    """
     f = open("db_creation/csv_files/last_added.csv", "w")
     f.write(data.file)
     f.close()
@@ -338,7 +334,8 @@ async def add_entries(data: Data):
 @app.get("/change_status/{author_id}/{competency_id}/{competency_status}")
 async def change_status(author_id, competency_id, competency_status):
     conn = adapter.create_connection()
-    response = adapter.change_status(conn, author_id, competency_id, competency_status)
+    response = adapter.change_status(conn, author_id, competency_id,
+                                     competency_status)
     conn.close()
     return response
 

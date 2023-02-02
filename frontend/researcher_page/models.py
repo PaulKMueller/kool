@@ -1,4 +1,4 @@
-"""Defines the models used in the result page.
+"""Defines the models used in the researcher page.
 """
 
 import access
@@ -20,7 +20,7 @@ class Author:
             for abstract in competency.abstracts:
                 abstract_ids.add(abstract.id)
         return len(abstract_ids)
-    
+
     def get_ranking_for_competency_by_id(self, competency_id:int):
         return access.get_request_from_api(
             "/ranking_score/{author_id}/{competency_id}")

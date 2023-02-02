@@ -29,7 +29,7 @@ def get_author_by_competency_id(competency_id: int):
         author_last_name = author_entry[2]
         abstract_id = author_entry[3]
         relevancy_of_abstract = author_entry[4]
-        status = author_entry[5]        
+        status = author_entry[5]
         ranking = access.get_request_from_api("/ranking_score/" + str(
             author_id) + "/" + str(competency_id))
 
@@ -115,6 +115,13 @@ def results(request: HttpRequest, id: Optional[int] = None) -> HttpResponse:
 
 @login_required
 def change_status(request):
+    """Changes the status of
+    a competency and an author.
+    Redirects back to the result page.
+
+    Args:
+        request (HttpRequest): The request object.
+    """
     if request.method == 'POST':
         competency_id = request.POST['competency_id']
         author_id = request.POST['author_id']
@@ -128,6 +135,11 @@ def change_status(request):
 
 
 def sort_authors(authors):
+    """Sorts the given list of authors by their relevancy.
+
+    Args:
+        list: Authors The authors.
+    """
     author_list = [(key, value) for key, value in authors.items()]
     sorted_list = sorted(author_list, key=lambda x: x[1].ranking, reverse=True)
     sorted_dict = dict(sorted_list)
