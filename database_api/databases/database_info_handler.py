@@ -48,6 +48,11 @@ def get_db_name_from_path_to_db(path_to_db: str):
     return ""
 
 
+def get_db_path_from_db_name(db_name: str):
+    dict = load_dict()
+    return dict[db_name]["path"]
+
+
 def safe_new_database_info(db_name: str, path_to_db: str, model: str, generated: str,
                            is_running: str):
     dict = load_dict()
@@ -70,9 +75,10 @@ def add_to_abstract_count(db_name: str, add_count: int):
     write_dict_to_json(dict=dict)
 
 
-def update_build_status(db_name: str, new_count: int):
+def add_to_build_status(db_name: str, add_count: int):
     dict = load_dict()
-    dict[db_name]["build_status"]["at"] = new_count
+    current_count = dict[db_name]["build_status"]["at"]
+    dict[db_name]["build_status"]["at"] = current_count + add_count
     write_dict_to_json(dict=dict)
 
 

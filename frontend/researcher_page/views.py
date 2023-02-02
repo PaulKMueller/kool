@@ -80,11 +80,11 @@ def researcher(request: HttpRequest, id: Optional[int] = None) -> HttpResponse:
 
     all_authors = access.get_request_from_api("/all_authors/")
     return render(request, 'researcher.html', {'has_found': found_id,
-                                                    'searched': searched,
-                                                    'competencies':
-                                                        competencies,
-                                                    'author': author,
-                                                    'all_authors': json.dumps(
+                                               'searched': searched,
+                                               'competencies':
+                                               competencies,
+                                               'author': author,
+                                               'all_authors': json.dumps(
                                                         all_authors)}
                   )
 

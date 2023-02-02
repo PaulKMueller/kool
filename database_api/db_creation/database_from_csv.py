@@ -64,8 +64,10 @@ def fill_database_from_added_entries(model: str):
     Safes all entries in current.csv.
     """
     new_entries = get_new_entries()
+    active_db_name = database_info_handler.get_active_db_name()
+    active_db_path = database_info_handler.get_db_path_from_db_name(active_db_name)
     # using PATH_TO_DB to append currently used database
-    fill_database(df=new_entries, model=model, path_to_db=PATH_TO_DB)
+    fill_database(df=new_entries, model=model, path_to_db=active_db_path)
     # Safe all Entries to current.csv
     all_entries = get_all_entries()
     all_entries.to_csv("db_creation/csv_files/current.csv", index=False)
@@ -136,8 +138,8 @@ def fill_database(df, model: str, path_to_db):
     try:
         # This loop iterates the rows and stores calls the inserting functions
         for index, row in tqdm(df.iterrows(), total=df.shape[0]):
-            database_info_handler.update_build_status(db_name=db_name,
-                                                    new_count=index)
+            database_info_handler.add_to_build_status(db_name=db_name,
+                                                    add_count=1)
             abstract_content = row.loc["Abstract"]
 
             # We focus on english abstracts
