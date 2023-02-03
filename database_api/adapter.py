@@ -2,9 +2,10 @@
 Provides functionality to interact with the database.
 """
 
+import os
+
 import sqlite3
 from sqlite3 import Error
-import os
 import numpy as np
 
 
@@ -747,9 +748,9 @@ def get_author_id_by_full_name(conn, full_name: str) -> int:
         int: Id of the author
     """
     sql_get_author_id_by_full_name = """SELECT author_id
-                           FROM author
-                           WHERE first_name || ' ' || last_name = 
-                           '{}'""".format(full_name)
+                                        FROM author
+                                        WHERE first_name || ' ' || last_name = 
+                                        '{}'""".format(full_name)
     cursor = conn.cursor()
     cursor.execute(sql_get_author_id_by_full_name)
     result = cursor.fetchone()

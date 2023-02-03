@@ -58,7 +58,7 @@ def get_db_path_from_db_name(db_name: str) -> str:
 
     Returns:
         str: path to database with specified name
-    """    
+    """
     dict = load_dict()
     return dict[db_name]["path"]
 

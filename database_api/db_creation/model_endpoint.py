@@ -1,3 +1,5 @@
+"""Matches the endpoints of the models to the model name"""
+
 import enum
 
 
