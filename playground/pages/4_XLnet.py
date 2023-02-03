@@ -10,25 +10,6 @@ import seaborn as sns
 from download_button import download
 from models import ask_xlnet
 
-ENVIRONMENT_VARIABLE_MODEL_API_PORT = "MODEL_API_PORT"
-MODEL_API_PORT = os.environ.get(ENVIRONMENT_VARIABLE_MODEL_API_PORT)
-
-URL_OF_MODEL_API = "http://model_api:" + MODEL_API_PORT
-
-
-def get_request_from_api(endpoint):
-    """ This function sends a get request to the
-    model_api and returns the response as json
-
-    Args:
-        endpoint (str): The endpoint of the model_api
-
-    Returns:
-        json: The response of the model_api
-    """
-    response = requests.get(URL_OF_MODEL_API + endpoint)
-    return response.json()
-
 
 st.set_page_config(
     page_title="Kool - Competency Extractor",
@@ -110,54 +91,61 @@ with st.form(key="my_form"):
 
         submit_button = st.form_submit_button(label="📈 Get me the data!")
 
+question = st.text_input("Your question:", value=("What keyword is"
+                                                  " mentioned in "
+                                                  "the abstract?"))
+
 if not submit_button:
     st.stop()
 
+
 keywords = []
 if ModelType == "XLNet":
-    keywords = ask_xlnet(doc)
-    st.write(keywords)
+    keywords = ask_xlnet(abstract=doc, question=question)
 
-st.markdown("## **🔎 Check & download results **")
+st.header("Result:")
+st.write(keywords)
 
-st.header("")
+# st.markdown("## **🔎 Check & download results **")
 
-cs, c1, c2, c3, cLast = st.columns([2, 1.5, 1.5, 1.5, 2])
+# st.header("")
 
-with c1:
-    download(keywords, "Data.csv", "📅 Download (.csv)")
-with c2:
-    download(keywords, "Data.txt", "📄 Download (.txt)")
-with c3:
-    download(keywords, "Data.json", "📥 Download (.json)")
+# cs, c1, c2, c3, cLast = st.columns([2, 1.5, 1.5, 1.5, 2])
 
-st.header("")
+# with c1:
+#     download(keywords, "Data.csv", "📅 Download (.csv)")
+# with c2:
+#     download(keywords, "Data.txt", "📄 Download (.txt)")
+# with c3:
+#     download(keywords, "Data.json", "📥 Download (.json)")
 
-df = (
-    DataFrame(keywords, columns=["Keyword/Keyphrase", "Relevancy"])
-    .sort_values(by="Relevancy", ascending=False)
-    .reset_index(drop=True)
-)
+# st.header("")
 
-df.index += 1
+# df = (
+#     DataFrame(keywords, columns=["Keyword/Keyphrase", "Relevancy"])
+#     .sort_values(by="Relevancy", ascending=False)
+#     .reset_index(drop=True)
+# )
 
-# Add styling
-cmGreen = sns.light_palette("green", as_cmap=True)
-cmRed = sns.light_palette("red", as_cmap=True)
-df = df.style.background_gradient(
-    cmap=cmGreen,
-    subset=[
-        "Relevancy",
-    ],
-)
+# df.index += 1
 
-c1, c2, c3 = st.columns([1, 3, 1])
+# # Add styling
+# cmGreen = sns.light_palette("green", as_cmap=True)
+# cmRed = sns.light_palette("red", as_cmap=True)
+# df = df.style.background_gradient(
+#     cmap=cmGreen,
+#     subset=[
+#         "Relevancy",
+#     ],
+# )
 
-format_dictionary = {
-    "Relevancy": "{:.1%}",
-}
+# c1, c2, c3 = st.columns([1, 3, 1])
 
-df = df.format(format_dictionary)
+# format_dictionary = {
+#     "Relevancy": "{:.1%}",
+# }
 
-with c2:
-    st.table(df)
+# df = df.format(format_dictionary)
+
+# with c2:
+#     st.table(df)
