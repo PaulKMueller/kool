@@ -2,40 +2,35 @@
     with data from a csv file and ML generated
     data from the model_api.
 """
-
 import os
 import pandas as pd
+
+from langdetect import 
+import requests
+
 from db_creation.model_endpoint import ENDPOINT
-from langdetect import detect
 from db_creation import string_formatter
 from databases import database_info_handler
-import yaml
 import adapter
-import requests
 
 ENVIRONMENT_VARIABLE_MODEL_API_PORT = "MODEL_API_PORT"
 MODEL_API_PORT = os.environ.get(ENVIRONMENT_VARIABLE_MODEL_API_PORT)
 
 URL_OF_MODEL_API = "http://model_api:" + MODEL_API_PORT
 
-
-
-
 # Path to existing csv file with data for the database
 ENVIRONMENT_VARIABLE_CSV_FILE = "PATH_TO_CSV"
 PATH_TO_FILE = os.environ.get(ENVIRONMENT_VARIABLE_CSV_FILE)
-
 
 PATH_TO_CURRENT_CSV = PATH_TO_FILE
 PATH_TO_LAST_ADDED_CSV = "db_creation/csv_files/last_added.csv"
 
 # Path to existing database or where the database should be created
-
 ENVIRONMENT_VARIABLE_DB_FILE = "PATH_TO_DB"
 PATH_TO_DB = os.environ.get(ENVIRONMENT_VARIABLE_DB_FILE)
 
+# Default status of a competency added to the db
 DEFAULT_STATUS = "Unvalidated"
-
 
 def get_request_from_api(endpoint: str):
     """ This function sends a get request to the
@@ -162,7 +157,7 @@ def get_entries_from_row(row: pd.Series):
     Returns:
         tuple: tuple of the Values mentioned above
     """    
-    abstract_content = row.loc["Abstract"]
+    abstract_content = string_formatter.format_abstract(row.loc["Abstract"])
     abstract_title = row.loc["Title"]
     doctype = row.loc["Doc-Type"]
     authors = string_formatter.format_authors(row.loc["Authors"])
