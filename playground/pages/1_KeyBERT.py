@@ -50,11 +50,11 @@ with st.expander("ℹ️ - About this interface", expanded=True):
     st.write(
         ("The *Kool - Competency Extractor* app is an easy-to-use "
             "interface built in [Streamlit](https://streamlit.io/).\n "
-            "It uses a minimal keyword extraction techniques that "
+            "It uses minimal keyword extraction techniques that "
             "leverage multiple NLP embeddings and rely on "
             "[Transformers](https://huggingface.co/transformers/) 🤗 "
             "to extract competencies "
-            "that are most similar to a given document. "
+            "that are most similar to a given document.\n\n"
             "On this site you can experiment with different parametrizations"
             " of the model [KeyBERT](https://github.com/MaartenGr/KeyBERT) "
             "by Maarten Grootendorst"
@@ -70,13 +70,13 @@ with st.form(key="my_form"):
     ce, c1, c2, c3 = st.columns([0.07, 2, 5, 0.07])
     with c1:
         ModelType = st.radio(
-            "Your model",
+            "Your model:",
             ["KeyBERT",],
             help=("This is your chosen model."),
         )
 
         use_mmr = st.checkbox(
-            "Use MMR",
+            "Use MMR:",
             value=True,
             help=("""Maximal Marginal Relevance (MMR).
                      Calculates the similarity between generated keywords.
@@ -84,7 +84,7 @@ with st.form(key="my_form"):
         )
 
         minimum_number_of_keywords = st.slider(
-            "Minimum number of keywords",
+            "Minimum number of keywords:",
             min_value=1,
             max_value=5,
             value=1,
@@ -93,7 +93,7 @@ with st.form(key="my_form"):
         )
 
         maximum_number_of_keywords = st.slider(
-            "Maximum number of keywords",
+            "Maximum number of keywords:",
             min_value=1,
             max_value=5,
             value=2,
@@ -102,7 +102,7 @@ with st.form(key="my_form"):
         )
 
         diversity = st.slider(
-            "Diversity",
+            "Diversity:",
             min_value=0.0,
             max_value=1.0,
             value=0.5,
@@ -113,7 +113,7 @@ with st.form(key="my_form"):
         )
 
         minimum_relevancy = st.slider(
-            "Minimum relevancy",
+            "Minimum relevancy:",
             min_value=0.0,
             max_value=1.0,
             value=0.4,
