@@ -2,10 +2,32 @@
 The playground is used to test the model_api and the database_api.
 """
 
+import os
+import requests
 import streamlit as st
 from pandas import DataFrame
+import seaborn as sns
 from download_button import download
-from models import ask_keybert, ask_galactica, ask_galactica, ask_gpt_neo
+from models import ask_bloom
+
+ENVIRONMENT_VARIABLE_MODEL_API_PORT = "MODEL_API_PORT"
+MODEL_API_PORT = os.environ.get(ENVIRONMENT_VARIABLE_MODEL_API_PORT)
+
+URL_OF_MODEL_API = "http://model_api:" + MODEL_API_PORT
+
+
+def get_request_from_api(endpoint):
+    """ This function sends a get request to the
+    model_api and returns the response as json
+
+    Args:
+        endpoint (str): The endpoint of the model_api
+
+    Returns:
+        json: The response of the model_api
+    """
+    response = requests.get(URL_OF_MODEL_API + endpoint)
+    return response.json()
 
 
 st.set_page_config(
@@ -33,7 +55,7 @@ _max_width_()
 c30, c31, c32 = st.columns([2.5, 1, 3])
 
 with c30:
-    st.title("🏠 Kool - Competency Extractor")
+    st.title("🌷 Bloom")
     st.header("")
 
 with st.expander("ℹ️ - About this interface", expanded=True):
@@ -59,12 +81,11 @@ with st.form(key="my_form"):
 
     ce, c1, c2, c3 = st.columns([0.07, 2, 5, 0.07])
     with c1:
-        keybert = st.checkbox(
-            "KeyBERT")
-        galactica = st.checkbox(
-            "Galactica 125M")
-        gpt_neo = st.checkbox(
-            "GPT-Neo 125M")
+        ModelType = st.radio(
+            "Your model",
+            ["Bloom",],
+            help=("This is your chosen model."),
+        )
 
     with c2:
         doc = st.text_area(
@@ -92,22 +113,10 @@ with st.form(key="my_form"):
 if not submit_button:
     st.stop()
 
-keywords_keybert = []
-keywords_galactica = []
-keywords_gpt_neo = []
-
-if keybert:
-    keywords_keybert = ask_keybert(doc)
-    # Get only keywords not relevancy
-    keywords_keybert = [keyword[0] for keyword in keywords_keybert]
-if galactica:
-    keywords_galactica = ask_galactica(doc)
-    # Get only keywords not relevancy
-    keywords_galactica = [keyword[0] for keyword in keywords_galactica]
-if gpt_neo:
-    keywords_gpt_neo = ask_gpt_neo(doc)
-    # Get only keywords not relevancy
-    keywords_gpt_neo = [keyword[0] for keyword in keywords_gpt_neo]
+keywords = []
+if ModelType == "Bloom":
+    keywords = ask_bloom(doc)
+    st.write(keywords)
 
 st.markdown("## **🔎 Check & download results **")
 
@@ -115,48 +124,40 @@ st.header("")
 
 cs, c1, c2, c3, cLast = st.columns([2, 1.5, 1.5, 1.5, 2])
 
-result_dict = {}
-if keybert:
-    result_dict["KeyBERT"] = keywords_keybert
-if galactica:
-    result_dict["Galactica 125M"] = keywords_galactica
-if gpt_neo:
-    result_dict["GPT-Neo 125M"] = keywords_gpt_neo
-
 with c1:
-    download(
-        result_dict, "Data.csv", "📅 Download (.csv)")
+    download(keywords, "Data.csv", "📅 Download (.csv)")
 with c2:
-    download(
-        result_dict, "Data.txt", "📄 Download (.txt)")
+    download(keywords, "Data.txt", "📄 Download (.txt)")
 with c3:
-    download(
-        result_dict, "Data.json", "📥 Download (.json)")
+    download(keywords, "Data.json", "📥 Download (.json)")
 
 st.header("")
 
-# Max keyword length
-max_len = max(len(keywords_keybert),
-              len(keywords_galactica),
-              len(keywords_gpt_neo))
-
-# Fill all keywords lists with empty strings
-keywords_keybert += [""] * (max_len - len(keywords_keybert))
-keywords_galactica += [""] * (max_len - len(keywords_galactica))
-keywords_gpt_neo += [""] * (max_len - len(keywords_gpt_neo))
-
-# Build dataframe dictionary based on checked checkboxes
-
-
 df = (
-    DataFrame(result_dict)
+    DataFrame(keywords, columns=["Keyword/Keyphrase", "Relevancy"])
+    .sort_values(by="Relevancy", ascending=False)
     .reset_index(drop=True)
 )
 
 df.index += 1
 
+# Add styling
+cmGreen = sns.light_palette("green", as_cmap=True)
+cmRed = sns.light_palette("red", as_cmap=True)
+df = df.style.background_gradient(
+    cmap=cmGreen,
+    subset=[
+        "Relevancy",
+    ],
+)
 
 c1, c2, c3 = st.columns([1, 3, 1])
+
+format_dictionary = {
+    "Relevancy": "{:.1%}",
+}
+
+df = df.format(format_dictionary)
 
 with c2:
     st.table(df)

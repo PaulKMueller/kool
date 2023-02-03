@@ -97,24 +97,38 @@ def get_mock_competency():
     return random.choice(competence_list)
 
 
-def ask_galactica(abstract: str):
+def ask_galactica(abstract: str, max_length_output: int = 512,
+                  max_length_competencies: int = 4,
+                  min_length_competencies: int = 1,
+                  model_version: str = "mini"):
     """Returns galactica's answer to being asked what competencies an
     abstract author has.
 
     Args:
         abstract (str): A scientific abstract in text format
+        max_length_output (int, optional): Maximum length in
+                                           tokens of the generated text
+                                           (including prompt).
+        min_length_competencies (int, optional): Minimum number of words
+                                                 in a competency.
+        max_length_competencies (int, optional): Maximum number of words
+                                                 in a competency.
+        model_version (str, optional): The version of the model to use.
+                                       Available versions are "mini" (125M),
+                                       base (1.3 B), standard (6.7 B),
+                                       large (30 B) and huge (120 B).
 
     Returns:
         list: list in the form of [(competency, score), ...]
     """
-    model = gal.load_model(name="mini")
+    model = gal.load_model(name=model_version)
 
     prompt = f"Extract keywords from this abstract:{abstract} \n\n Keywords:"
 
     # Generate keywords and refactor them to list
     competency_list = model.generate(prompt,
-                                     max_length=512).replace(prompt,
-                                                             "").split(',')
+                                     max_length_output).replace(prompt,
+                                                                "").split(',')
 
     # Remove unnecessary whitespaces
     competency_list = [competency.strip() for competency in competency_list]
@@ -128,15 +142,15 @@ def ask_galactica(abstract: str):
     # Remove empty strings
     competency_list = list(filter(None, competency_list))
 
-    # Remove competencies with more than 4 words
-    competency_list = list(filter(lambda x: len(x.split()) < 5,
-                                  competency_list))
+    # Remove competencies with more than max_length_competencies words
+    competency_list = list(filter(
+        lambda x: len(x.split()) <= max_length_competencies,
+        competency_list))
 
-    # If a competency is part of another competency, remove it
-    for competency in competency_list:
-        for other_competency in competency_list:
-            if competency in other_competency and competency != other_competency:
-                competency_list.remove(competency)
+    # Remove competencies with less than min_length_competencies words
+    competency_list = list(filter(
+        lambda x: len(x.split()) >= min_length_competencies,
+        competency_list))
 
     # Set the score of each competency to -1 (default relevancy
     # for all models that do not calculate relevancy)
@@ -187,24 +201,26 @@ def ask_bloom(abstract: str, method: int):
     if method == 0:
         # Greedy Search
         return tokenizer.decode(model.generate(inputs["input_ids"],
-                                        max_length=result_length)[0])
+                                max_length=result_length)[0])
     elif method == 1:
         # Beam Search
         return tokenizer.decode(model.generate(inputs["input_ids"],
-                                              max_length=result_length,
-                                              num_beams=2,
-                                              no_repeat_ngram_size=2,
-                                              early_stopping=True)[0])
+                                max_length=result_length,
+                                num_beams=2,
+                                no_repeat_ngram_size=2,
+                                early_stopping=True)[0])
     elif method == 2:
         # Sampling Top-k + Top-p
         return tokenizer.decode(model.generate(inputs["input_ids"],
-                                              max_length=result_length,
-                                              do_sample=True,
-                                              top_k=50,
-                                              top_p=0.9)[0])
+                                               max_length=result_length,
+                                               do_sample=True,
+                                               top_k=50,
+                                               top_p=0.9)[0])
 
 
-def ask_keybert(abstract: str):
+def ask_keybert(abstract: str, use_mmr: bool = True,
+                diversity: float = 0.5, keyphrase_ngram_range: tuple = (1, 2),
+                minimum_relevancy: float = 0.4):
     """Extracts keywords from an abstract using KeyBert.
 
     Args:
@@ -213,10 +229,16 @@ def ask_keybert(abstract: str):
     Returns:
         list: [[keyword, relevancy], [keyword, relevancy], ...]
     """
-    kw_model = KeyBERT()
-    keywords = kw_model.extract_keywords(abstract,
-                                         keyphrase_ngram_range=(1, 3))
-    return keywords
+    kw_model = KeyBERT("distilbert-base-nli-mean-tokens")
+    keywords = kw_model.extract_keywords(
+        abstract,
+        keyphrase_ngram_range=keyphrase_ngram_range,
+        use_mmr=use_mmr, diversity=diversity)
+
+    # Filter keywords with relevancy below minimum_relevancy
+    filtered_keywords = list(filter(lambda x: x[1] > minimum_relevancy,
+                                    keywords))
+    return filtered_keywords
 
 
 def get_category_of_competency(competence: str):
@@ -277,20 +299,13 @@ def ask_gpt_neo(abstract: str):
     # for models that do not calcute relevancy)
     competency_list = [(competency, -1) for competency in competency_list]
 
-
     # Remove empty competencies
-    competency_list = [competency for competency in competency_list if competency[0] != '']
-
-    # If a competency is part of another competency, remove it
-    competency_list_copy = competency_list.copy()
-    for competency in competency_list:
-        for other_competency in competency_list_copy:
-            if competency in other_competency and competency != other_competency:
-                competency_list_copy.remove(competency)
-
-    competency_list = competency_list_copy
+    competency_list = [
+        competency for competency in competency_list if competency[0] != '']
 
     # Remove all competencies that have more than 4 words
-    competency_list = [competency for competency in competency_list if len(competency[0].split()) <= 4]
+    competency_list = [
+        competency for competency in competency_list if len(
+            competency[0].split()) <= 4]
 
     return competency_list
