@@ -1,14 +1,14 @@
 """Defines the views used in the landing page.
 """
 
-import django.http
-import django.http.response
 import json
+
 from django.shortcuts import render
-import access
 from django.http import HttpRequest
 from django.http.response import HttpResponse as HttpResponse
+
 from competency_page import views as competency_page
+import access
 
 
 def home(request: HttpRequest) -> HttpResponse:

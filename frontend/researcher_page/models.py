@@ -1,33 +1,36 @@
 """Defines the models used in the researcher page.
 """
 
-import access
-
 
 class Author:
-    '''Represents an author'''
-    def __init__(self, id: int, first_name: str, last_name: str, 
+    """Represents an author entry with its competencies
+
+    Returns:
+        Author: author
+    """
+    def __init__(self, id: int, first_name: str, last_name: str,
                  competencies: dict):
         self.id = id
         self.first_name = first_name
         self.last_name = last_name
         self.competencies = competencies
 
-    def get_number_of_publications(self):
-        '''Returns number of publications of the given author'''
+    def get_number_of_publications(self) -> int:
+        """Returns number of publications of the given author
+
+        Returns:
+            int: number of publications
+        """
         abstract_ids = set()
         for competency in self.competencies:
             for abstract in competency.abstracts:
                 abstract_ids.add(abstract.id)
         return len(abstract_ids)
 
-    def get_ranking_for_competency_by_id(self, competency_id:int):
-        return access.get_request_from_api(
-            "/ranking_score/{author_id}/{competency_id}")
-
 
 class Abstract:
-    '''Represents an abstract'''
+    """Represents an abstract
+    """
     def __init__(self, id: int, year: int, title: str, content: str,
                  doctype: str, institution: str):
         self.id = id
@@ -56,15 +59,19 @@ class Competency:
         self.ranking = ranking
         self.abstracts = abstracts
 
-    def get_last_publication_year(self):
-        '''
-        Returns the latest publication year
-                Returns:
-                        max (int): latest year
-        '''
+    def get_last_publication_year(self) -> int:
+        """Returns the latest publication year
+
+        Returns:
+            int: latest year
+        """
         years = [x.year for x in self.abstracts]
         return max(years)
 
-    def get_number_of_publications(self):
-        '''Returns number of publications of the given competency'''
+    def get_number_of_publications(self) -> int:
+        """Returns number of publications of the given competency
+
+        Returns:
+            int: number of abstracts
+        """
         return len(self.abstracts)

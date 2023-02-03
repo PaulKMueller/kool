@@ -1,13 +1,12 @@
+import json
+import os
+
 import pandas as pd
 from django.shortcuts import render
-from django.http.response import HttpResponse, HttpResponseRedirect
-from django.core.files.storage import FileSystemStorage
-import socket
-import os
+from django.http.response import HttpResponse
 from django.http import HttpRequest, JsonResponse
 from django.contrib.auth.decorators import login_required
-import requests
-import json
+
 import access
 
 ENVIRONMENT_VARIABLE_PLAYGROUND_PORT = "PLAYGROUND_PORT"
@@ -16,14 +15,14 @@ PLAYGROUND_PORT = os.environ.get(ENVIRONMENT_VARIABLE_PLAYGROUND_PORT)
 ENVIRONMENT_VARIABLE_PLAYGROUND_HOST = "PLAYGROUND_HOST"
 PLAYGROUND_HOST = os.environ.get(ENVIRONMENT_VARIABLE_PLAYGROUND_HOST)
 
-DATABASE_API_POST_FILE_ENDPOINT = "/add_entries/"
-DATABASE_API_REBUILD_ENDPOINT = "/rebuild"
-DATABASE_API_ENDPOINT_DATABASE_INFO = "/get_database_info/"
-DATABASE_CHANGE_DATABASE_ENDPOINT = "/change_active_database/"
+ENDPOINT_POST_FILE = "/add_entries/"
+ENDPOINT_REBUILD = "/rebuild"
+ENDPOINT_DATABASE_INFO = "/get_database_info/"
+ENDPOINT_CHANGE_DATABASE = "/change_active_database/"
 
 
 @login_required
-def adminpage(request: HttpRequest):
+def adminpage(request: HttpRequest) -> HttpResponse:
     """
     View for the adminpage.
 
@@ -39,7 +38,7 @@ def adminpage(request: HttpRequest):
 
 
 @login_required
-def add_entries(request: HttpRequest):
+def add_entries(request: HttpRequest) -> HttpResponse:
     """View for the add entries page on the adminpage. Note that there is a
     submit button which uploads a new csv with new entries and the model with
     which the entries should be computated. This is handled in the backend and
@@ -60,7 +59,7 @@ def add_entries(request: HttpRequest):
         file_content_decoded = file_content_binary.decode("utf-8")
 
         data = {'model': model, 'file': file_content_decoded}
-        status = access.post_request_to_api(endpoint=DATABASE_API_POST_FILE_ENDPOINT,
+        status = access.post_request_to_api(endpoint=ENDPOINT_POST_FILE,
                                             data=data)
         if status == 200:
             success = 1
@@ -72,7 +71,7 @@ def add_entries(request: HttpRequest):
 
 
 @login_required
-def edit_database(request):
+def edit_database(request: HttpRequest) -> HttpResponse:
     """
     View for the edit database page on the adminpage.
 
@@ -86,13 +85,21 @@ def edit_database(request):
 
 
 @login_required
-def get_status_of_db(request):
-    databases = json.loads(access.get_request_from_api(endpoint=DATABASE_API_ENDPOINT_DATABASE_INFO))
+def get_status_of_db(request: HttpRequest) -> JsonResponse:
+    """Gets database info from backend and returns it as JSON
+
+    Args:
+        request (HttpRequest): The request object.
+
+    Returns:
+        JsonResponse: database info as JSON
+    """
+    databases = json.loads(access.get_request_from_api(endpoint=ENDPOINT_DATABASE_INFO))
     return JsonResponse(databases)
 
 
 @login_required
-def change_database(request):
+def change_database(request: HttpRequest) -> HttpResponse:
     """View the change database page on the adminpage. Note that there
     are two buttons. One is for rebuilding the database with chosen model.
     The other one is for selecting the displayed database.
@@ -107,26 +114,29 @@ def change_database(request):
 
     success = False
     if request.method == 'POST':
+        # Select which form was send
         if 'rebuild' in request.POST:
             model = request.POST['model']
             data = {'model': model}
-            status = access.post_request_to_api(endpoint = DATABASE_API_REBUILD_ENDPOINT, data=data)
+            status = access.post_request_to_api(endpoint=ENDPOINT_REBUILD,
+                                                data=data)
 
             if status == 200:
                 success = True
         elif 'select' in request.POST:
             database = request.POST['database_selector']
             data = {"new_database": database}
-            status = access.post_request_to_api(endpoint = DATABASE_CHANGE_DATABASE_ENDPOINT, data=data)
+            status = access.post_request_to_api(endpoint=ENDPOINT_CHANGE_DATABASE,
+                                                data=data)
 
-    databases = json.loads(access.get_request_from_api(endpoint = DATABASE_API_ENDPOINT_DATABASE_INFO))
+    databases = json.loads(access.get_request_from_api(endpoint=ENDPOINT_DATABASE_INFO))
 
     return render(request, 'change_database.html', {'success': success,
-                                            'databases': databases})
+                                                    'databases': databases})
 
 
 @login_required
-def scraper(request):
+def scraper(request: HttpRequest):
     """
     View for the scraper page on the adminpage.
 
@@ -140,7 +150,7 @@ def scraper(request):
 
 
 @login_required
-def playground(request):
+def playground(request: HttpRequest):
     """
     View for the playground on the adminpage.
 

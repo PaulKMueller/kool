@@ -52,13 +52,13 @@ def format_authors(raw_authors):
     return authors_formatted
 
 
-def format_abstract(abstract: str) -> str:
-    """Formats abstract for api request
+def format_for_api_request(text: str) -> str:
+    """Formats text for api request
 
     Args:
-        abstract (str): unformatted string
+        text (str): unformatted string
 
     Returns:
         str: formatted string
     """
-    return abstract.replace(old="/", new=" ")
+    return text.replace(old="/", new=" ")

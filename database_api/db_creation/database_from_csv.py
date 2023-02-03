@@ -157,7 +157,7 @@ def get_entries_from_row(row: pd.Series):
     Returns:
         tuple: tuple of the Values mentioned above
     """    
-    abstract_content = string_formatter.format_abstract(row.loc["Abstract"])
+    abstract_content = string_formatter.format_for_api_request(row.loc["Abstract"])
     abstract_title = row.loc["Title"]
     doctype = row.loc["Doc-Type"]
     authors = string_formatter.format_authors(row.loc["Authors"])
@@ -200,7 +200,7 @@ def add_competency_to_db(conn, competency: list, competency_ids: dict,
         conn, competency_name)
     # get category of competency from model_api
     category_id = get_request_from_api(
-        "/get_category_of_competency/" + competency_name)
+        "/get_category_of_competency/" + string_formatter.format_for_api_request(competency_name))
     adapter.insert_derived_from(conn, competency_ids[competency_name],
                                 abstract_id=abstract_id,
                                 relevancy=relevancy)

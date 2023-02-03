@@ -3,12 +3,14 @@
 
 import json
 from typing import Optional
+
 from django.shortcuts import render, redirect
-from result_page.models import Author
-import access
 from django.http import HttpRequest
 from django.http.response import HttpResponse as HttpResponse
 from django.contrib.auth.decorators import login_required
+
+from result_page.models import Author
+import access
 
 
 def get_author_by_competency_id(competency_id: int):

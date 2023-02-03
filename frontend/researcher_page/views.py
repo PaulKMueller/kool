@@ -2,16 +2,19 @@
 """
 
 from typing import Optional
+import json
+
 from django.shortcuts import render, redirect
-from researcher_page.models import Author, Abstract, Competency
-import access
 from django.http import HttpRequest
 from django.http.response import HttpResponse as HttpResponse
 from django.contrib.auth.decorators import login_required
-import json
+
+import access
+from researcher_page.models import Author, Abstract, Competency
 
 
 def researcher(request: HttpRequest, id: Optional[int] = None) -> HttpResponse:
+    # TODO: ein wenig mehr auslagern, methode kleiner machen
     """Renders the researcher page.
     When no authors are found, the user is informed in frontend.
 
@@ -85,11 +88,10 @@ def researcher(request: HttpRequest, id: Optional[int] = None) -> HttpResponse:
                                                competencies,
                                                'author': author,
                                                'all_authors': json.dumps(
-                                                        all_authors)}
-                  )
+                                                        all_authors)})
 
 
-def get_author_id(searchquery):
+def get_author_id(searchquery) -> int:
     """Returns the author id for a given searchquery
 
     Args:
@@ -118,7 +120,7 @@ def get_author_by_id(author_id):
                                        str(author_id))
 
 
-def get_competencies_of_author(author_id):
+def get_competencies_of_author(author_id) -> list:
     """Return the competencies of the author with the author id
 
     Args:
@@ -131,7 +133,7 @@ def get_competencies_of_author(author_id):
                     "/competencies_by_author_id/" + str(author_id))
 
 
-def get_relevant_abstract_ids(competency_id, author_id):
+def get_relevant_abstract_ids(competency_id, author_id) -> list:
     """Returns the relevant abstract ids
     of abstracts by the author with a given relevancy.
 
@@ -147,7 +149,7 @@ def get_relevant_abstract_ids(competency_id, author_id):
                     str(competency_id) + "/" + str(author_id))
 
 
-def get_ranking_score(author_id, competency_id):
+def get_ranking_score(author_id, competency_id) -> int:
     """returns the ranking soce of the author and
     the competency.
 
@@ -163,7 +165,7 @@ def get_ranking_score(author_id, competency_id):
                                        str(competency_id))
 
 
-def get_abstract_by_id(abstract_id):
+def get_abstract_by_id(abstract_id) -> list:
     """Returns the abstracts properties of the abstract
     with the given id.
 
@@ -177,7 +179,7 @@ def get_abstract_by_id(abstract_id):
                                        str(abstract_id))
 
 
-def sort_competencies(competencies: list):
+def sort_competencies(competencies: list) -> list:
     """Sorts the list of competencies by the ranking of the competencies.
 
     Args:

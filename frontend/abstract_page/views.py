@@ -1,12 +1,11 @@
+from typing import Optional
+
 from django.shortcuts import render
-import requests
-from abstract_page.models import Abstract, Author, Competency
 from django.http import HttpRequest
 from django.http.response import HttpResponse as HttpResponse
-import json
-# Create your views here.
+
+from abstract_page.models import Abstract, Author, Competency
 import access
-from typing import Optional
 
 
 def abstract_page(request: HttpRequest, id: int, auth_id: Optional[int] = None) -> HttpResponse:
