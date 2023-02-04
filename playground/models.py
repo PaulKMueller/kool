@@ -158,7 +158,8 @@ def ask_galactica(abstract: str, max_length_output: int = 512,
     return competency_list
 
 
-def ask_xlnet(abstract: str, question: str = "What keyword is mentioned in the abstract?"):
+def ask_xlnet(abstract: str,
+              question: str = "What keyword is mentioned in the abstract?"):
     """Generates an answer to the question "What competency is mentioned in
     the abstract?" using XLNet.
 
@@ -181,7 +182,14 @@ def ask_xlnet(abstract: str, question: str = "What keyword is mentioned in the a
     return answer
 
 
-def ask_bloom(abstract: str, method: int, max_length_competencies: int = 4, min_length_competencies: int = 1):
+def ask_bloom(abstract: str,
+              method: int,
+              max_length_output: int = 512,
+              max_length_competencies: int = 4,
+              min_length_competencies: int = 1,
+              model_version: str = "bigscience/bloom-560m"
+
+              ):
     """Generates an answer to the question "What competency is mentioned in
     the abstract?" using Bloom. A method can be chosen to generate the
     answer. The methods are: 0: Greedy Search, 1: Beam Search, 2: Sampling
@@ -189,11 +197,21 @@ def ask_bloom(abstract: str, method: int, max_length_competencies: int = 4, min_
     Args:
         abstract (str): An abstract in text format
         method (int): The method to use for generating the answer
+        max_length_competencies (int): Maximum number of words
+                                       in a competency.
+        min_length_competencies (int): Minimum number of words
+                                       in a competency.
+        max_length_output (int): Maximum length in tokens of the
+                                    generated text (including prompt).
+        model_version (str): The version of the model to use.
+
+    Returns:
+        list: [(competency, score), ...]
     """
-    model = BloomForCausalLM.from_pretrained("bigscience/bloom-560m")
-    tokenizer = BloomTokenizerFast.from_pretrained("bigscience/bloom-560m")
+    model = BloomForCausalLM.from_pretrained(model_version)
+    tokenizer = BloomTokenizerFast.from_pretrained(
+        model_version)
     prompt = f"Extract keywords from the following abstract: {abstract} \n\n Keywords:"
-    result_length = 512
     inputs = tokenizer(prompt, return_tensors="pt")
 
     result = ""
@@ -201,21 +219,21 @@ def ask_bloom(abstract: str, method: int, max_length_competencies: int = 4, min_
     if method == 0:
         # Greedy Search
         result = tokenizer.decode(model.generate(inputs["input_ids"],
-                                max_length=result_length)[0])
+                                  max_length=max_length_output)[0])
     elif method == 1:
         # Beam Search
         result = tokenizer.decode(model.generate(inputs["input_ids"],
-                                max_length=result_length,
-                                num_beams=2,
-                                no_repeat_ngram_size=2,
-                                early_stopping=True)[0])
+                                  max_length=max_length_output,
+                                  num_beams=2,
+                                  no_repeat_ngram_size=2,
+                                  early_stopping=True)[0])
     elif method == 2:
         # Sampling Top-k + Top-p
         result = tokenizer.decode(model.generate(inputs["input_ids"],
-                                               max_length=result_length,
-                                               do_sample=True,
-                                               top_k=50,
-                                               top_p=0.9)[0])
+                                                 max_length=max_length_output,
+                                                 do_sample=True,
+                                                 top_k=50,
+                                                 top_p=0.9)[0])
 
     # Reomve prompt from result
     result = result.replace(prompt, "")
@@ -250,12 +268,17 @@ def ask_bloom(abstract: str, method: int, max_length_competencies: int = 4, min_
 
 
 def ask_keybert(abstract: str, use_mmr: bool = True,
-                diversity: float = 0.5, keyphrase_ngram_range: tuple = (1, 2),
+                diversity: float = 0.5,
+                keyphrase_ngram_range: tuple = (1, 2),
                 minimum_relevancy: float = 0.4):
     """Extracts keywords from an abstract using KeyBert.
 
     Args:
         abstract (str): A scientific abstract in text format
+        use_mmr (bool): Whether to use MMR to filter keywords
+        diversity (float): The diversity of the keywords
+        keyphrase_ngram_range (tuple): The range of ngrams to use
+        minimum_relevancy (float): The minimum relevancy of a keyword
 
     Returns:
         list: [[keyword, relevancy], [keyword, relevancy], ...]

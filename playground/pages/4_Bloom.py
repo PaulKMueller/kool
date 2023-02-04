@@ -2,32 +2,11 @@
 The playground is used to test the model_api and the database_api.
 """
 
-import os
-import requests
 import streamlit as st
 from pandas import DataFrame
 import seaborn as sns
 from download_button import download
 from models import ask_bloom
-
-ENVIRONMENT_VARIABLE_MODEL_API_PORT = "MODEL_API_PORT"
-MODEL_API_PORT = os.environ.get(ENVIRONMENT_VARIABLE_MODEL_API_PORT)
-
-URL_OF_MODEL_API = "http://model_api:" + MODEL_API_PORT
-
-
-def get_request_from_api(endpoint):
-    """ This function sends a get request to the
-    model_api and returns the response as json
-
-    Args:
-        endpoint (str): The endpoint of the model_api
-
-    Returns:
-        json: The response of the model_api
-    """
-    response = requests.get(URL_OF_MODEL_API + endpoint)
-    return response.json()
 
 
 st.set_page_config(
@@ -82,14 +61,47 @@ with st.form(key="my_form"):
     ce, c1, c2, c3 = st.columns([0.07, 2, 5, 0.07])
     with c1:
         ModelType = st.radio(
-            "Your model",
-            ["Bloom",],
+            "Your model:",
+            ["Bloom"],
             help=("This is your chosen model."),
+        )
+
+        max_length_output = st.selectbox(
+            "Max length of the output:",
+            [512, 64, 128, 256, 1024, 2048, 4096],
+            help=("This is the maximum length of the output."),
+        )
+
+        min_length_competencies = st.slider(
+            "Min length of the generated competencies:",
+            min_value=1,
+            max_value=5,
+            value=1,
+            help=("This is the minimum length of the generated competencies."),
+        )
+
+        max_length_competencies = st.slider(
+            "Max length of the generated competencies:",
+            min_value=1,
+            max_value=5,
+            value=4,
+            help=("This is the maximum length of the generated competencies."),
+        )
+
+        model_version = st.selectbox(
+            "Model version:",
+            ["bigscience/bloom-560m",
+             "bigscience/bloom-1.1b",
+             "bigscience/bloom-1.7b",
+             "bigscience/bloom-3b",
+             "bigscience/bloom-7b1",
+             "bigscience/bloom"],
+            help=("This is the version of the model."),
         )
 
     with c2:
         doc = st.text_area(
-            "Paste your text below (max 1000 words)",
+            "Paste your text below (max 1000 words):",
             height=510,
         )
 
@@ -115,7 +127,10 @@ if not submit_button:
 
 keywords = []
 if ModelType == "Bloom":
-    keywords = ask_bloom(abstract=doc, method=0)
+    keywords = ask_bloom(abstract=doc, method=0, model_version=model_version,
+                         max_length_output=max_length_output,
+                         min_length_competencies=min_length_competencies,
+                         max_length_competencies=max_length_competencies)
 
 st.markdown("## **🔎 Check & download results **")
 

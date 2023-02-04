@@ -50,6 +50,8 @@ with st.expander("ℹ️ - About this interface", expanded=True):
             "On this site you can experiment with different parametrizations"
             " of the model "
             "[Galactica](https://github.com/paperswithcode/galai)."
+            " Galactica is a language model trained on a large corpus of "
+            "scientific literature."
             " For further information about this model see the "
             "[original paper](https://galactica.org/static/paper.pdf) "
             " by the [Galactica team](https://galactica.org/).")

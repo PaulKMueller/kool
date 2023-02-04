@@ -51,7 +51,11 @@ with st.expander("ℹ️ - About this interface", expanded=True):
             "leverages multiple NLP embeddings and relies on "
             "[Transformers](https://huggingface.co/transformers/) 🤗 "
             "to extract competencies "
-            "that are most similar to a document.")
+            "that are most similar to a document.\n\n"
+            "To learn more about the model, take a look at the "
+            "[original paper](https://arxiv.org/abs/1906.08237).\n\n"
+            "Its implementation in this playground is aimed at "
+            "question answering.")
     )
 
     st.markdown("")
