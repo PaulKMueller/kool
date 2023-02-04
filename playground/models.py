@@ -181,7 +181,7 @@ def ask_xlnet(abstract: str, question: str = "What keyword is mentioned in the a
     return answer
 
 
-def ask_bloom(abstract: str, method: int):
+def ask_bloom(abstract: str, method: int, max_length_competencies: int = 4, min_length_competencies: int = 1):
     """Generates an answer to the question "What competency is mentioned in
     the abstract?" using Bloom. A method can be chosen to generate the
     answer. The methods are: 0: Greedy Search, 1: Beam Search, 2: Sampling
@@ -192,29 +192,61 @@ def ask_bloom(abstract: str, method: int):
     """
     model = BloomForCausalLM.from_pretrained("bigscience/bloom-560m")
     tokenizer = BloomTokenizerFast.from_pretrained("bigscience/bloom-560m")
-    question = "What competency is mentioned in the abstract?"
-    prompt = abstract + question
-    result_length = 50
+    prompt = f"Extract keywords from the following abstract: {abstract} \n\n Keywords:"
+    result_length = 512
     inputs = tokenizer(prompt, return_tensors="pt")
+
+    result = ""
 
     if method == 0:
         # Greedy Search
-        return tokenizer.decode(model.generate(inputs["input_ids"],
+        result = tokenizer.decode(model.generate(inputs["input_ids"],
                                 max_length=result_length)[0])
     elif method == 1:
         # Beam Search
-        return tokenizer.decode(model.generate(inputs["input_ids"],
+        result = tokenizer.decode(model.generate(inputs["input_ids"],
                                 max_length=result_length,
                                 num_beams=2,
                                 no_repeat_ngram_size=2,
                                 early_stopping=True)[0])
     elif method == 2:
         # Sampling Top-k + Top-p
-        return tokenizer.decode(model.generate(inputs["input_ids"],
+        result = tokenizer.decode(model.generate(inputs["input_ids"],
                                                max_length=result_length,
                                                do_sample=True,
                                                top_k=50,
                                                top_p=0.9)[0])
+
+    # Reomve prompt from result
+    result = result.replace(prompt, "")
+
+    # Split into single competencies
+    competency_list = result.split(',')
+
+    # Remove duplicates
+    competency_list = list(dict.fromkeys(competency_list))
+
+    # Remove empty strings
+    competency_list = list(filter(None, competency_list))
+
+    # Lowercase all competencies
+    competency_list = [competency.lower() for competency in competency_list]
+
+    # Remove all competencies with less than min_length_competencies words
+    competency_list = list(filter(
+        lambda x: len(x.split()) >= min_length_competencies,
+        competency_list))
+
+    # Remove all competencies with more than max_length_competencies words
+    competency_list = list(filter(
+        lambda x: len(x.split()) <= max_length_competencies,
+        competency_list))
+
+    # Set the score of each competency to -1 (default relevancy
+    # for all models that do not calculate relevancy)
+    competency_list = [(competency, -1) for competency in competency_list]
+
+    return competency_list
 
 
 def ask_keybert(abstract: str, use_mmr: bool = True,
