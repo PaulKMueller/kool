@@ -5,7 +5,7 @@
 import os
 import pandas as pd
 
-from langdetect import 
+from langdetect import detect
 import requests
 
 from db_creation.model_endpoint import ENDPOINT

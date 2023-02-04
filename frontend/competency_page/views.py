@@ -8,12 +8,9 @@ from competency_page.models import Category
 import access
 
 
-def get_categories(request: HttpRequest) -> list:
+def get_categories() -> list:
     """Gets all categories from backend and builds objects containing
     corresponding images and links
-
-    Args:
-        request (HttpRequest): The request object.
 
     Returns:
         list: List of all categories
