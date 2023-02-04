@@ -22,7 +22,7 @@ services:
       - '.env'
     environment:
       - PATH_TO_DB=databases/database.db
-      - PATH_TO_CSV=db_creation/csv_files/base.csv
+      - PATH_TO_CSV=db_creation/csv_files/current.csv
     restart: unless-stopped
 
     volumes:

@@ -197,3 +197,16 @@ body {
 .scrollbar-primary {
     scrollbar-color: #9EC4D5 #F5F5F5;
 }
+
+.searchbarcategory {
+    bottom: -35px;
+    left: 5%;
+    position: absolute;
+    width: 30%;
+    height: 75px;
+    border: 1px black;
+    border-style: solid;
+    align-items: center;
+    display: flex;
+    border-radius: 10px;
+}

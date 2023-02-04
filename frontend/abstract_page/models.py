@@ -1,3 +1,7 @@
+"""Defines the models used in the abstract page.
+"""
+
+
 class Abstract:
     """Represents an abstract"""
     def __init__(self, id: int, year: int, title: str, content: str,

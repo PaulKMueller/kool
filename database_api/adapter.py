@@ -2,9 +2,10 @@
 Provides functionality to interact with the database.
 """
 
+import os
+
 import sqlite3
 from sqlite3 import Error
-import os
 import numpy as np
 
 
@@ -241,15 +242,13 @@ def get_first_available_abstract_id(conn) -> int:
 
     Returns:
         int: next abstract id
-    """    
+    """
     sql_get_highest_abstract_id = """SELECT MAX(abstract_id)
                                      FROM abstract
                                   """
     cursor = conn.cursor()
     cursor.execute(sql_get_highest_abstract_id)
     highest_abstract_id = cursor.fetchone()
-    print("HIGHEST ABSTRACT ID")
-    print(highest_abstract_id)
     if highest_abstract_id[0] is None:
         highest_abstract_id = 0
     else:
@@ -320,7 +319,7 @@ def get_competency_name_by_id(conn, competency_id) -> str:
     Returns:
         str: Name of the competency
     """
-    sql_get_competency_id = """SELECT competency_name 
+    sql_get_competency_id = """SELECT competency_name
                             FROM competency
                             WHERE competency_id = ?"""
     cursor = conn.cursor()
@@ -722,8 +721,6 @@ def change_status(conn, author_id: int, competency_id: int,
         conn (Connection): Connection to the database
         author_id: author where it should be changed
         competency_id: for which competency the status should be changed
-        
-    
     """
     sql_change_status = """ UPDATE has_competency
                             SET status = ?
@@ -751,9 +748,9 @@ def get_author_id_by_full_name(conn, full_name: str) -> int:
         int: Id of the author
     """
     sql_get_author_id_by_full_name = """SELECT author_id
-                           FROM author
-                           WHERE first_name || ' ' || last_name = 
-                           '{}'""".format(full_name)
+                                        FROM author
+                                        WHERE first_name || ' ' || last_name = 
+                                        '{}'""".format(full_name)
     cursor = conn.cursor()
     cursor.execute(sql_get_author_id_by_full_name)
     result = cursor.fetchone()
