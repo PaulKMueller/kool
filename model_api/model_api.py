@@ -5,7 +5,7 @@ to extract competencies from abstracts.
 
 import uvicorn
 from fastapi import FastAPI
-from models import (answer_abstract_question, summarize, get_mock_competency,
+from models import (ask_pegasus, get_mock_competency,
                     ask_galactica, ask_xlnet, ask_bloom, ask_keybert,
                     get_competency_from_backend, ask_gpt_neo, get_category_of_competency)
 
@@ -15,7 +15,7 @@ app = FastAPI()
 
 @app.get("/")
 async def root():
-    """Root endpoint
+    """Root endpoint.
 
     Returns:
         json: Welcome message
@@ -53,7 +53,7 @@ def get_category(competency: str):
 
 
 @app.get("/ask_gpt_neo/{abstract}")
-async def get_competencies_from_abstract(abstract: str):
+async def gpt_neo(abstract: str):
     """Returns a list of competencies from an abstract using gpt-neo-2.7B
 
     Args:
@@ -66,28 +66,18 @@ async def get_competencies_from_abstract(abstract: str):
     return ask_gpt_neo(abstract)
 
 
-@app.get("/question_answering/{abstract}")
-async def get_competencies_from_test_abstract(abstract: str):
-    """This endpoint is used to test the question answering model.
-    Its output is saved in test_out.
-    """
-
-    return answer_abstract_question(abstract)
-
-
-@app.get("/summarize/{abstract}")
-async def test_summarizatino(abstract: str):
-    """Extracts competencies from the abstracts in test_in/data.xlsx
-    using summarization model and saves the output in test_out/output.xlsx
+@app.get("/ask_pegasus/{abstract}")
+async def pegasus(abstract: str):
+    """Summarizes a given abstract.
 
     Returns:
         string: Response from the model
     """
-    return summarize(abstract)
+    return ask_pegasus(abstract)
 
 
 @app.get("/get_mock_competency/")
-async def get_mock_competences():
+async def get_mock_competencies():
     """Used create a mock output for the frontend.
 
     Returns:
@@ -109,7 +99,7 @@ async def galactica(abstract: str):
 
 @app.get("/ask_xlnet/{abstract}")
 async def xlnet(abstract: str):
-    """Tests xlnet model's response to a prompt trying to extract competencies
+    """Xlnet's response to a prompt trying to extract competencies
     from an abstract.
 
     Returns:
@@ -118,23 +108,21 @@ async def xlnet(abstract: str):
     return ask_xlnet(abstract)
 
 
-@app.get("/ask_bloom/{abstract}/{method}")
-async def bloom(abstract: str, method: int = 0):
-    """Tests bloom model's response to a prompt trying to extract competencies
+@app.get("/ask_bloom/{abstract}")
+async def bloom(abstract: str):
+    """Bloom's response to a prompt trying to extract competencies
     from an abstract using the given method (default: 0).
 
-    Args:
-        method (int): The method used internally by the model to generate
-        text. 0 for greedy, 1 for beam search, 2 for top-k sampling.
+    abstract (string): Text of the abstract from which competencies are extracted.
 
     Returns:
         string: The model's response to the prompt.
     """
-    return ask_bloom(abstract, int(method))
+    return ask_bloom(abstract)
 
 
 @app.get("/ask_keybert/{abstract}")
-async def get_keybert_answer(abstract: str):
+async def keybert(abstract: str):
     """Tests keybert model's response to a prompt trying
     to extract competencies from an abstract.
 

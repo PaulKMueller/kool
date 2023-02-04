@@ -53,27 +53,8 @@ def get_competency_from_backend(abstract: str):
     return filtered_keywords
 
 
-def answer_abstract_question(abstract: str):
-    """Answers the question "What is the most meaningful word in the text?"
-    for a given abstract.
-
-    Args:
-        abstract (str): A scienfific abstract in text format
-
-    Returns:
-        json: The answer and the confidence of the model
-    """
-    context = abstract
-    question = "What skill is mentioned in the text?"
-    qa_model = pipeline("question-answering")
-    answer = qa_model(question=question,
-                      context=context, max_answer_length=5)
-
-    return {"answer": answer["answer"], "confidence": answer["score"]}
-
-
-def summarize(abstract: str):
-    """Summarizes a given abstract
+def ask_pegasus(abstract: str):
+    """Summarizes a given abstract.
 
     Args:
         abstract (str): A scientific abstract in text format
