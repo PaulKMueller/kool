@@ -26,17 +26,23 @@
                     <i class="small material-icons" style="margin-left: 3%">account_circle</i>
                     <div class="resulttext col">
                     <p>
+                            <a class="waves-effect btn-flat" style="margin-bottom: 2%; font-size:90%;text-transform:capitalize;" href="/researcher/{{ author_id }}">{{author.first_name}} {{ author.last_name }}</a>
 
-                            <a href="/researcher/{{ author_id }}">{{author.first_name}} {{ author.last_name }}</a> 
-                            
                             {% if author.competency_status == 'Validated' %}
                             <img src="/static/images/verified.png" width="24px" height="24px">
                             {% endif %}
                     </p>
                     </div>
-                    <div class="rankingbar">
-                        <div class="indicator" style="left: calc({{author.ranking}} * 100%);"></div>
-                    </div>    
+                    {% if author.ranking >= 0 %}
+                        {% if author.ranking <= 1 %} 
+                        <div class="rankingbar">
+                            <div class="indicator" style="left: calc({{author.ranking}} * 100%);"></div>
+                            <div class="tooltip">The ranking is calculated based on the average relevancy given by the ML model plus a bonus for multiple occurences. Ranking: {{author.ranking}}
+                            </div>
+                        </div>
+                        {%endif%}
+                    {%endif%}
+                    
                     {% if user.is_authenticated %}
                     <div class="col" style="width: 130px">
                         <div class="row">
@@ -45,21 +51,21 @@
                                 <input type="hidden" name ="author_id" value="{{ author_id }}">
                                 <input type="hidden" name ="competency_id" value="{{ competency_id }}">
                                 <input type="hidden" name ="new_status" value="Hidden">
-                                <button type="submit" class="material-icons status-button {% if author.competency_status == 'Hidden' %}clicked #e0e0e0 red lighten-2 roundedcorners{% endif %}">visibility_off</button>
+                                <button type="submit" class="material-icons status-button transparent {% if author.competency_status == 'Hidden' %}clicked #e0e0e0 red lighten-2 roundedcorners{% endif %}">visibility_off</button>
                             </form>
                             <form action="{% url 'change_status' %}" method="post">
                                 {% csrf_token %}
                                 <input type="hidden" name ="author_id" value="{{ author_id }}">
                                 <input type="hidden" name ="competency_id" value="{{ competency_id }}">
                                 <input type="hidden" name ="new_status" value="Unvalidated">
-                                <button type="submit" class="material-icons status-button {% if author.competency_status == 'Unvalidated' %}clicked #e0e0e0 grey lighten-2 roundedcorners{% endif %}">visibility</button>
+                                <button type="submit" class="material-icons status-button transparent {% if author.competency_status == 'Unvalidated' %}clicked #e0e0e0 grey lighten-2 roundedcorners{% endif %}">visibility</button>
                             </form>
                             <form action="{% url 'change_status' %}" method="post">
                                 {% csrf_token %}
                                 <input type="hidden" name ="author_id" value="{{ author_id }}">
                                 <input type="hidden" name ="competency_id" value="{{ competency_id }}">
                                 <input type="hidden" name ="new_status" value="Validated">
-                                <button type="submit" class="material-icons status-button {% if author.competency_status == 'Validated' %}clicked #e0e0e0 green lighten-2 roundedcorners{% endif %}">check</button>
+                                <button type="submit" class="material-icons status-button transparent {% if author.competency_status == 'Validated' %}clicked #e0e0e0 green lighten-2 roundedcorners{% endif %}">check</button>
                             </form>
                         </div>
                     </div>

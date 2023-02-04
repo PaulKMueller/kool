@@ -22,8 +22,10 @@ def get_request_from_api(endpoint):
     response = requests.get(MAIN_URL + endpoint)
     return response.json()
 
+
 def post_request_to_api(endpoint, data):
-    """Makes HTTP POST Request to database API, mostly used for (re)building data
+    """Makes HTTP POST Request to database API,
+    mostly used for (re)building data
 
     Args:
         endpoint (str): Endpoint
@@ -32,6 +34,6 @@ def post_request_to_api(endpoint, data):
     Returns:
         int: status code
     """
-    
+
     response = requests.post(MAIN_URL + endpoint, json=data)
     return response.status_code

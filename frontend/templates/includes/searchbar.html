@@ -1,10 +1,16 @@
-<form  id="searchbar" style="flex: 100" method="get" action="/results">
-    <div class="input-field" style="position: relative">
-    <!-- todo: start input left & autofill -->
-        <input name="q" class="autocomplete" placeholder="Search Competences" id="search" type="search" style="width: 65%; margin: 0">
-        <label class="label-icon" for="search" style="left: auto; right: 0; width: auto, margin-left: 0; margin-right: 5%">
-            <i class="material-icons">search</i>
-        </label>
+<form id="searchbar" style="flex: 100" method="get" action="/results">
+    <div style="display: flex; align-items: center;">
+        <img src="/static/images/LightBulb.png" width="24px" height="24px" style="margin-left: 5%;">
+        <div class="input-field" style="position: relative; width: 65%;margin-left: 5%;" onchange="search_allowed()">
+            <input name="q" placeholder="Search Competency" id="search-input"
+                          id="auto" type="text" class="autocomplete" 
+                          style="width: 100%; margin: 0;">
+        </div>
+            <label for="auto" class="label-icon" for="search" style="margin-left: 5%;margin-top: 1%;" type="submit" name="action">
+                <button class="transparent" id="searchbutton" disabled style="border: none" type="submit">
+                    <i class="material-icons">search</i>
+                </button>
+            </label>
     </div>
 </form>
 <script>  
@@ -24,4 +30,12 @@
         }
         var instances = M.Autocomplete.init(elems, options);
     });
+
+    function search_allowed() {
+       if(document.getElementById("search-input").value=="") { 
+              document.getElementById('searchbutton').disabled = true; 
+          } else { 
+              document.getElementById('searchbutton').disabled = false;
+          }
+      }
 </script>

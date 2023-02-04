@@ -2,9 +2,10 @@
 Provides functionality to interact with the database.
 """
 
+import os
+
 import sqlite3
 from sqlite3 import Error
-import os
 import numpy as np
 
 
@@ -14,14 +15,24 @@ PATH_TO_DB = os.environ.get('PATH_TO_DB')
 
 def create_connection():
     """Creates a connection to the database or creates a
-    new database if it does not existent
+    new database if it does not exist using the default path
+
+    Returns:
+        Connection: Connection to database
+    """
+    return create_connection_to(path_to_db=PATH_TO_DB)
+
+
+def create_connection_to(path_to_db: str):
+    """Creates a connection to the database or creates a
+    new database if it does not exist
 
     Returns:
         Connection: Connection to database
     """
     conn = None
     try:
-        conn = sqlite3.connect(PATH_TO_DB)
+        conn = sqlite3.connect(path_to_db)
     except Error as error:
         print(error)
 
@@ -113,7 +124,7 @@ def insert_has_category(conn, category_id: int, competency_id: int):
         category_id (int): Id of the category
         competency_id (int): Id of the competency
     """
-    sql_command = """INSERT INTO has_category(category_id, competency_id)
+    sql_command = """INSERT OR IGNORE INTO has_category(category_id, competency_id)
                     VALUES(?,?)"""
     cursor = conn.cursor()
     cursor.execute(sql_command, (category_id, competency_id))
@@ -231,14 +242,14 @@ def get_first_available_abstract_id(conn) -> int:
 
     Returns:
         int: next abstract id
-    """    
+    """
     sql_get_highest_abstract_id = """SELECT MAX(abstract_id)
                                      FROM abstract
                                   """
     cursor = conn.cursor()
     cursor.execute(sql_get_highest_abstract_id)
     highest_abstract_id = cursor.fetchone()
-    if highest_abstract_id is None:
+    if highest_abstract_id[0] is None:
         highest_abstract_id = 0
     else:
         highest_abstract_id = highest_abstract_id[0]
@@ -270,8 +281,8 @@ def get_or_generate_competency_id_by_name(conn, competency_name: str) -> int:
         # competency not in db -> needs to be created
         competency_id = cursor.execute(sql_insert_competency,
                                        (competency_name,)).lastrowid
+        print("Wurde hinzugefügt mit id" + str(competency_id))
     else:
-
         competency_id = result[0]
 
     conn.commit()
@@ -308,7 +319,7 @@ def get_competency_name_by_id(conn, competency_id) -> str:
     Returns:
         str: Name of the competency
     """
-    sql_get_competency_id = """SELECT competency_name 
+    sql_get_competency_id = """SELECT competency_name
                             FROM competency
                             WHERE competency_id = ?"""
     cursor = conn.cursor()
@@ -611,7 +622,7 @@ def get_ranking_score(conn, author_id, competency_id) -> int:
     Returns:
         _type_: _description_
     """
-    FAILURE_DEFAULT = 0
+    FAILURE_DEFAULT = -1
     sql_get_relevancies = """SELECT relevancy
                              FROM derived_from df JOIN
                              written_by wb ON df.abstract_id = wb.abstract_id
@@ -619,22 +630,26 @@ def get_ranking_score(conn, author_id, competency_id) -> int:
                              author_id = ?
                             """
     cursor = conn.cursor()
+    # getting all relevancies of the author and competency from the ML model
     cursor.execute(sql_get_relevancies, (competency_id, author_id))
     relevancies = cursor.fetchall()
     if relevancies is None or -1 in relevancies:    # no relevancies or dummy relevancies
         return FAILURE_DEFAULT
     conn.commit()
 
+    # getting the author name from the database
     author_first_name, author_last_name = get_author_name(conn, author_id)
     if author_first_name is None and author_last_name is None:
         return FAILURE_DEFAULT
 
+    # getting all abstracts by the author
     abstracts_by_author = get_abstracts_by_author(conn, author_first_name,
                                                   author_last_name)
     if abstracts_by_author == 'There are no abstracts from this author.':
         return FAILURE_DEFAULT
-    total_abstracts = len(abstracts_by_author)
+    total_abstracts = len(abstracts_by_author)  # amount of abstracts
 
+    # getting the abstracts of the author that show the competency
     abstracts_with_competency = get_abstracts_with_competency(conn,
                                                               competency_id,
                                                               author_id)
@@ -653,6 +668,7 @@ def get_ranking_score(conn, author_id, competency_id) -> int:
 
     # calculation of relevancy: relevancy mean plus bonus for proportion with the competency
     ranking_score = mean_relevancy + bonus
+    ranking_score = round(ranking_score*100) / 100
 
     return ranking_score
 
@@ -709,8 +725,6 @@ def change_status(conn, author_id: int, competency_id: int,
         conn (Connection): Connection to the database
         author_id: author where it should be changed
         competency_id: for which competency the status should be changed
-        
-    
     """
     sql_change_status = """ UPDATE has_competency
                             SET status = ?
@@ -738,9 +752,9 @@ def get_author_id_by_full_name(conn, full_name: str) -> int:
         int: Id of the author
     """
     sql_get_author_id_by_full_name = """SELECT author_id
-                           FROM author
-                           WHERE first_name || ' ' || last_name = 
-                           '{}'""".format(full_name)
+                                        FROM author
+                                        WHERE first_name || ' ' || last_name = 
+                                        '{}'""".format(full_name)
     cursor = conn.cursor()
     cursor.execute(sql_get_author_id_by_full_name)
     result = cursor.fetchone()

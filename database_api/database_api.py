@@ -3,10 +3,21 @@ This is the backend's database_api. It contains the endpoints
 to access the database.
 """
 
-from fastapi import FastAPI, File, UploadFile, HTTPException, Form
+import time
+import shutil
+import json
+import os
+
+from fastapi import FastAPI, BackgroundTasks
 from pydantic import BaseModel
+
 import adapter
 from db_creation import database_from_csv
+from db_creation import create_db
+from databases import database_info_handler
+
+
+PATH_TO_DB = os.environ.get("PATH_TO_DB")
 
 app = FastAPI()
 
@@ -243,21 +254,107 @@ async def get_authors():
     return response
 
 
+class Model(BaseModel):
+    """Contains string with model
 
-@app.get("/rebuild")
-async def rebuild():
-    """Endpoint for rebuilding database with old data
-    
+    Args:
+        BaseModel (BaseModel): pydantic basemodel
     """
-    database_from_csv.build()
+    model: str
+
+
+@app.post("/rebuild")
+async def rebuild(model: Model, background_tasks: BackgroundTasks) -> str:
+    """Endpoint for rebuilding database with old data. Creates new
+    database with model and timestamp as identification
+
+    Args:
+        model (Model): model used for retrieving competencies
+        background_tasks (BackgroundTasks): allow to return without waiting
+                                            for task to finish
+
+    Returns:
+        str: returns success to confirm process started
+    """
+    ts = time.gmtime()
+    ts_readable = time.strftime("%Y-%m-%d-%H-%M-%S", ts)
+    db_name = "database-" + model.model + "-" + ts_readable + ".db"
+    path_to_db = "databases/" + db_name
+
+    database_info_handler.safe_new_database_info(db_name=db_name, 
+                                                 path_to_db=path_to_db,
+                                                 model=model.model,
+                                                 generated=ts_readable,
+                                                 is_running="True")
+
+    # create new db with tables
+    create_db.create_database(path_to_db=path_to_db)
+
+    background_tasks.add_task(database_from_csv.build, model=model.model,
+                              path_to_db=path_to_db)
     return "[success]"
 
+
+class Database(BaseModel):
+    """Contains string with active database
+
+    Args:
+        BaseModel (BaseModel): pydantic basemodel
+    """
+    new_database: str
+
+
+@app.post("/change_active_database")
+async def change_active_database(new_database: Database) -> str:
+    """Endpoint to change the active database. Copies new databse in
+    path where other App components expect database. Changes status
+    to active in database_info.json too.
+
+    Args:
+        new_database (Database): name of new database to which should be active
+
+    Returns:
+        str: returns success to confirm database changes
+    """
+    with open("databases/database_info.json", "r", encoding="utf-8") as f:
+        dict = json.load(f)
+
+    new_active_db_name = new_database.new_database
+
+    path_to_new_db = dict[new_active_db_name]['path']
+    shutil.copyfile(path_to_new_db, PATH_TO_DB)
+
+    currently_active_db_name = database_info_handler.get_active_db_name()
+
+    database_info_handler.change_db_active_status(database_name=currently_active_db_name,
+                                                  new_status="False")
+    database_info_handler.change_db_active_status(database_name=new_active_db_name,
+                                                  new_status="True")
+    return "[success]"
+
+
+@app.get("/get_database_info")
+async def get_database_info() -> str:
+    """returns database info as json string
+
+    Returns:
+        str: string of json file containing database info
+    """
+    return database_info_handler.get_database_info()
+
+
 class Data(BaseModel):
+    """Contains string with model and with file content
+
+    Args:
+        BaseModel (BaseModel): pydantic basemodel
+    """
     model: str
     file: str
 
+
 @app.post("/add_entries/")
-async def add_entries(data: Data):
+async def add_entries(data: Data) -> str:
     """Endpoint for rebuilding database with new data
 
     Args:
@@ -267,19 +364,20 @@ async def add_entries(data: Data):
         HTTPException: if file is not csv format
 
     Returns:
-        _type_: _description_
-    """ 
+        str: success message
+    """
     f = open("db_creation/csv_files/last_added.csv", "w")
     f.write(data.file)
     f.close()
-    database_from_csv.fill_database_from_added_entries()
+    database_from_csv.fill_database_from_added_entries(model=data.model)
     return "[success]"
 
 
 @app.get("/change_status/{author_id}/{competency_id}/{competency_status}")
 async def change_status(author_id, competency_id, competency_status):
     conn = adapter.create_connection()
-    response = adapter.change_status(conn, author_id, competency_id, competency_status)
+    response = adapter.change_status(conn, author_id, competency_id,
+                                     competency_status)
     conn.close()
     return response
 

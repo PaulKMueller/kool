@@ -1,7 +1,7 @@
-"""This file contains the functions to create the database.
-"""
+"""This file contains the functions to create the database."""
 
 from sqlite3 import Error
+
 import adapter
 
 # All available categories
@@ -117,10 +117,13 @@ def create_table(conn, sql_command: str):
         print(error)
 
 
-def create_database():
+def create_database(path_to_db: str):
     """Creates the database and all tables specified in sql_commands.
+
+    Args:
+        path_to_db: Path where database should be created
     """
-    conn = adapter.create_connection()
+    conn = adapter.create_connection_to(path_to_db)
 
     if conn is not None:
         for sql_command in sql_commands:

@@ -4,7 +4,8 @@ from django.db import models
 
 
 class Category:
-
+    """Represents a Category
+    """
     id: int
     name: str
     link: str

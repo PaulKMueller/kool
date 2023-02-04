@@ -4,13 +4,13 @@
 {% block main_content %}
 
 {% include 'includes/navbar_admin.html' %}
-<div class="container transparent" style="padding-top: 100px;">
+<div class="container transparent" style="padding-top: 100px; width: 75%">
     
        <h3>Scrape entries from KIT Open</h3>
        
        <p class="flow-text" style="text-align: justify">
         Our Scraper is Python code that uses the <i>Selenium web scraping library</i> to scrape 
-        publications from the KIT Open website (https://primo.bibliothek.kit.edu/primo-explore/search?tab=kit_evastar&sortby=date&vid=KIT).
+        publications from the <a href="https://primo.bibliothek.kit.edu/primo-explore/search?tab=kit_evastar&sortby=date&vid=KIT" target="_blank">KIT Open website</a>.
         <br>
         The code navigates to the website, sets filters, and then scrapes the information for 
         each publication. It saves the scraped data in a CSV file, with the structure defined 

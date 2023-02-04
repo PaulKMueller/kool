@@ -3,12 +3,14 @@
 
 import json
 from typing import Optional
+
 from django.shortcuts import render, redirect
-from result_page.models import Author
-import access
 from django.http import HttpRequest
 from django.http.response import HttpResponse as HttpResponse
 from django.contrib.auth.decorators import login_required
+
+from result_page.models import Author
+import access
 
 
 def get_author_by_competency_id(competency_id: int):
@@ -29,7 +31,7 @@ def get_author_by_competency_id(competency_id: int):
         author_last_name = author_entry[2]
         abstract_id = author_entry[3]
         relevancy_of_abstract = author_entry[4]
-        status = author_entry[5]        
+        status = author_entry[5]
         ranking = access.get_request_from_api("/ranking_score/" + str(
             author_id) + "/" + str(competency_id))
 
@@ -115,19 +117,31 @@ def results(request: HttpRequest, id: Optional[int] = None) -> HttpResponse:
 
 @login_required
 def change_status(request):
+    """Changes the status of
+    a competency and an author.
+    Redirects back to the result page.
+
+    Args:
+        request (HttpRequest): The request object.
+    """
     if request.method == 'POST':
         competency_id = request.POST['competency_id']
         author_id = request.POST['author_id']
-        new_status = request.POST['new_status'] 
+        new_status = request.POST['new_status']
         access.get_request_from_api(
-            "/change_status/" + author_id + "/" + competency_id + "/" + new_status)
+            "/change_status/" + author_id + "/" + competency_id + "/" +
+            new_status)
         return redirect('/results/' + competency_id)
     else:
         return render(request, 'result.html')
 
 
 def sort_authors(authors):
-    
+    """Sorts the given list of authors by their relevancy.
+
+    Args:
+        list: Authors The authors.
+    """
     author_list = [(key, value) for key, value in authors.items()]
     sorted_list = sorted(author_list, key=lambda x: x[1].ranking, reverse=True)
     sorted_dict = dict(sorted_list)

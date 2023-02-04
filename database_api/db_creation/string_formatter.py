@@ -1,7 +1,6 @@
 """String formatting for database_from_csv.py,
 depends on structure of KIT-Open's results"""
 
- 
 import re
 
 
@@ -51,3 +50,15 @@ def format_authors(raw_authors):
         else:
             continue
     return authors_formatted
+
+
+def format_for_api_request(text: str) -> str:
+    """Formats text for api request
+
+    Args:
+        text (str): unformatted string
+
+    Returns:
+        str: formatted string
+    """
+    return text.replace(old="/", new=" ")
