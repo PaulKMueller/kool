@@ -322,7 +322,9 @@ async def change_active_database(new_database: Database) -> str:
     new_active_db_name = new_database.new_database
 
     path_to_new_db = dict[new_active_db_name]['path']
-    shutil.copyfile(path_to_new_db, PATH_TO_DB)
+
+    database_info_handler.copy_database(path_from=path_to_new_db,
+                                        path_to=PATH_TO_DB)
 
     currently_active_db_name = database_info_handler.get_active_db_name()
 
@@ -331,6 +333,7 @@ async def change_active_database(new_database: Database) -> str:
     database_info_handler.change_db_active_status(database_name=new_active_db_name,
                                                   new_status="True")
     return "[success]"
+
 
 
 @app.get("/get_database_info")
