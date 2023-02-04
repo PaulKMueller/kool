@@ -61,4 +61,4 @@ def format_for_api_request(text: str) -> str:
     Returns:
         str: formatted string
     """
-    return text.replace(old="/", new=" ")
+    return text.replace("/", " ")

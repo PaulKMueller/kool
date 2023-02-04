@@ -32,6 +32,7 @@ PATH_TO_DB = os.environ.get(ENVIRONMENT_VARIABLE_DB_FILE)
 # Default status of a competency added to the db
 DEFAULT_STATUS = "Unvalidated"
 
+
 def get_request_from_api(endpoint: str):
     """ This function sends a get request to the
     model_api and returns the response as json
@@ -72,6 +73,10 @@ def fill_database_from_added_entries(model: str):
     # using active_db_path to append currently active database
     active_db_path = database_info_handler.get_db_path_from_db_name(active_db_name)
     fill_database(df=new_entries, model=model, path_to_db=active_db_path)
+
+    # Copies active Database to database.db so changes become visible
+    database_info_handler.copy_database(path_from=active_db_path,
+                                        path_to=PATH_TO_DB)
     # Safe all Entries to current.csv
     all_entries = get_all_entries()
     all_entries.to_csv(PATH_TO_CURRENT_CSV, index=False)

@@ -1,4 +1,5 @@
 """Contains functionality refering the database_info.json"""
+import shutil
 import json
 
 PATH_TO_DB_INFO = "databases/database_info.json"
@@ -16,6 +17,10 @@ def get_active_db_name() -> str:
         if value['active'] == 'True':
             return key
     return ''
+
+
+def copy_database(path_from: str, path_to: str):
+    shutil.copyfile(path_from, path_to)
 
 
 def change_db_active_status(database_name: str, new_status: str):
