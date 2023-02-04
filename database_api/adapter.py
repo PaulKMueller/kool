@@ -630,22 +630,26 @@ def get_ranking_score(conn, author_id, competency_id) -> int:
                              author_id = ?
                             """
     cursor = conn.cursor()
+    # getting all relevancies of the author and competency from the ML model
     cursor.execute(sql_get_relevancies, (competency_id, author_id))
     relevancies = cursor.fetchall()
     if relevancies is None or -1 in relevancies:    # no relevancies or dummy relevancies
         return FAILURE_DEFAULT
     conn.commit()
 
+    # getting the author name from the database
     author_first_name, author_last_name = get_author_name(conn, author_id)
     if author_first_name is None and author_last_name is None:
         return FAILURE_DEFAULT
 
+    # getting all abstracts by the author
     abstracts_by_author = get_abstracts_by_author(conn, author_first_name,
                                                   author_last_name)
     if abstracts_by_author == 'There are no abstracts from this author.':
         return FAILURE_DEFAULT
-    total_abstracts = len(abstracts_by_author)
+    total_abstracts = len(abstracts_by_author)  # amount of abstracts
 
+    # getting the abstracts of the author that show the competency
     abstracts_with_competency = get_abstracts_with_competency(conn,
                                                               competency_id,
                                                               author_id)
