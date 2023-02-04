@@ -5,7 +5,7 @@ The playground is used to test the model_api and the database_api.
 import streamlit as st
 from pandas import DataFrame
 from download_button import download
-from models import ask_keybert, ask_galactica, ask_galactica, ask_gpt_neo
+from models import ask_keybert, ask_galactica, ask_gpt_neo, ask_bloom
 
 
 st.set_page_config(
@@ -33,22 +33,21 @@ _max_width_()
 c30, c31, c32 = st.columns([2.5, 1, 3])
 
 with c30:
-    st.title("🏠 Kool - Competency Extractor")
+    st.title("🏠 Kool - Competency Extractor - Benchmark")
     st.header("")
 
 with st.expander("ℹ️ - About this interface", expanded=True):
 
     st.write(
         ("The *Kool - Competency Extractor* app is an easy-to-use "
-            "interface built in [Streamlit](https://streamlit.io/)"
-            " for the amazing [KeyBERT]"
-            "(https://github.com/MaartenGr/KeyBERT) library from "
-            "Maarten Grootendorst!\n"
+            "interface built in [Streamlit](https://streamlit.io/).\n\n"
             "It uses a minimal keyword extraction technique that "
             "leverages multiple NLP embeddings and relies on "
             "[Transformers](https://huggingface.co/transformers/) 🤗 "
             "to extract competencies "
-            "that are most similar to a document.")
+            "that are most similar to a document.\n\n"
+            "All selected models will be benchmarked input document. "
+            "The results are displayed in a table.")
     )
 
     st.markdown("")
@@ -65,6 +64,8 @@ with st.form(key="my_form"):
             "Galactica 125M")
         gpt_neo = st.checkbox(
             "GPT-Neo 125M")
+        bloom = st.checkbox(
+            "Bloom 560M")
 
     with c2:
         doc = st.text_area(
@@ -95,6 +96,7 @@ if not submit_button:
 keywords_keybert = []
 keywords_galactica = []
 keywords_gpt_neo = []
+keywords_bloom = []
 
 if keybert:
     keywords_keybert = ask_keybert(doc)
@@ -108,6 +110,10 @@ if gpt_neo:
     keywords_gpt_neo = ask_gpt_neo(doc)
     # Get only keywords not relevancy
     keywords_gpt_neo = [keyword[0] for keyword in keywords_gpt_neo]
+if bloom:
+    keywords_bloom = ask_bloom(abstract=doc)
+    # Get only keywords not relevancy
+    keywords_bloom = [keyword[0] for keyword in keywords_bloom]
 
 st.markdown("## **🔎 Check & download results **")
 
@@ -122,6 +128,8 @@ if galactica:
     result_dict["Galactica 125M"] = keywords_galactica
 if gpt_neo:
     result_dict["GPT-Neo 125M"] = keywords_gpt_neo
+if bloom:
+    result_dict["Bloom 560M"] = keywords_bloom
 
 with c1:
     download(
@@ -138,12 +146,14 @@ st.header("")
 # Max keyword length
 max_len = max(len(keywords_keybert),
               len(keywords_galactica),
-              len(keywords_gpt_neo))
+              len(keywords_gpt_neo),
+              len(keywords_bloom))
 
 # Fill all keywords lists with empty strings
 keywords_keybert += [""] * (max_len - len(keywords_keybert))
 keywords_galactica += [""] * (max_len - len(keywords_galactica))
 keywords_gpt_neo += [""] * (max_len - len(keywords_gpt_neo))
+keywords_bloom += [""] * (max_len - len(keywords_bloom))
 
 # Build dataframe dictionary based on checked checkboxes
 

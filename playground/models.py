@@ -183,7 +183,7 @@ def ask_xlnet(abstract: str,
 
 
 def ask_bloom(abstract: str,
-              method: int,
+              method: int = 0,
               max_length_output: int = 512,
               max_length_competencies: int = 4,
               min_length_competencies: int = 1,

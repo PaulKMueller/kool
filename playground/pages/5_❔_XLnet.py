@@ -43,15 +43,13 @@ with st.expander("ℹ️ - About this interface", expanded=True):
 
     st.write(
         ("The *Kool - Competency Extractor* app is an easy-to-use "
-            "interface built in [Streamlit](https://streamlit.io/)"
-            " for the amazing [KeyBERT]"
-            "(https://github.com/MaartenGr/KeyBERT) library from "
-            "Maarten Grootendorst!\n"
+            "interface built in [Streamlit](https://streamlit.io/)."
             "It uses a minimal keyword extraction technique that "
             "leverages multiple NLP embeddings and relies on "
             "[Transformers](https://huggingface.co/transformers/) 🤗 "
             "to extract competencies "
             "that are most similar to a document.\n\n"
+            "On this site you can experiment XLNet  ."
             "To learn more about the model, take a look at the "
             "[original paper](https://arxiv.org/abs/1906.08237).\n\n"
             "Its implementation in this playground is aimed at "
@@ -68,7 +66,7 @@ with st.form(key="my_form"):
     with c1:
         ModelType = st.radio(
             "Your model",
-            ["XLNet",],
+            ["XLNet"],
             help=("This is your chosen model."),
         )
 

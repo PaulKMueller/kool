@@ -41,15 +41,17 @@ with st.expander("ℹ️ - About this interface", expanded=True):
 
     st.write(
         ("The *Kool - Competency Extractor* app is an easy-to-use "
-            "interface built in [Streamlit](https://streamlit.io/)"
-            " for the amazing [KeyBERT]"
-            "(https://github.com/MaartenGr/KeyBERT) library from "
-            "Maarten Grootendorst!\n"
-            "It uses a minimal keyword extraction technique that "
-            "leverages multiple NLP embeddings and relies on "
+            "interface built in [Streamlit](https://streamlit.io/). "
+            "It uses minimal keyword extraction techniques that "
+            "leverage multiple NLP embeddings and rely on "
             "[Transformers](https://huggingface.co/transformers/) 🤗 "
             "to extract competencies "
-            "that are most similar to a document.")
+            "that are most similar to a given document. \n\n"
+            "On this site you can experiment with different parametrizations"
+            " of the model "
+            "[Bloom](https://huggingface.co/docs/transformers/model_doc/bloom)."
+            " For further information about this model see its "
+            "[original paper](https://arxiv.org/abs/2211.05100).")
     )
 
     st.markdown("")
@@ -90,19 +92,24 @@ with st.form(key="my_form"):
 
         model_version = st.selectbox(
             "Model version:",
-            ["bigscience/bloom-560m",
-             "bigscience/bloom-1.1b",
-             "bigscience/bloom-1.7b",
-             "bigscience/bloom-3b",
-             "bigscience/bloom-7b1",
-             "bigscience/bloom"],
-            help=("This is the version of the model."),
+            ["bloom-560m",
+             "bloom-1.1b",
+             "bloom-1.7b",
+             "bloom-3b",
+             "bloom-7b1",
+             "bloom"],
+            help=("This is the version of the model.\n\n"
+                  "The normal bloom has 176b parameters.")
         )
+
+        st.warning(
+            "⚠️ If you are unsure if your model can handle the bigger versions"
+            ", please use the default model with 560m parameters.")
 
     with c2:
         doc = st.text_area(
             "Paste your text below (max 1000 words):",
-            height=510,
+            height=663,
         )
 
         MAX_WORDS = 1000
@@ -127,7 +134,8 @@ if not submit_button:
 
 keywords = []
 if ModelType == "Bloom":
-    keywords = ask_bloom(abstract=doc, method=0, model_version=model_version,
+    keywords = ask_bloom(abstract=doc, method=0,
+                         model_version="bigscience/" + model_version,
                          max_length_output=max_length_output,
                          min_length_competencies=min_length_competencies,
                          max_length_competencies=max_length_competencies)
@@ -161,7 +169,7 @@ cmRed = sns.light_palette("red", as_cmap=True)
 df = df.style.background_gradient(
     cmap=cmGreen,
     subset=[
-        "Relevancy",
+        "Relevancy"
     ],
 )
 
