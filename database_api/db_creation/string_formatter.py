@@ -53,7 +53,7 @@ def format_authors(raw_authors):
 
 
 def format_for_api_request(text: str) -> str:
-    """Formats text for api request
+    """Formats text for API request
 
     Args:
         text (str): unformatted string
@@ -61,4 +61,8 @@ def format_for_api_request(text: str) -> str:
     Returns:
         str: formatted string
     """
-    return text.replace("/", " ")
+
+    # Remove all special characters
+    text = text.replace("\\", " ")
+    text = re.sub(r"[:/?#\[\]@!$%&'()*+,;=]+", " ", text)
+    return text
