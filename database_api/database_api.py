@@ -357,7 +357,7 @@ class Data(BaseModel):
 
 
 @app.post("/add_entries/")
-async def add_entries(data: Data) -> str:
+async def add_entries(data: Data, background_tasks: BackgroundTasks) -> str:
     """Endpoint for rebuilding database with new data
 
     Args:
@@ -372,7 +372,8 @@ async def add_entries(data: Data) -> str:
     f = open("db_creation/csv_files/last_added.csv", "w")
     f.write(data.file)
     f.close()
-    database_from_csv.fill_database_from_added_entries(model=data.model)
+    background_tasks.add_task(database_from_csv.fill_database_from_added_entries,
+                              model=data.model)
     return "[success]"
 
 
