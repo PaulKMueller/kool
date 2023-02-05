@@ -27,13 +27,12 @@
                     <div class="resulttext col">
                     <p>
                             <a class="waves-effect btn-flat" style="margin-bottom: 2%; font-size:90%;text-transform:capitalize;" href="/researcher/{{ author_id }}">{{author.first_name}} {{ author.last_name }}</a>   
-                    </p>
-                    </div>
-                    <div style="padding-right: 1%;">
                         {% if author.competency_status == 'Validated' %}
                             <img src="/static/images/verified.png" width="24px" height="24px">
                         {% endif %}
+                    </p>
                     </div>
+                    
                     {% if author.ranking >= 0 %}
                         {% if author.ranking <= 1 %} 
                         <div class="rankingbar">
