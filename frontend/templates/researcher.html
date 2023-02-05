@@ -45,10 +45,12 @@
                                 <a class="waves-effect btn-flat"
                                     style="margin-bottom: 2%; font-size: large;text-transform:capitalize;"
                                     href="/results/{{competency.id}}">{{competency.name}}</a>
-                                {% if competency.competency_status == 'Validated' %}
-                                <img src="/static/images/verified.png" width="24px" height="24px">
-                                {% endif %}
                             </p>
+                        </div>
+                        <div style="padding-right: 1%;">
+                            {% if competency.competency_status == 'Validated' %}
+                                <img src="/static/images/verified.png" width="24px" height="24px">
+                            {% endif %}
                         </div>
                         {% if competency.ranking >= 0 %}
                             {% if competency.ranking <= 1 %} 
