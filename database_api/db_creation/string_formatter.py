@@ -64,5 +64,6 @@ def format_for_api_request(text: str) -> str:
 
     # Remove all special characters
     text = text.replace("\\", " ")
-    text = re.sub(r"[:/?#\[\]@!$%&'()*+,;=]+", " ", text)
+    text = text.replace("?", ".")
+    text = re.sub(r"[:/#\[\]@!$%&'()*+,;=]+", " ", text)
     return text
