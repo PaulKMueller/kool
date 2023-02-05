@@ -14,7 +14,6 @@ from researcher_page.models import Author, Abstract, Competency
 
 
 def researcher(request: HttpRequest, id: Optional[int] = None) -> HttpResponse:
-    # TODO: ein wenig mehr auslagern, methode kleiner machen
     """Renders the researcher page.
     When no authors are found, the user is informed in frontend.
 
@@ -28,11 +27,12 @@ def researcher(request: HttpRequest, id: Optional[int] = None) -> HttpResponse:
     found_id = False
     author = None
     author_id = None
-    competencies = []
     author_first_name = None
     author_last_name = None
     searchquery = request.GET.get('q', '')
 
+    # If ?q=... exists its preferred, else id is used. When no author is
+    # found, the user is informed in frontend.
     if searchquery == "":
         author_id = id
         searched = id
@@ -41,54 +41,75 @@ def researcher(request: HttpRequest, id: Optional[int] = None) -> HttpResponse:
         searched = searchquery
 
     author_response = get_author_by_id(author_id)
-
     author_first_name = author_response[0]
     author_last_name = author_response[1]
-    if author_id:
 
-        if author_first_name and author_last_name:
-            found_id = True
+    # The frontend is informed whether the author exists or not
+    if author_id and author_first_name and author_last_name:
+        found_id = True
+        competencies = get_competencies_list(author_id)
 
-            author_competencies = get_competencies_of_author(author_id)
-            for competency in author_competencies:
-                competency_id = competency[0]
-                ranking = get_ranking_score(author_id, competency_id)
-
-                relevant_abstract_ids = get_relevant_abstract_ids(
-                    competency_id, author_id)
-
-                relevant_abstracts = []
-                for abstract_id in relevant_abstract_ids:
-                    abstract = get_abstract_by_id(abstract_id[0])
-
-                    relevant_abstracts.append(Abstract(abstract[0],
-                                              abstract[1],
-                                              abstract[2],
-                                              abstract[3],
-                                              abstract[4],
-                                              abstract[5]))
-
-                competencies.append(Competency(competency_id,
-                                               competency[1],
-                                               competency[2],
-                                               ranking,
-                                               relevant_abstracts))
-
-            author = Author(id=author_id,
-                            first_name=author_first_name,
-                            last_name=author_last_name,
-                            competencies=competencies)
-
-            competencies = sort_competencies(competencies)
+        author = Author(id=author_id,
+                        first_name=author_first_name,
+                        last_name=author_last_name,
+                        competencies=competencies)
 
     all_authors = access.get_request_from_api("/all_authors/")
     return render(request, 'researcher.html', {'has_found': found_id,
                                                'searched': searched,
-                                               'competencies':
-                                               competencies,
                                                'author': author,
                                                'all_authors': json.dumps(
                                                         all_authors)})
+
+
+def get_relevant_abstracts(relevant_abstract_ids: list) -> list[Abstract]:
+    """Returns a list of the relevant abstracts that have
+    the relevant abstract ids.
+
+    Args:
+        relevant_abstract_ids (list): a list of the relevant abstract ids
+
+    Returns:
+        list[Abstract]: a list of the abstracts
+    """
+    relevant_abstracts = []
+    for abstract_id in relevant_abstract_ids:
+        abstract = get_abstract_by_id(abstract_id[0])
+
+        relevant_abstracts.append(Abstract(abstract[0],
+                                           abstract[1],
+                                           abstract[2],
+                                           abstract[3],
+                                           abstract[4],
+                                           abstract[5]))
+    return relevant_abstracts
+
+
+def get_competencies_list(author_id: int) -> list[Competency]:
+    """Returns a lists of competencies that the author with the author_id has
+
+    Args:
+        author_id (int): the id of the author
+
+    Returns:
+        list[Competency]: a list of all the competencies the author has
+    """
+    competencies = []
+    author_competencies = get_competencies_of_author(author_id)
+    for competency in author_competencies:
+        competency_id = competency[0]
+        ranking = get_ranking_score(author_id, competency_id)
+
+        relevant_abstracts = get_relevant_abstracts(
+                                get_relevant_abstract_ids(
+                                    competency_id, author_id))
+
+        competencies.append(Competency(competency_id,
+                                       competency[1],
+                                       competency[2],
+                                       ranking,
+                                       relevant_abstracts))
+    return sort_competencies(competencies)
 
 
 def get_author_id(searchquery) -> int:

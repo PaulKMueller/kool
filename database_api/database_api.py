@@ -403,7 +403,7 @@ async def get_author_by_id(author_id):
 
 @app.get("/abstracts_with_competency_by_author/{competency_id}/{author_id}")
 async def get_abstracts_with_competency_by_author(competency_id, author_id):
-    """Endpoint to get all abstracts_ids of the abstracts that proof that an 
+    """Endpoint to get all abstracts_ids of the abstracts that proof that an
     author has a given competency.
 
     Args:
