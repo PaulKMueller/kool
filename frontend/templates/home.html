@@ -46,13 +46,12 @@
       </h3>
       <div class="scrollbar scrollbar-primary" style="height: auto; width: 100%;padding: 3px;">
          {% for category in categories %}
-         <div class="card" href="category/{{category.link}}" style="display: inline-block;">
+         <div id="categories-card" class="card" href="category/{{category.link}}" style="display: inline-block;">
             <div class="card-image" stye="border-radius: 10px;">
                <a href="category/{{category.link}}">
                   <div>
                      <img class="responsive-img" src="{{ category.img }}"
                         style="height: 200px; width: 100%; object-fit: cover; filter: brightness(60%) blur(2px)" />
-                        
                   </div>
                </a>
             </div>

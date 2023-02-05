@@ -124,6 +124,9 @@ body {
     font-size: 30px; line-break:auto;
     padding: 10px;
 }
+#categories-card:hover{
+    filter: brightness(80%);
+}
 #search-button{
     right: 0;
     width: auto;
@@ -197,7 +200,6 @@ body {
 .scrollbar-primary {
     scrollbar-color: #9EC4D5 #F5F5F5;
 }
-
 .searchbarcategory {
     bottom: -35px;
     left: 5%;
