@@ -103,7 +103,7 @@ with st.form(key="my_form"):
         )
 
         st.warning(
-            "⚠️ If you are unsure if your model can handle the bigger versions"
+            "⚠️ If you are unsure if your device can handle the bigger versions"
             ", please use the default model with 560m parameters.")
 
     with c2:
